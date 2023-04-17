@@ -28,9 +28,9 @@ BUFF BUFFenable( uint8_t size_buff, BUFFvar* buff )
 	// OBJECT STRUCT
 	BUFF ret;
 	// inic VAR
-	ret.orig = buff;
-	ret.head = buff;
-	ret.end = buff + ( size_buff - 1 ); // generic
+	ret.pos.orig = buff;
+	ret.pos.head = buff;
+	ret.pos.end = buff + ( size_buff - 1 ); // generic
 	// function pointers
 	ret.push = BUFF_push;
 	ret.raw = BUFF_raw;
@@ -40,28 +40,28 @@ BUFF BUFFenable( uint8_t size_buff, BUFFvar* buff )
 
 void BUFF_push( BUFF* self, BUFFvar data ){
 	BUFFvar* head; BUFFvar* next;
-	head = self->head;
+	head = self->pos.head;
 	if(data){
-		if( head == self->end ){
-			head = self->orig;
+		if( head == self->pos.end ){
+			head = self->pos.orig;
 			next = head + 1;
 		}else{
 			next = head + 1;
 		}
 			*head = data;
 			*next = 0;
-			self->head = next;
+			self->pos.head = next;
 	}
 }
 
 BUFFvar* BUFF_raw( BUFF* self){
-		return self->orig;
+		return self->pos.orig;
 }
 
 void BUFF_flush( BUFF* self ){
 	BUFFvar* head;
-	head = self->orig;
-	self->head = head;
+	head = self->pos.orig;
+	self->pos.head = head;
 	*head = 0;
 }
 

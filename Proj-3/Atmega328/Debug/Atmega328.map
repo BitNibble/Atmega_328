@@ -173,7 +173,7 @@ time                0x5               Libraria/watch.o
 mm74c923_tmp        0x1               Libraria/mm74c923.o
 d                   0x2               main.o
 WATCH_delay_flag    0x10              Libraria/watch.o
-rxbuff              0xe               Libraria/atmega328uart.o
+rxbuff              0xc               Libraria/atmega328uart.o
 MM74C923_pointer    0x2               Libraria/mm74c923.o
 func                0x48              Libraria/mm74c923.o
 vari                0xe               Libraria/mm74c923.o
@@ -222,7 +222,7 @@ Discarded input sections
                 0x00000000       0x30 Libraria/atcommands.o
  .debug_ranges  0x00000000       0x20 Libraria/atcommands.o
  .debug_line    0x00000000      0x718 Libraria/atcommands.o
- .debug_str     0x00000000      0x1ad Libraria/atcommands.o
+ .debug_str     0x00000000      0x1a4 Libraria/atcommands.o
  .comment       0x00000000       0x31 Libraria/atcommands.o
  .debug_frame   0x00000000       0x44 Libraria/atcommands.o
  .text          0x00000000        0x0 Libraria/atmega328analog.o
@@ -254,7 +254,7 @@ Discarded input sections
                 0x00000000       0x20 Libraria/atmegaeeprom.o
  .debug_ranges  0x00000000       0x10 Libraria/atmegaeeprom.o
  .debug_line    0x00000000      0x138 Libraria/atmegaeeprom.o
- .debug_str     0x00000000      0x26c Libraria/atmegaeeprom.o
+ .debug_str     0x00000000      0x263 Libraria/atmegaeeprom.o
  .comment       0x00000000       0x31 Libraria/atmegaeeprom.o
  .debug_frame   0x00000000       0x24 Libraria/atmegaeeprom.o
  .text          0x00000000        0x0 Libraria/buffer.o
@@ -292,7 +292,7 @@ Discarded input sections
                 0x00000000       0x70 Libraria/clock.o
  .debug_ranges  0x00000000       0x60 Libraria/clock.o
  .debug_line    0x00000000      0x3d8 Libraria/clock.o
- .debug_str     0x00000000      0x340 Libraria/clock.o
+ .debug_str     0x00000000      0x337 Libraria/clock.o
  .comment       0x00000000       0x31 Libraria/clock.o
  .debug_frame   0x00000000       0xec Libraria/clock.o
  COMMON         0x00000000       0x11 Libraria/clock.o
@@ -318,7 +318,7 @@ Discarded input sections
                 0x00000000       0x48 Libraria/explode.o
  .debug_ranges  0x00000000       0x38 Libraria/explode.o
  .debug_line    0x00000000      0x169 Libraria/explode.o
- .debug_str     0x00000000      0x1e6 Libraria/explode.o
+ .debug_str     0x00000000      0x1dd Libraria/explode.o
  .comment       0x00000000       0x31 Libraria/explode.o
  .debug_frame   0x00000000       0x74 Libraria/explode.o
  .text          0x00000000        0x0 Libraria/function.o
@@ -360,7 +360,7 @@ Discarded input sections
                 0x00000000       0x68 Libraria/hx711.o
  .debug_ranges  0x00000000       0x58 Libraria/hx711.o
  .debug_line    0x00000000      0x3c9 Libraria/hx711.o
- .debug_str     0x00000000      0x3f7 Libraria/hx711.o
+ .debug_str     0x00000000      0x3ee Libraria/hx711.o
  .comment       0x00000000       0x31 Libraria/hx711.o
  .debug_frame   0x00000000       0xec Libraria/hx711.o
  COMMON         0x00000000        0xc Libraria/hx711.o
@@ -391,7 +391,7 @@ Discarded input sections
                 0x00000000       0x50 Libraria/keypad.o
  .debug_ranges  0x00000000       0x40 Libraria/keypad.o
  .debug_line    0x00000000      0x400 Libraria/keypad.o
- .debug_str     0x00000000      0x2d7 Libraria/keypad.o
+ .debug_str     0x00000000      0x2ce Libraria/keypad.o
  .comment       0x00000000       0x31 Libraria/keypad.o
  .debug_frame   0x00000000       0xb0 Libraria/keypad.o
  COMMON         0x00000000       0x17 Libraria/keypad.o
@@ -439,7 +439,7 @@ Discarded input sections
                 0x00000000       0x90 Libraria/lfsm.o
  .debug_ranges  0x00000000       0x80 Libraria/lfsm.o
  .debug_line    0x00000000      0x806 Libraria/lfsm.o
- .debug_str     0x00000000      0x400 Libraria/lfsm.o
+ .debug_str     0x00000000      0x3f7 Libraria/lfsm.o
  .comment       0x00000000       0x31 Libraria/lfsm.o
  .debug_frame   0x00000000      0x2e4 Libraria/lfsm.o
  COMMON         0x00000000       0x21 Libraria/lfsm.o
@@ -504,7 +504,7 @@ Discarded input sections
                 0x00000000       0x98 Libraria/pcf8563rtc.o
  .debug_ranges  0x00000000       0x88 Libraria/pcf8563rtc.o
  .debug_line    0x00000000      0x44b Libraria/pcf8563rtc.o
- .debug_str     0x00000000      0x459 Libraria/pcf8563rtc.o
+ .debug_str     0x00000000      0x450 Libraria/pcf8563rtc.o
  .comment       0x00000000       0x31 Libraria/pcf8563rtc.o
  .debug_frame   0x00000000      0x234 Libraria/pcf8563rtc.o
  COMMON         0x00000000        0xc Libraria/pcf8563rtc.o
@@ -522,7 +522,7 @@ Discarded input sections
                 0x00000000       0x28 Libraria/rotenc.o
  .debug_ranges  0x00000000       0x18 Libraria/rotenc.o
  .debug_line    0x00000000      0x122 Libraria/rotenc.o
- .debug_str     0x00000000      0x1e2 Libraria/rotenc.o
+ .debug_str     0x00000000      0x1d9 Libraria/rotenc.o
  .comment       0x00000000       0x31 Libraria/rotenc.o
  .debug_frame   0x00000000       0x54 Libraria/rotenc.o
  .text          0x00000000        0x0 Libraria/watch.o
@@ -553,7 +553,7 @@ Discarded input sections
                 0x00000000       0x60 Libraria/watch.o
  .debug_ranges  0x00000000       0x50 Libraria/watch.o
  .debug_line    0x00000000      0x2af Libraria/watch.o
- .debug_str     0x00000000      0x2ae Libraria/watch.o
+ .debug_str     0x00000000      0x2a5 Libraria/watch.o
  .comment       0x00000000       0x31 Libraria/watch.o
  .debug_frame   0x00000000       0xa4 Libraria/watch.o
  COMMON         0x00000000       0x3e Libraria/watch.o
@@ -586,7 +586,7 @@ Discarded input sections
                 0x00000000       0x70 Libraria/znpid.o
  .debug_ranges  0x00000000       0x60 Libraria/znpid.o
  .debug_line    0x00000000      0x1d4 Libraria/znpid.o
- .debug_str     0x00000000      0x274 Libraria/znpid.o
+ .debug_str     0x00000000      0x26b Libraria/znpid.o
  .comment       0x00000000       0x31 Libraria/znpid.o
  .debug_frame   0x00000000      0x16c Libraria/znpid.o
  COMMON         0x00000000        0x4 Libraria/znpid.o
@@ -1778,7 +1778,7 @@ END GROUP
                 0x0080010c                _edata = .
                 0x0080010c                PROVIDE (__data_end, .)
 
-.bss            0x0080010c      0x224
+.bss            0x0080010c      0x222
                 0x0080010c                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
@@ -1816,49 +1816,49 @@ END GROUP
                 0x008001a1                m
  COMMON         0x008001df       0x3e Libraria/atmega328timer.o
                 0x008001df                mega328
- COMMON         0x0080021d       0x31 Libraria/atmega328uart.o
+ COMMON         0x0080021d       0x2f Libraria/atmega328uart.o
                 0x0080021d                UART_LastRxError
                 0x0080021e                rxbuff
-                0x0080022c                UART_Rx
-                0x0080022d                UART_RxBuf
- COMMON         0x0080024e        0xd Libraria/lcd2p.o
-                0x0080024e                lcd0cmd_PORT
-                0x00800250                lcd0cmd_DDR
-                0x00800252                lcd0data_PIN
-                0x00800254                lcd0_detect
-                0x00800255                lcd0cmd_PIN
-                0x00800257                lcd0data_DDR
-                0x00800259                lcd0data_PORT
- COMMON         0x0080025b       0x73 Libraria/mm74c923.o
-                0x0080025b                mm74c923_mem
-                0x0080025c                MM74C923_KEY_CODE_INDEX
-                0x0080025d                mm74c923_PIN
-                0x0080025f                MM74C923_KEY_BUFFER_INDEX
-                0x00800260                mm74c923_PORT
-                0x00800262                mm74c923_tmp
-                0x00800263                MM74C923_pointer
-                0x00800265                func
-                0x008002ad                vari
-                0x008002bb                mm74c923_DDR
-                0x008002bd                MM74C923_KEY_BUFFER
- COMMON         0x008002ce       0x62 main.o
-                0x008002ce                lcd
-                0x008002e4                j
-                0x008002e5                shift
-                0x008002eb                tc0
-                0x008002f7                i
-                0x008002f8                d
-                0x008002fa                uart
-                0x00800310                uartmsg
-                0x00800330                PROVIDE (__bss_end, .)
+                0x0080022a                UART_Rx
+                0x0080022b                UART_RxBuf
+ COMMON         0x0080024c        0xd Libraria/lcd2p.o
+                0x0080024c                lcd0cmd_PORT
+                0x0080024e                lcd0cmd_DDR
+                0x00800250                lcd0data_PIN
+                0x00800252                lcd0_detect
+                0x00800253                lcd0cmd_PIN
+                0x00800255                lcd0data_DDR
+                0x00800257                lcd0data_PORT
+ COMMON         0x00800259       0x73 Libraria/mm74c923.o
+                0x00800259                mm74c923_mem
+                0x0080025a                MM74C923_KEY_CODE_INDEX
+                0x0080025b                mm74c923_PIN
+                0x0080025d                MM74C923_KEY_BUFFER_INDEX
+                0x0080025e                mm74c923_PORT
+                0x00800260                mm74c923_tmp
+                0x00800261                MM74C923_pointer
+                0x00800263                func
+                0x008002ab                vari
+                0x008002b9                mm74c923_DDR
+                0x008002bb                MM74C923_KEY_BUFFER
+ COMMON         0x008002cc       0x62 main.o
+                0x008002cc                lcd
+                0x008002e2                j
+                0x008002e3                shift
+                0x008002e9                tc0
+                0x008002f5                i
+                0x008002f6                d
+                0x008002f8                uart
+                0x0080030e                uartmsg
+                0x0080032e                PROVIDE (__bss_end, .)
                 0x00003f7e                __data_load_start = LOADADDR (.data)
                 0x00003f8a                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800330        0x0
+.noinit         0x0080032e        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x00800330                _end = .
+                0x0080032e                _end = .
                 [!provide]                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
@@ -1968,7 +1968,7 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0xd767
+.debug_info     0x00000000     0xd781
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x5f4 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328/avr5/crtatmega328.o
  .debug_info    0x000005f4      0x22c Libraria/74hc595.o
@@ -1977,12 +1977,12 @@ END GROUP
  .debug_info    0x00002282     0x1820 Libraria/atmega328mapping.o
  .debug_info    0x00003aa2     0x1b61 Libraria/atmega328timer.o
  .debug_info    0x00005603     0x1a71 Libraria/atmega328twi.o
- .debug_info    0x00007074     0x1b74 Libraria/atmega328uart.o
- .debug_info    0x00008be8      0x24c Libraria/buffer.o
- .debug_info    0x00008e34     0x13b2 Libraria/function.o
- .debug_info    0x0000a1e6      0xb77 Libraria/lcd2p.o
- .debug_info    0x0000ad5d      0x94a Libraria/mm74c923.o
- .debug_info    0x0000b6a7     0x20c0 main.o
+ .debug_info    0x00007074     0x1b81 Libraria/atmega328uart.o
+ .debug_info    0x00008bf5      0x259 Libraria/buffer.o
+ .debug_info    0x00008e4e     0x13b2 Libraria/function.o
+ .debug_info    0x0000a200      0xb77 Libraria/lcd2p.o
+ .debug_info    0x0000ad77      0x94a Libraria/mm74c923.o
+ .debug_info    0x0000b6c1     0x20c0 main.o
 
 .debug_abbrev   0x00000000     0x1d06
  *(.debug_abbrev)
@@ -2031,33 +2031,33 @@ END GROUP
  .debug_frame   0x00000ce8       0xac Libraria/mm74c923.o
  .debug_frame   0x00000d94       0xa8 main.o
 
-.debug_str      0x00000000     0x188c
+.debug_str      0x00000000     0x1892
  *(.debug_str)
  .debug_str     0x00000000      0x208 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328/avr5/crtatmega328.o
- .debug_str     0x00000208      0x1d7 Libraria/74hc595.o
-                                0x22b (size before relaxing)
- .debug_str     0x000003df      0x942 Libraria/atmega328analog.o
-                                0xb78 (size before relaxing)
- .debug_str     0x00000d21       0x7a Libraria/atmega328interrupt.o
-                                0x21e (size before relaxing)
- .debug_str     0x00000d9b       0x1f Libraria/atmega328mapping.o
-                                0xad8 (size before relaxing)
- .debug_str     0x00000dba      0x27d Libraria/atmega328timer.o
-                                0xd09 (size before relaxing)
- .debug_str     0x00001037      0x105 Libraria/atmega328twi.o
-                                0xb97 (size before relaxing)
- .debug_str     0x0000113c       0xdc Libraria/atmega328uart.o
-                                0xbac (size before relaxing)
- .debug_str     0x00001218       0x47 Libraria/buffer.o
-                                0x1ec (size before relaxing)
- .debug_str     0x0000125f      0x30b Libraria/function.o
-                                0x621 (size before relaxing)
- .debug_str     0x0000156a      0x165 Libraria/lcd2p.o
-                                0x38f (size before relaxing)
- .debug_str     0x000016cf      0x176 Libraria/mm74c923.o
-                                0x495 (size before relaxing)
- .debug_str     0x00001845       0x47 main.o
-                                0xcb1 (size before relaxing)
+ .debug_str     0x00000208      0x1ce Libraria/74hc595.o
+                                0x222 (size before relaxing)
+ .debug_str     0x000003d6      0x942 Libraria/atmega328analog.o
+                                0xb6f (size before relaxing)
+ .debug_str     0x00000d18       0x7a Libraria/atmega328interrupt.o
+                                0x215 (size before relaxing)
+ .debug_str     0x00000d92       0x1f Libraria/atmega328mapping.o
+                                0xacf (size before relaxing)
+ .debug_str     0x00000db1      0x27d Libraria/atmega328timer.o
+                                0xd00 (size before relaxing)
+ .debug_str     0x0000102e      0x105 Libraria/atmega328twi.o
+                                0xb8e (size before relaxing)
+ .debug_str     0x00001133       0xeb Libraria/atmega328uart.o
+                                0xbad (size before relaxing)
+ .debug_str     0x0000121e       0x47 Libraria/buffer.o
+                                0x1f2 (size before relaxing)
+ .debug_str     0x00001265      0x30b Libraria/function.o
+                                0x618 (size before relaxing)
+ .debug_str     0x00001570      0x165 Libraria/lcd2p.o
+                                0x386 (size before relaxing)
+ .debug_str     0x000016d5      0x176 Libraria/mm74c923.o
+                                0x48c (size before relaxing)
+ .debug_str     0x0000184b       0x47 main.o
+                                0xca8 (size before relaxing)
 
 .debug_loc      0x00000000     0x40a5
  *(.debug_loc)
