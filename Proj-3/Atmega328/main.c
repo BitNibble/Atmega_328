@@ -30,7 +30,7 @@ Comment:
 /*** File Variable ***/
 ATMEGA328 m;
 TIMER_COUNTER0 tc0;
-HC595 shift;
+HC595 sh;
 UART uart;
 FUNC func;
 LCD0 lcd;
@@ -48,18 +48,21 @@ int main(void)
 	m = ATMEGA328enable();
 	func = FUNCenable();
 	lcd = LCD0enable(&DDRB, &PINB, &PORTB, &DDRC, &PINC, &PORTC); //using arduino
-	// HC595 shift = HC595enable(&DDRB,&PORTB,3,1,0); //using arduino
-	shift = HC595enable(&DDRD,&PORTD,4,7,5); //4,7,5 using board from ETT with altered pin.
+	// HC595 sh = HC595enable(&DDRB,&PORTB,3,1,0); //using arduino
+	sh = HC595enable(&DDRD,&PORTD,4,5,7); //4,7,5 using board from ETT with altered pin.
 	// UART 103 para 9600, 68 para 14400, 25 para 38400, 8 para 115200 at 16Mhz
 	// UART 51 para 9600, 12 para 38400 at 8Mhz
 	uart = m.usart.enable(12,8,1,NONE);
 	tc0 = m.tc0.enable(1, 1);
 	tc0.start(~0);
-	uint8_t output = 0xFF;
+	
+	uint8_t i = 0;
+	uint8_t output = 255;
 	d = 0;
 	
 	// uart detect '\n'
-	uint8_t uartoneshot = 0;
+	//uint8_t uartoneshot = 0;
+	sh.byte(output);
 	
 	// Replace with your application code
     while (TRUE)
@@ -68,30 +71,50 @@ int main(void)
 		// lcd reboot
 		lcd.reboot();
 		// uart capture
-		if(uartoneshot){ uartoneshot = 0; uart.rxflush();} // the matrix
+		//if(uartoneshot){ uartoneshot = 0; uart.rxflush();} // the matrix
+		strcpy(uartmsg, " ");
 		uartreceive = uart.gets(); // UART1
-		if(uart.getch() == '\n'){ strcpy(uartmsg, uartreceive); uartoneshot = 1;}
+		if(uart.getch() == '\n'){ strcpy(uartmsg, uartreceive); uart.rxflush();}
 		// procedures
 		
 		lcd.gotoxy(0,0);
 		lcd.string_size("Welcome",7);
 		
-		lcd.gotoxy(0,8);
-		lcd.string(func.ui16toa(d));
+		
 		
 		lcd.gotoxy(1,0);
 		lcd.string_size("HC:",3);
 		lcd.string_size(uartmsg,13);
 		
-		if(!strcmp(uartmsg, "led 1 on\r\n"))
-			output &= ~(0xFF);
+		if(!strcmp(uartmsg, "led 1 on\r\n")){
+			output = 5;
 			
-		if(!strcmp(uartmsg, "led 1 off\r\n"))
-			output |= 0xFF;
+			for(i = 0; i < 8; i++){
+				_delay_ms(100);
+				sh.bit(output & (1 << i));
+				
+				
+				lcd.gotoxy(0,8);
+				lcd.string(func.ui16toa(output));
+				lcd.hspace(2);
+				lcd.string(func.ui16toa((1 << i)));
+				
+			}
+			sh.out();
 			
 			
+			
+			//shift.byte(output);
+		}
+			
+		if(!strcmp(uartmsg, "led 1 off\r\n")){
+			output = 0;
+			sh.byte(255);
+		}
+			
+			
+		//sh.byte(output);
 		
-		shift.byte(output);
     }
 }
 
@@ -109,12 +132,12 @@ ISR(TIMER0_OVF_vect)
 	// Play around
 	if(i < 8){
 		if(j){
-			shift.bit(1);
-			shift.out();
+			sh.bit(1);
+			sh.out();
 			i++;
 		}else{
-			shift.bit(0);
-			shift.out();
+			sh.bit(0);
+			sh.out();
 			i++;
 		}
 	}else{

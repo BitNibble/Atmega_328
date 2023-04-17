@@ -22,6 +22,7 @@ uint8_t HC595_outpin;
 
 /*** File Header ***/
 void HC595_shift_bit(uint8_t bool);
+void HC595_shift_ibyte(uint8_t byte);
 void HC595_shift_byte(uint8_t byte);
 void HC595_shift_out(void);
 
@@ -42,6 +43,7 @@ HC595 HC595enable(volatile uint8_t *ddr, volatile uint8_t *port, uint8_t datapin
 	*hc595_PORT &= ~((1<<datapin) | (1<<clkpin) | (1 << outpin));
 	// Direccionar apontadores para PROTOTIPOS
 	hc595.bit = HC595_shift_bit;
+	hc595.ibyte = HC595_shift_ibyte;
 	hc595.byte = HC595_shift_byte;
 	hc595.out = HC595_shift_out;
 	
@@ -56,11 +58,18 @@ void HC595_shift_bit(uint8_t bool)
 	*hc595_PORT |= (1 << HC595_clkpin); // Shift bit
 	*hc595_PORT &= ~(1 << HC595_clkpin); // Shift disable
 }
-void HC595_shift_byte(uint8_t byte)
+void HC595_shift_ibyte(uint8_t byte)
 {
 	uint8_t i;
 	for(i = 0; i < 8; i++)
 		HC595_shift_bit(byte & (1 << i));
+	HC595_shift_out();
+}
+void HC595_shift_byte(uint8_t byte)
+{
+	uint8_t i;
+	for(i = 0; i < 8; i++)
+		HC595_shift_bit(byte & (1 << (7 - i)));
 	HC595_shift_out();
 }
 void HC595_shift_out(void)

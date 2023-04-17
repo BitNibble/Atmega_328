@@ -26,6 +26,7 @@ Comment:
 /*** Global Variable ***/
 struct hc595{
 	void (*bit)(uint8_t bool);
+	void (*ibyte)(uint8_t byte);
 	void (*byte)(uint8_t byte);
 	void (*out)(void);
 };
