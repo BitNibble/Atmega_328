@@ -55,6 +55,7 @@ int main(void)
 	uart = m.usart.enable(12,8,1,NONE);
 	tc0 = m.tc0.enable(1, 1);
 	tc0.start(~0);
+	uint8_t output = 0xFF;
 	d = 0;
 	
 	// uart detect '\n'
@@ -82,7 +83,15 @@ int main(void)
 		lcd.string_size("HC:",3);
 		lcd.string_size(uartmsg,13);
 		
+		if(!strcmp(uartmsg, "led 1 on\r\n"))
+			output &= ~(0xFF);
+			
+		if(!strcmp(uartmsg, "led 1 off\r\n"))
+			output |= 0xFF;
+			
+			
 		
+		shift.byte(output);
     }
 }
 
@@ -96,6 +105,7 @@ void PORTINIT(void)
 ISR(TIMER0_OVF_vect)
 {
 	d++;
+	/*
 	// Play around
 	if(i < 8){
 		if(j){
@@ -112,6 +122,7 @@ ISR(TIMER0_OVF_vect)
 		if(j) j = 0;
 		else j =1;
 	}
+	*/
 }
 
 /***EOF***/
