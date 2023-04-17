@@ -73,47 +73,91 @@ int main(void)
 		// uart capture
 		if(uartoneshot){ uartoneshot = 0; uart.rxflush(); strcpy(uartrcv, " "); }
 		uartreceive = uart.gets(); // UART1
-		if(uart.getch() == '\n'){ uartoneshot = 1; strcpy(uartrcv, uartreceive); strcpy(uartmsg, uartrcv); }
+		if(uart.getch() == '\n'){ uartoneshot = 1; strcpy(uartrcv, uartreceive); }
 		// procedures
 		
 		lcd.gotoxy(0,0);
 		lcd.string_size("Welcome",7);
+		
 		lcd.gotoxy(1,0);
-		lcd.string_size("HC:",3);
-		lcd.string_size(uartmsg,13);
 		
 		if(!strcmp(uartrcv, "led 1 on\r\n")){
-			if(output & 1)
+			if(output & 1){
 				output&=~1;
-			else
+				strcpy(uartmsg, "led 1 on");
+				uart.puts("led 1 on\n");
+			}else{
 				output|=1;
+				strcpy(uartmsg, "led 1 off");
+				uart.puts("led 1 off\n");
+			}
+		}
+		if(!strcmp(uartrcv, "led 1 off\r\n")){
+				output|=1;
+				strcpy(uartmsg, "led 1 off");
+				uart.puts("led 1 off\n");
 		}
 		
 		if(!strcmp(uartrcv, "led 2 on\r\n")){
-			if(output & 2)
+			if(output & 2){
 				output&=~2;
-			else
+				strcpy(uartmsg, "led 2 on");
+				uart.puts("led 2 on\n");
+			}else{
 				output|=2;
+				strcpy(uartmsg, "led 2 off");
+				uart.puts("led 2 off\n");
+			}
+		}
+		if(!strcmp(uartrcv, "led 2 off\r\n")){
+			output|=2;
+			strcpy(uartmsg, "led 2 off");
+			uart.puts("led 2 off\n");
 		}
 		
 		if(!strcmp(uartrcv, "led 3 on\r\n")){
-			if(output & 4)
+			if(output & 4){
 				output&=~4;
-			else
+				strcpy(uartmsg, "led 3 on");
+				uart.puts("led 3 on\n");
+			}else{
 				output|=4;
+				strcpy(uartmsg, "led 3 off");
+				uart.puts("led 3 off\n");
+			}
+		}
+		if(!strcmp(uartrcv, "led 3 off\r\n")){
+			output|=4;
+			strcpy(uartmsg, "led 3 off");
+			uart.puts("led 3 off\n");
 		}
 		
 		if(!strcmp(uartmsg, "led 4 on\r\n")){
-			if(output & 8)
+			if(output & 8){
 				output&=~8;
-			else
+				strcpy(uartmsg, "led 4 on");
+				uart.puts("led 4 on\n");
+			}else{
 				output|=8;
+				strcpy(uartmsg, "led 4 off");
+				uart.puts("led 4 off\n");
+			}
+		}
+		if(!strcmp(uartrcv, "led 4 off\r\n")){
+			output|=8;
+			strcpy(uartmsg, "led 4 off");
+			uart.puts("led 4 off\n");
 		}
 			
-		if(!strcmp(uartmsg, "all off\r\n")){
+		if(!strcmp(uartrcv, "all off\r\n")){
 			output = 0xFF;
+			strcpy(uartmsg, "all off");
+			uart.puts("all off\n");
 			_delay_ms(100);
 		}
+		
+		lcd.string_size("HC:",3);
+		lcd.string_size(uartmsg,13);
 		
 		sh.byte(output);
 		
