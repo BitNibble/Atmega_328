@@ -4,6 +4,24 @@ Author: Sergio Santos
 	<sergio.salazar.santos@gmail.com>
 Created: 04/10/2020 16:37:53
 Comment:
+	74HC595
+	-PD4 pin 6 - Serial Data
+	-PD5 pin 11 - Shift Bit
+	-PD7 pin 12 - Output
+	Shift Register Connected to relay board
+	LCD
+	-PB0 pin 14 cmd
+	-PB1 pin 15 cmd
+	-PB2 pin 16 cmd
+	-PB3 pin 17 cmd
+	-PC0 pin 23 data
+	-PC1 pin 24 data
+	-PC2 pin 25 data
+	-PC3 pin 26 data
+	Bluetooth HC-05 (MAX 232 bypassed with jumpers)
+	-PD0 pin 2 Tx
+	-PD1 pin 3 Rx
+	
 	Stable
  **********************************************************/
 #define F_CPU 8000000UL
@@ -50,7 +68,7 @@ int main(void)
 	func = FUNCenable();
 	lcd = LCD0enable(&DDRB, &PINB, &PORTB, &DDRC, &PINC, &PORTC); //using arduino
 	// HC595 sh = HC595enable(&DDRB,&PORTB,3,1,0); //using arduino
-	sh = HC595enable(&DDRD,&PORTD,4,5,7); //4,7,5 using board from ETT with altered pin.
+	sh = HC595enable(&DDRD,&PORTD,4,5,7); //4,5,7 using board from ETT with altered pin.
 	// UART 103 para 9600, 68 para 14400, 25 para 38400, 8 para 115200 at 16Mhz
 	// UART 51 para 9600, 12 para 38400 at 8Mhz
 	uart = m.usart.enable(12,8,1,NONE);

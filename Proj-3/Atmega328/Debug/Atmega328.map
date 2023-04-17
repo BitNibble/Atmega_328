@@ -2010,7 +2010,7 @@ END GROUP
  .debug_abbrev  0x00001955      0x1e5 Libraria/mm74c923.o
  .debug_abbrev  0x00001b3a      0x226 main.o
 
-.debug_line     0x00000000     0x3560
+.debug_line     0x00000000     0x3561
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x133 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328/avr5/crtatmega328.o
  .debug_line    0x00000133      0x1a6 Libraria/74hc595.o
@@ -2024,7 +2024,7 @@ END GROUP
  .debug_line    0x00001dff      0x907 Libraria/function.o
  .debug_line    0x00002706      0x73d Libraria/lcd2p.o
  .debug_line    0x00002e43      0x29e Libraria/mm74c923.o
- .debug_line    0x000030e1      0x47f main.o
+ .debug_line    0x000030e1      0x480 main.o
 
 .debug_frame    0x00000000      0xe2c
  *(.debug_frame)
