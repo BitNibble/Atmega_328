@@ -35,8 +35,9 @@ UART uart;
 FUNC func;
 LCD0 lcd;
 uint16_t d;
-uint8_t i,j;
-char* uartreceive = NULL; // pointing to Rx Buffer
+//uint8_t i,j;
+char* uartreceive = NULL; // pointing to Rx Buffer raw
+char uartrcv[UART_RX_BUFFER_SIZE];
 char uartmsg[UART_RX_BUFFER_SIZE];
 
 /*** File Header ***/
@@ -56,12 +57,11 @@ int main(void)
 	tc0 = m.tc0.enable(1, 1);
 	tc0.start(~0);
 	
-	uint8_t i = 0;
-	uint8_t output = 255;
+	uint8_t output = 0xFF;
 	d = 0;
 	
 	// uart detect '\n'
-	//uint8_t uartoneshot = 0;
+	uint8_t uartoneshot = 0;
 	sh.byte(output);
 	
 	// Replace with your application code
@@ -71,49 +71,51 @@ int main(void)
 		// lcd reboot
 		lcd.reboot();
 		// uart capture
-		//if(uartoneshot){ uartoneshot = 0; uart.rxflush();} // the matrix
-		strcpy(uartmsg, " ");
+		if(uartoneshot){ uartoneshot = 0; uart.rxflush(); strcpy(uartrcv, " "); }
 		uartreceive = uart.gets(); // UART1
-		if(uart.getch() == '\n'){ strcpy(uartmsg, uartreceive); uart.rxflush();}
+		if(uart.getch() == '\n'){ uartoneshot = 1; strcpy(uartrcv, uartreceive); strcpy(uartmsg, uartrcv); }
 		// procedures
 		
 		lcd.gotoxy(0,0);
 		lcd.string_size("Welcome",7);
-		
-		
-		
 		lcd.gotoxy(1,0);
 		lcd.string_size("HC:",3);
 		lcd.string_size(uartmsg,13);
 		
-		if(!strcmp(uartmsg, "led 1 on\r\n")){
-			output = 5;
-			
-			for(i = 0; i < 8; i++){
-				_delay_ms(100);
-				sh.bit(output & (1 << i));
-				
-				
-				lcd.gotoxy(0,8);
-				lcd.string(func.ui16toa(output));
-				lcd.hspace(2);
-				lcd.string(func.ui16toa((1 << i)));
-				
-			}
-			sh.out();
-			
-			
-			
-			//shift.byte(output);
+		if(!strcmp(uartrcv, "led 1 on\r\n")){
+			if(output & 1)
+				output&=~1;
+			else
+				output|=1;
+		}
+		
+		if(!strcmp(uartrcv, "led 2 on\r\n")){
+			if(output & 2)
+				output&=~2;
+			else
+				output|=2;
+		}
+		
+		if(!strcmp(uartrcv, "led 3 on\r\n")){
+			if(output & 4)
+				output&=~4;
+			else
+				output|=4;
+		}
+		
+		if(!strcmp(uartmsg, "led 4 on\r\n")){
+			if(output & 8)
+				output&=~8;
+			else
+				output|=8;
 		}
 			
-		if(!strcmp(uartmsg, "led 1 off\r\n")){
-			output = 0;
-			sh.byte(255);
+		if(!strcmp(uartmsg, "all off\r\n")){
+			output = 0xFF;
+			_delay_ms(100);
 		}
-			
-			
-		//sh.byte(output);
+		
+		sh.byte(output);
 		
     }
 }
@@ -128,7 +130,7 @@ void PORTINIT(void)
 ISR(TIMER0_OVF_vect)
 {
 	d++;
-	/*
+	/**
 	// Play around
 	if(i < 8){
 		if(j){
@@ -145,7 +147,7 @@ ISR(TIMER0_OVF_vect)
 		if(j) j = 0;
 		else j =1;
 	}
-	*/
+	**/
 }
 
 /***EOF***/
