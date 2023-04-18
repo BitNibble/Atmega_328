@@ -4,12 +4,12 @@ Author: Sergio Santos
 	<sergio.salazar.santos@gmail.com>
 Created: 04/10/2020 16:37:53
 Comment:
-	74HC595
+		74HC595
 	-PD4 pin 6 - Serial Data
 	-PD5 pin 11 - Shift Bit
 	-PD7 pin 12 - Output
 	Shift Register Connected to relay board
-	LCD
+		LCD
 	-PB0 pin 14 cmd
 	-PB1 pin 15 cmd
 	-PB2 pin 16 cmd
@@ -18,8 +18,8 @@ Comment:
 	-PC1 pin 24 data
 	-PC2 pin 25 data
 	-PC3 pin 26 data
-	Bluetooth HC-05 (MAX 232 bypassed with jumpers) 12 para 38400 at 8Mhz, 
-	AT+BAUD6\r\n, AT+TYPE1\r\n, AT+ROLE0\r\n, AT+PIN916919\r\n.
+		Bluetooth HC-05 (MAX 232 bypassed with jumpers) 
+	- 12 para 38400 at 8Mhz, AT+BAUD6\r\n, AT+TYPE1\r\n, AT+ROLE0\r\n, AT+PIN916919\r\n.
 	-PD0 pin 2 Tx
 	-PD1 pin 3 Rx
 	
