@@ -19,7 +19,7 @@ Comment:
 	-PC2 pin 25 data
 	-PC3 pin 26 data
 		Bluetooth HC-05 (MAX 232 bypassed with jumpers) 
-	- 12 para 38400 at 8Mhz, AT+BAUD6\r\n, AT+TYPE1\r\n, AT+ROLE0\r\n, AT+PIN916919\r\n.
+		12 para 38400 at 8Mhz, AT+BAUD6\r\n, AT+TYPE1\r\n, AT+ROLE0\r\n, AT+PIN916919\r\n.
 	-PD0 pin 2 Tx
 	-PD1 pin 3 Rx
 	
