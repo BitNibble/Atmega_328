@@ -4,6 +4,7 @@ Author : Sergio Santos
 	<sergio.salazar.santos@gmail.com>
 Date: 15/04/2023 14:00:00
 Comment:
+	Testing uart threw ftdi.
 	
  **********************************************************/
 #define F_CPU 16000000UL

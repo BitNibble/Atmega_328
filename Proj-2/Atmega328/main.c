@@ -4,6 +4,7 @@ Author : Sergio Santos
 	<sergio.salazar.santos@gmail.com>
 Date: 15/04/2023 14:00:00
 Comment:
+	Testing Atmega 328 Hardware layer
 	
  **********************************************************/
 #define F_CPU 16000000UL
