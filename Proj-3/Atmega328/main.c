@@ -73,8 +73,8 @@ struct LCDposition {
 struct LCDvirtual {
 	struct LCDposition pos;
 }LCD;
-char LCDline0[16];
-char LCDline1[16];
+char LCDline0[18];
+char LCDline1[18];
 
 /*** File Header ***/
 void PORTINIT(void);
@@ -90,10 +90,12 @@ int main(void)
 	LCD.pos.l12 = LCDline1 + 8;
 	LCD.pos.l03 = LCDline0 + 12;
 	LCD.pos.l13 = LCDline1 + 12;
-	for(i=0; i<16; LCDline0[i]=' ', i++);
-	for(i=0; i<16; LCDline1[i]=' ', i++);
-	LCDline0[15] = '\0';
-	LCDline1[15] = '\0';
+	for(i=0; i<18; LCDline0[i]=' ', i++);
+	for(i=0; i<18; LCDline1[i]=' ', i++);
+	LCDline0[16] = '\n';
+	LCDline1[16] = '\n';
+	LCDline0[17] = '\0';
+	LCDline1[17] = '\0';
 	
 	m = ATMEGA328enable();
 	func = FUNCenable();
@@ -129,98 +131,80 @@ int main(void)
 		lcd.string_size("Welcome",7);
 		
 		lcd.gotoxy(1,0);
-		
+		//LED 1
 		if(!strcmp(uartrcv, "led 1 on\r\n")){
 			if(output & 1){
 				output&=~1;
-				//strcpy(uartmsg, "led 1 on");
-				*LCD.pos.l10 = '1';
-				uart.puts(LCDline1);
+				func.strtovec(LCD.pos.l10, "on ");
 			}else{
 				output|=1;
-				//strcpy(uartmsg, "led 1 off");
-				*LCD.pos.l10 = ' ';
-				uart.puts(LCDline1);
+				func.strtovec(LCD.pos.l10, "off");
 			}
 		}
 		if(!strcmp(uartrcv, "led 1 off\r\n")){
 				output|=1;
-				//strcpy(uartmsg, "led 1 off");
-				*LCD.pos.l10 = ' ';
-				uart.puts(LCDline1);
+				func.strtovec(LCD.pos.l10, "off");
 		}
-		
+		//LED 2
 		if(!strcmp(uartrcv, "led 2 on\r\n")){
 			if(output & 2){
 				output&=~2;
-				//strcpy(uartmsg, "led 2 on");
-				*LCD.pos.l11 = '2';
-				uart.puts(LCDline1);
+				func.strtovec(LCD.pos.l11, "on ");
 			}else{
 				output|=2;
-				//strcpy(uartmsg, "led 2 off");
-				*LCD.pos.l11 = ' ';
-				uart.puts(LCDline1);
+				func.strtovec(LCD.pos.l11, "off");
 			}
 		}
 		if(!strcmp(uartrcv, "led 2 off\r\n")){
 			output|=2;
-			//strcpy(uartmsg, "led 2 off");
-			*LCD.pos.l11 = ' ';
-			uart.puts(LCDline1);
+			func.strtovec(LCD.pos.l11, "off");
 		}
-		
+		//LED 3
 		if(!strcmp(uartrcv, "led 3 on\r\n")){
 			if(output & 4){
 				output&=~4;
-				//strcpy(uartmsg, "led 3 on");
-				*LCD.pos.l12 = '3';
-				uart.puts(LCDline1);
+				func.strtovec(LCD.pos.l12, "on ");
 			}else{
 				output|=4;
-				//strcpy(uartmsg, "led 3 off");
-				*LCD.pos.l12 = ' ';
-				uart.puts(LCDline1);
+				func.strtovec(LCD.pos.l12, "off");
 			}
 		}
 		if(!strcmp(uartrcv, "led 3 off\r\n")){
 			output|=4;
-			//strcpy(uartmsg, "led 3 off");
-			*LCD.pos.l12 = ' ';
-			uart.puts(LCDline1);
+			func.strtovec(LCD.pos.l12, "off");
 		}
-		
+		//LED 4
 		if(!strcmp(uartmsg, "led 4 on\r\n")){
 			if(output & 8){
 				output&=~8;
-				//strcpy(uartmsg, "led 4 on");
-				*LCD.pos.l12 = '4';
-				uart.puts(LCDline1);
+				func.strtovec(LCD.pos.l13, "on ");
 			}else{
 				output|=8;
-				//strcpy(uartmsg, "led 4 off");
-				*LCD.pos.l12 = ' ';
-				uart.puts(LCDline1);
+				func.strtovec(LCD.pos.l13, "off");
 			}
 		}
 		if(!strcmp(uartrcv, "led 4 off\r\n")){
 			output|=8;
-			//strcpy(uartmsg, "led 4 off");
-			*LCD.pos.l12 = ' ';
-			uart.puts(LCDline1);
+			func.strtovec(LCD.pos.l13, "off");
 		}
-			
+		//ALL OFF
 		if(!strcmp(uartrcv, "all off\r\n")){
 			output = 0xFF;
 			//strcpy(uartmsg, "all off");
-			*LCD.pos.l10 = ' '; *LCD.pos.l11 = ' '; *LCD.pos.l12 = ' '; *LCD.pos.l13 = ' ';
-			uart.puts(LCDline1);
-			_delay_ms(100);
+			func.strtovec(LCD.pos.l10, "off");
+			func.strtovec(LCD.pos.l11, "off");
+			func.strtovec(LCD.pos.l12, "off");
+			func.strtovec(LCD.pos.l13, "off");
 		}
+		//STATUS FEEDBACK
+		if(!strcmp(uartrcv, "status\r\n")){
+			uart.puts(LCDline1);	
+		}
+		
+		lcd.string_size(LCDline1, 16);
 		
 		//lcd.string_size("HC:",3);
 		//lcd.string_size(uartmsg,13);
-		lcd.string_size(LCDline1, 16);
 		
 		sh.byte(output);
 		

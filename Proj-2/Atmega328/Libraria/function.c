@@ -4,7 +4,7 @@ Author: Sergio Santos
 	<sergio.salazar.santos@gmail.com> 
 License: GNU General Public License
 Hardware: all
-Date: 06082022
+Date: 18042023
 Comment:
 	Tested Atemga128 16Mhz and Atmega328 8Mhz and STM32F446RE
 *************************************************************************/
@@ -66,6 +66,7 @@ FUNCHighLowByte FUNCWriteHLByte(uint16_t val);
 FUNCHighLowByte FUNCWriteLHByte(uint16_t val);
 uint16_t FUNCSwapByte(uint16_t num);
 char* FUNCprint(const char *format, ... );
+void FUNCstrtovec(char* pos, const char* str);
 /************ pc use ************
 char* FUNCfltos(FILE* stream);
 char* FUNCftos(FILE* stream);
@@ -123,6 +124,7 @@ FUNC FUNCenable( void )
 	func.WriteLHByte = FUNCWriteLHByte;
 	func.SwapByte = FUNCSwapByte;
 	func.print = FUNCprint;
+	func.strtovec = FUNCstrtovec;
 	/***********pc use************
 	func.fltos = FUNCfltos;
 	func.ftos = FUNCftos;
@@ -541,6 +543,10 @@ char* FUNCprint( const char* format, ... )
 		return FUNCstr;
 }
 
+void FUNCstrtovec(char* pos, const char* str){
+	int i;
+	for(i=0; str[i]; *(pos + i) = str[i], i++);
+}
 /********************************************************************
 int gcd( int a, int b ) {
     int result ;
