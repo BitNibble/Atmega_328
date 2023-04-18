@@ -73,6 +73,10 @@ Target "CoreBuild" in file "C:\Program Files (x86)\Atmel\Studio\7.0\Vs\Compiler.
 		Invoking: AVR/GNU C Compiler : 5.4.0
 		"C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe"  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"../Libraria" -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\gcc\dev\atmega328" -c -std=gnu99 -MD -MP -MF "Libraria/hx711.d" -MT"Libraria/hx711.d" -MT"Libraria/hx711.o"   -o "Libraria/hx711.o" "../Libraria/hx711.c" 
 		Finished building: ../Libraria/hx711.c
+		Building file: ../Libraria/function.c
+		Invoking: AVR/GNU C Compiler : 5.4.0
+		"C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe"  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"../Libraria" -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\gcc\dev\atmega328" -c -std=gnu99 -MD -MP -MF "Libraria/function.d" -MT"Libraria/function.d" -MT"Libraria/function.o"   -o "Libraria/function.o" "../Libraria/function.c" 
+		Finished building: ../Libraria/function.c
 		Building file: ../Libraria/keypad.c
 		Invoking: AVR/GNU C Compiler : 5.4.0
 		"C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe"  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"../Libraria" -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\gcc\dev\atmega328" -c -std=gnu99 -MD -MP -MF "Libraria/keypad.d" -MT"Libraria/keypad.d" -MT"Libraria/keypad.o"   -o "Libraria/keypad.o" "../Libraria/keypad.c" 
@@ -81,14 +85,14 @@ Target "CoreBuild" in file "C:\Program Files (x86)\Atmel\Studio\7.0\Vs\Compiler.
 		Invoking: AVR/GNU C Compiler : 5.4.0
 		"C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe"  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"../Libraria" -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\gcc\dev\atmega328" -c -std=gnu99 -MD -MP -MF "Libraria/lcd2p.d" -MT"Libraria/lcd2p.d" -MT"Libraria/lcd2p.o"   -o "Libraria/lcd2p.o" "../Libraria/lcd2p.c" 
 		Finished building: ../Libraria/lcd2p.c
-		Building file: ../Libraria/function.c
-		Invoking: AVR/GNU C Compiler : 5.4.0
-		"C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe"  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"../Libraria" -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\gcc\dev\atmega328" -c -std=gnu99 -MD -MP -MF "Libraria/function.d" -MT"Libraria/function.d" -MT"Libraria/function.o"   -o "Libraria/function.o" "../Libraria/function.c" 
-		Finished building: ../Libraria/function.c
 		Building file: ../Libraria/mm74c923.c
 		Invoking: AVR/GNU C Compiler : 5.4.0
 		"C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe"  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"../Libraria" -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\gcc\dev\atmega328" -c -std=gnu99 -MD -MP -MF "Libraria/mm74c923.d" -MT"Libraria/mm74c923.d" -MT"Libraria/mm74c923.o"   -o "Libraria/mm74c923.o" "../Libraria/mm74c923.c" 
 		Finished building: ../Libraria/mm74c923.c
+		Building file: ../Libraria/lfsm.c
+		Invoking: AVR/GNU C Compiler : 5.4.0
+		"C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe"  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"../Libraria" -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\gcc\dev\atmega328" -c -std=gnu99 -MD -MP -MF "Libraria/lfsm.d" -MT"Libraria/lfsm.d" -MT"Libraria/lfsm.o"   -o "Libraria/lfsm.o" "../Libraria/lfsm.c" 
+		Finished building: ../Libraria/lfsm.c
 		Building file: ../Libraria/rotenc.c
 		Invoking: AVR/GNU C Compiler : 5.4.0
 		"C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe"  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"../Libraria" -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\gcc\dev\atmega328" -c -std=gnu99 -MD -MP -MF "Libraria/rotenc.d" -MT"Libraria/rotenc.d" -MT"Libraria/rotenc.o"   -o "Libraria/rotenc.o" "../Libraria/rotenc.c" 
@@ -97,10 +101,6 @@ Target "CoreBuild" in file "C:\Program Files (x86)\Atmel\Studio\7.0\Vs\Compiler.
 		Invoking: AVR/GNU C Compiler : 5.4.0
 		"C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe"  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"../Libraria" -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\gcc\dev\atmega328" -c -std=gnu99 -MD -MP -MF "Libraria/pcf8563rtc.d" -MT"Libraria/pcf8563rtc.d" -MT"Libraria/pcf8563rtc.o"   -o "Libraria/pcf8563rtc.o" "../Libraria/pcf8563rtc.c" 
 		Finished building: ../Libraria/pcf8563rtc.c
-		Building file: ../Libraria/lfsm.c
-		Invoking: AVR/GNU C Compiler : 5.4.0
-		"C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe"  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"../Libraria" -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\gcc\dev\atmega328" -c -std=gnu99 -MD -MP -MF "Libraria/lfsm.d" -MT"Libraria/lfsm.d" -MT"Libraria/lfsm.o"   -o "Libraria/lfsm.o" "../Libraria/lfsm.c" 
-		Finished building: ../Libraria/lfsm.c
 		Building file: ../Libraria/watch.c
 		Invoking: AVR/GNU C Compiler : 5.4.0
 		"C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe"  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"../Libraria" -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\gcc\dev\atmega328" -c -std=gnu99 -MD -MP -MF "Libraria/watch.d" -MT"Libraria/watch.d" -MT"Libraria/watch.o"   -o "Libraria/watch.o" "../Libraria/watch.c" 
@@ -123,11 +123,12 @@ Target "CoreBuild" in file "C:\Program Files (x86)\Atmel\Studio\7.0\Vs\Compiler.
 		"C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-objcopy.exe" -O srec -R .eeprom -R .fuse -R .lock -R .signature -R .user_signatures "Atmega328.elf" "Atmega328.srec"
 		"C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-size.exe" "Atmega328.elf"
 		   text	   data	    bss	    dec	    hex	filename
-		  16964	    126	    633	  17723	   453b	Atmega328.elf
+		  17056	    128	    633	  17817	   4599	Atmega328.elf
 	Done executing task "RunCompilerTask".
+	Using "RunOutputFileVerifyTask" task from assembly "C:\Program Files (x86)\Atmel\Studio\7.0\Extensions\Application\AvrGCC.dll".
 	Task "RunOutputFileVerifyTask"
-				Program Memory Usage 	:	17090 bytes   52.2 % Full
-				Data Memory Usage 		:	759 bytes   37.1 % Full
+				Program Memory Usage 	:	17184 bytes   52.4 % Full
+				Data Memory Usage 		:	761 bytes   37.2 % Full
 				Warning: Memory Usage estimation may not be accurate if there are sections other than .text sections in ELF file
 	Done executing task "RunOutputFileVerifyTask".
 Done building target "CoreBuild" in project "Atmega328.cproj".

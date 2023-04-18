@@ -53,12 +53,15 @@ HC595 sh;
 UART uart;
 FUNC func;
 LCD0 lcd;
+
 uint16_t d;
 uint8_t i;
 // uint8_t j;
+
 char* uartreceive = NULL; // pointing to Rx Buffer raw
 char uartrcv[UART_RX_BUFFER_SIZE];
 char uartmsg[UART_RX_BUFFER_SIZE];
+
 // Virtual LCD
 struct LCDposition {
 	char* l00;
@@ -106,14 +109,19 @@ int main(void)
 	// UART 51 para 9600, 12 para 38400 at 8Mhz
 	uart = m.usart.enable(12,8,1,NONE);
 	tc0 = m.tc0.enable(1, 1);
+	
 	tc0.start(~0);
 	
 	uint8_t output = 0xFF;
 	d = 0;
-	
-	// uart detect '\n'
 	uint8_t uartoneshot = 0;
+	
+	
 	sh.byte(output);
+	func.strtovec(LCD.pos.l10, "off");
+	func.strtovec(LCD.pos.l11, "off");
+	func.strtovec(LCD.pos.l12, "off");
+	func.strtovec(LCD.pos.l13, "off");
 	
 	// Replace with your application code
     while (TRUE)
@@ -127,12 +135,16 @@ int main(void)
 		if(uart.getch() == '\n'){ uartoneshot = 1; strcpy(uartrcv, uartreceive); }
 		// procedures
 		
+		sh.byte(output);
+		
 		lcd.gotoxy(0,0);
 		lcd.string_size("Welcome",7);
 		
 		lcd.gotoxy(1,0);
+		lcd.string_size(LCDline1, 16);
+		
 		//LED 1
-		if(!strcmp(uartrcv, "led 1 on\r\n")){
+		if(!strcmp(uartrcv, "led 1\r\n")){
 			if(output & 1){
 				output&=~1;
 				func.strtovec(LCD.pos.l10, "on ");
@@ -146,7 +158,7 @@ int main(void)
 				func.strtovec(LCD.pos.l10, "off");
 		}
 		//LED 2
-		if(!strcmp(uartrcv, "led 2 on\r\n")){
+		if(!strcmp(uartrcv, "led 2\r\n")){
 			if(output & 2){
 				output&=~2;
 				func.strtovec(LCD.pos.l11, "on ");
@@ -160,7 +172,7 @@ int main(void)
 			func.strtovec(LCD.pos.l11, "off");
 		}
 		//LED 3
-		if(!strcmp(uartrcv, "led 3 on\r\n")){
+		if(!strcmp(uartrcv, "led 3\r\n")){
 			if(output & 4){
 				output&=~4;
 				func.strtovec(LCD.pos.l12, "on ");
@@ -174,7 +186,7 @@ int main(void)
 			func.strtovec(LCD.pos.l12, "off");
 		}
 		//LED 4
-		if(!strcmp(uartrcv, "led 4 on\r\n")){
+		if(!strcmp(uartrcv, "led 4\r\n")){
 			if(output & 8){
 				output&=~8;
 				func.strtovec(LCD.pos.l13, "on ");
@@ -200,14 +212,6 @@ int main(void)
 		if(!strcmp(uartrcv, "status\r\n")){
 			uart.puts(LCDline1);	
 		}
-		
-		lcd.string_size(LCDline1, 16);
-		
-		//lcd.string_size("HC:",3);
-		//lcd.string_size(uartmsg,13);
-		
-		sh.byte(output);
-		
     }
 }
 
