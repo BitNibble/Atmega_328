@@ -54,10 +54,27 @@ UART uart;
 FUNC func;
 LCD0 lcd;
 uint16_t d;
-//uint8_t i,j;
+uint8_t i;
+// uint8_t j;
 char* uartreceive = NULL; // pointing to Rx Buffer raw
 char uartrcv[UART_RX_BUFFER_SIZE];
 char uartmsg[UART_RX_BUFFER_SIZE];
+// Virtual LCD
+struct LCDposition {
+	char* l00;
+	char* l01;
+	char* l02;
+	char* l03;
+	char* l10;
+	char* l11;
+	char* l12;
+	char* l13;
+};
+struct LCDvirtual {
+	struct LCDposition pos;
+}LCD;
+char LCDline0[16];
+char LCDline1[16];
 
 /*** File Header ***/
 void PORTINIT(void);
@@ -65,6 +82,19 @@ void PORTINIT(void);
 /*** File Procedure & Function ***/
 int main(void)
 {
+	LCD.pos.l00 = LCDline0;
+	LCD.pos.l10 = LCDline1;	
+	LCD.pos.l01 = LCDline0 + 4;
+	LCD.pos.l11 = LCDline1 + 4;
+	LCD.pos.l02 = LCDline0 + 8;
+	LCD.pos.l12 = LCDline1 + 8;
+	LCD.pos.l03 = LCDline0 + 12;
+	LCD.pos.l13 = LCDline1 + 12;
+	for(i=0; i<16; LCDline0[i]=' ', i++);
+	for(i=0; i<16; LCDline1[i]=' ', i++);
+	LCDline0[15] = '\0';
+	LCDline1[15] = '\0';
+	
 	m = ATMEGA328enable();
 	func = FUNCenable();
 	lcd = LCD0enable(&DDRB, &PINB, &PORTB, &DDRC, &PINC, &PORTC); //using arduino
@@ -103,80 +133,94 @@ int main(void)
 		if(!strcmp(uartrcv, "led 1 on\r\n")){
 			if(output & 1){
 				output&=~1;
-				strcpy(uartmsg, "led 1 on");
-				uart.puts("led 1 on\n");
+				//strcpy(uartmsg, "led 1 on");
+				*LCD.pos.l10 = '1';
+				uart.puts(LCDline1);
 			}else{
 				output|=1;
-				strcpy(uartmsg, "led 1 off");
-				uart.puts("led 1 off\n");
+				//strcpy(uartmsg, "led 1 off");
+				*LCD.pos.l10 = ' ';
+				uart.puts(LCDline1);
 			}
 		}
 		if(!strcmp(uartrcv, "led 1 off\r\n")){
 				output|=1;
-				strcpy(uartmsg, "led 1 off");
-				uart.puts("led 1 off\n");
+				//strcpy(uartmsg, "led 1 off");
+				*LCD.pos.l10 = ' ';
+				uart.puts(LCDline1);
 		}
 		
 		if(!strcmp(uartrcv, "led 2 on\r\n")){
 			if(output & 2){
 				output&=~2;
-				strcpy(uartmsg, "led 2 on");
-				uart.puts("led 2 on\n");
+				//strcpy(uartmsg, "led 2 on");
+				*LCD.pos.l11 = '2';
+				uart.puts(LCDline1);
 			}else{
 				output|=2;
-				strcpy(uartmsg, "led 2 off");
-				uart.puts("led 2 off\n");
+				//strcpy(uartmsg, "led 2 off");
+				*LCD.pos.l11 = ' ';
+				uart.puts(LCDline1);
 			}
 		}
 		if(!strcmp(uartrcv, "led 2 off\r\n")){
 			output|=2;
-			strcpy(uartmsg, "led 2 off");
-			uart.puts("led 2 off\n");
+			//strcpy(uartmsg, "led 2 off");
+			*LCD.pos.l11 = ' ';
+			uart.puts(LCDline1);
 		}
 		
 		if(!strcmp(uartrcv, "led 3 on\r\n")){
 			if(output & 4){
 				output&=~4;
-				strcpy(uartmsg, "led 3 on");
-				uart.puts("led 3 on\n");
+				//strcpy(uartmsg, "led 3 on");
+				*LCD.pos.l12 = '3';
+				uart.puts(LCDline1);
 			}else{
 				output|=4;
-				strcpy(uartmsg, "led 3 off");
-				uart.puts("led 3 off\n");
+				//strcpy(uartmsg, "led 3 off");
+				*LCD.pos.l12 = ' ';
+				uart.puts(LCDline1);
 			}
 		}
 		if(!strcmp(uartrcv, "led 3 off\r\n")){
 			output|=4;
-			strcpy(uartmsg, "led 3 off");
-			uart.puts("led 3 off\n");
+			//strcpy(uartmsg, "led 3 off");
+			*LCD.pos.l12 = ' ';
+			uart.puts(LCDline1);
 		}
 		
 		if(!strcmp(uartmsg, "led 4 on\r\n")){
 			if(output & 8){
 				output&=~8;
-				strcpy(uartmsg, "led 4 on");
-				uart.puts("led 4 on\n");
+				//strcpy(uartmsg, "led 4 on");
+				*LCD.pos.l12 = '4';
+				uart.puts(LCDline1);
 			}else{
 				output|=8;
-				strcpy(uartmsg, "led 4 off");
-				uart.puts("led 4 off\n");
+				//strcpy(uartmsg, "led 4 off");
+				*LCD.pos.l12 = ' ';
+				uart.puts(LCDline1);
 			}
 		}
 		if(!strcmp(uartrcv, "led 4 off\r\n")){
 			output|=8;
-			strcpy(uartmsg, "led 4 off");
-			uart.puts("led 4 off\n");
+			//strcpy(uartmsg, "led 4 off");
+			*LCD.pos.l12 = ' ';
+			uart.puts(LCDline1);
 		}
 			
 		if(!strcmp(uartrcv, "all off\r\n")){
 			output = 0xFF;
-			strcpy(uartmsg, "all off");
-			uart.puts("all off\n");
+			//strcpy(uartmsg, "all off");
+			*LCD.pos.l10 = ' '; *LCD.pos.l11 = ' '; *LCD.pos.l12 = ' '; *LCD.pos.l13 = ' ';
+			uart.puts(LCDline1);
 			_delay_ms(100);
 		}
 		
-		lcd.string_size("HC:",3);
-		lcd.string_size(uartmsg,13);
+		//lcd.string_size("HC:",3);
+		//lcd.string_size(uartmsg,13);
+		lcd.string_size(LCDline1, 16);
 		
 		sh.byte(output);
 		
