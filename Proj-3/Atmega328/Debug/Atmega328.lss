@@ -7959,7 +7959,7 @@ void PORTINIT(void)
     3232:	09 95       	icall
     3234:	65 e5       	ldi	r22, 0x55	; 85
     3236:	71 e0       	ldi	r23, 0x01	; 1
-    3238:	89 ed       	ldi	r24, 0xD9	; 217
+    3238:	8f e7       	ldi	r24, 0x7F	; 127
     323a:	93 e0       	ldi	r25, 0x03	; 3
     323c:	0e 94 1c 1e 	call	0x3c38	; 0x3c38 <strcmp>
     3240:	89 2b       	or	r24, r25

@@ -174,7 +174,7 @@ int main(void)
 			func.strtovec(LCD.pos.l12, "off");
 		}
 		//LED 4
-		if(!strcmp(uartmsg, "led 4 on\r\n")){
+		if(!strcmp(uartrcv, "led 4 on\r\n")){
 			if(output & 8){
 				output&=~8;
 				func.strtovec(LCD.pos.l13, "on ");
