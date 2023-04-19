@@ -57,7 +57,6 @@ FUNC func;
 LCD0 lcd;
 EXPLODE button;
 
-uint8_t input;
 uint16_t d;
 uint8_t i;
 // uint8_t j;
@@ -117,6 +116,7 @@ int main(void)
 	
 	tc0.start(~0);
 	
+	uint8_t input;	
 	uint8_t output = 0xFF;
 	d = 0;
 	uint8_t uartoneshot = 0;
