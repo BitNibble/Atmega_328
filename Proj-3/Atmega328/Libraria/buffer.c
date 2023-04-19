@@ -54,7 +54,7 @@ void BUFF_push( BUFF* self, BUFFvar data ){
 	}
 }
 
-BUFFvar* BUFF_raw( BUFF* self){
+BUFFvar* BUFF_raw( BUFF* self ){
 		return self->pos.orig;
 }
 
