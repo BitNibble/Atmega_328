@@ -1,4 +1,4 @@
-/***********************************************************
+/*********************************************************************
 Hardware: Atmega328.c
 Author: Sergio Santos
 	<sergio.salazar.santos@gmail.com>
@@ -19,12 +19,13 @@ Comment:
 	-PC2 pin 25 data
 	-PC3 pin 26 data
 		Bluetooth HC-05 (MAX 232 bypassed with jumpers) 
-		12 para 38400 at 8Mhz, AT+BAUD6\r\n, AT+TYPE1\r\n, AT+ROLE0\r\n, AT+PIN916919\r\n.
+		12 para 38400 at 8Mhz, AT+BAUD6\r\n, AT+TYPE1\r\n,
+		AT+ROLE0\r\n, AT+PIN916919\r\n.
 	-PD0 pin 2 Tx
 	-PD1 pin 3 Rx
 	
 	Stable
- **********************************************************/
+ ********************************************************************/
 #define F_CPU 8000000UL
 
 /*** File library ***/
@@ -33,6 +34,7 @@ Comment:
 #include "lcd2p.h"
 #include "keypad.h"
 #include "74hc595.h"
+#include "explode.h"
 #include "atcommands.h"
 #include <util/delay.h>
 //#include <stdio.h>
@@ -53,7 +55,9 @@ HC595 sh;
 UART uart;
 FUNC func;
 LCD0 lcd;
+EXPLODE button;
 
+uint8_t input;
 uint16_t d;
 uint8_t i;
 // uint8_t j;
@@ -109,6 +113,7 @@ int main(void)
 	// UART 51 para 9600, 12 para 38400 at 8Mhz
 	uart = m.usart.enable(12,8,1,NONE);
 	tc0 = m.tc0.enable(1, 1);
+	button = EXPLODEenable();
 	
 	tc0.start(~0);
 	
@@ -129,6 +134,7 @@ int main(void)
 		// preamble
 		// lcd reboot
 		lcd.reboot();
+		button.update(&button, input);
 		// uart capture
 		if(uartoneshot){ uartoneshot = 0; uart.rxflush(); strcpy(uartrcv, " "); }
 		uartreceive = uart.gets(); // UART1
@@ -142,6 +148,7 @@ int main(void)
 		
 		lcd.gotoxy(1,0);
 		lcd.string_size(LCDline1, 16);
+		
 		
 		//LED 1
 		if(!strcmp(uartrcv, "led 1\r\n")){
@@ -157,6 +164,7 @@ int main(void)
 				output|=1;
 				func.strtovec(LCD.pos.l10, "off");
 		}
+		
 		//LED 2
 		if(!strcmp(uartrcv, "led 2\r\n")){
 			if(output & 2){
@@ -171,6 +179,7 @@ int main(void)
 			output|=2;
 			func.strtovec(LCD.pos.l11, "off");
 		}
+		
 		//LED 3
 		if(!strcmp(uartrcv, "led 3\r\n")){
 			if(output & 4){
@@ -185,6 +194,7 @@ int main(void)
 			output|=4;
 			func.strtovec(LCD.pos.l12, "off");
 		}
+		
 		//LED 4
 		if(!strcmp(uartrcv, "led 4\r\n")){
 			if(output & 8){
@@ -199,6 +209,7 @@ int main(void)
 			output|=8;
 			func.strtovec(LCD.pos.l13, "off");
 		}
+		
 		//ALL OFF
 		if(!strcmp(uartrcv, "all off\r\n")){
 			output = 0xFF;
@@ -208,17 +219,22 @@ int main(void)
 			func.strtovec(LCD.pos.l12, "off");
 			func.strtovec(LCD.pos.l13, "off");
 		}
+		
 		//STATUS FEEDBACK
 		if(!strcmp(uartrcv, "status\r\n")){
 			uart.puts(LCDline1);	
 		}
+		
+		
     }
 }
 
 void PORTINIT(void)
 {
-	DDRB=0x0B;
-	PORTB=0x0B;
+	DDRB = 0x0B;
+	PORTB = 0x0B;
+	DDRC = 0x0B;
+	PORTC = 0x0B;
 }
 
 /*** File Interrupt ***/
