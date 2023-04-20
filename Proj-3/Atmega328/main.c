@@ -239,10 +239,14 @@ int main(void)
 
 void PORTINIT(void)
 {
-	DDRB = 0x00;
-	PORTB = 0xF0;
-	DDRC = 0x00;
-	PORTC = 0xF0;
+	//DDRB = 0x00;
+	m.portb.reg->ddr = 0x00;
+	//PORTB = 0xF0;
+	m.portb.reg->port = 0xF0;
+	//DDRC = 0x00;
+	m.portc.reg->ddr = 0x00;
+	//PORTC = 0xF0;
+	m.portc.reg->port = 0xF0;
 }
 
 /*** File Interrupt ***/
