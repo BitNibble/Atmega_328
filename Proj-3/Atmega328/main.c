@@ -168,13 +168,13 @@ int main(void)
 				func.strtovec(LCD.pos.l10, "off");
 			}
 		}
-		if(!strcmp(uartrcv, "led 1 off\r\n") || (button.HL & 2)){
+		if(!strcmp(uartrcv, "led 1 off\r\n")){
 				output|=1;
 				func.strtovec(LCD.pos.l10, "off");
 		}
 		
 		//LED 2
-		if(!strcmp(uartrcv, "led 2\r\n") || (button.HL & 4)){
+		if(!strcmp(uartrcv, "led 2\r\n") || (button.HL & 2)){
 			if(output & 2){
 				output&=~2;
 				func.strtovec(LCD.pos.l11, "on ");
@@ -183,13 +183,13 @@ int main(void)
 				func.strtovec(LCD.pos.l11, "off");
 			}
 		}
-		if(!strcmp(uartrcv, "led 2 off\r\n") || (button.HL & 8)){
+		if(!strcmp(uartrcv, "led 2 off\r\n")){
 			output|=2;
 			func.strtovec(LCD.pos.l11, "off");
 		}
 		
 		//LED 3
-		if(!strcmp(uartrcv, "led 3\r\n") || (button.HL & 16)){
+		if(!strcmp(uartrcv, "led 3\r\n") || (button.HL & 4)){
 			if(output & 4){
 				output&=~4;
 				func.strtovec(LCD.pos.l12, "on ");
@@ -198,13 +198,13 @@ int main(void)
 				func.strtovec(LCD.pos.l12, "off");
 			}
 		}
-		if(!strcmp(uartrcv, "led 3 off\r\n") || (button.HL & 32)){
+		if(!strcmp(uartrcv, "led 3 off\r\n")){
 			output|=4;
 			func.strtovec(LCD.pos.l12, "off");
 		}
 		
 		//LED 4
-		if(!strcmp(uartrcv, "led 4\r\n") || (button.HL & 64)){
+		if(!strcmp(uartrcv, "led 4\r\n") || (button.HL & 8)){
 			if(output & 8){
 				output&=~8;
 				func.strtovec(LCD.pos.l13, "on ");
@@ -213,7 +213,7 @@ int main(void)
 				func.strtovec(LCD.pos.l13, "off");
 			}
 		}
-		if(!strcmp(uartrcv, "led 4 off\r\n") || (button.HL & 128)){
+		if(!strcmp(uartrcv, "led 4 off\r\n")){
 			output|=8;
 			func.strtovec(LCD.pos.l13, "off");
 		}
