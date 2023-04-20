@@ -2,7 +2,7 @@
 Hardware: Atmega328.c
 Author: Sergio Santos
 	<sergio.salazar.santos@gmail.com>
-Created: 04/10/2020 16:37:53
+Created: 20/04/2023 14:00:00
 Comment:
 		74HC595
 	-PD4 pin 6 - Serial Data
@@ -23,6 +23,11 @@ Comment:
 		AT+ROLE0\r\n, AT+PIN916919\r\n.
 	-PD0 pin 2 Tx
 	-PD1 pin 3 Rx
+		Buttons
+	-PB4 pin 18
+	-PB5 pin 19
+	-PC4 pin 27
+	-PC5 pin 28
 	
 	Stable
  ********************************************************************/
@@ -87,7 +92,9 @@ void PORTINIT(void);
 
 /*** File Procedure & Function ***/
 int main(void)
-{
+{	
+	PORTINIT();
+	
 	LCD.pos.l00 = LCDline0;
 	LCD.pos.l10 = LCDline1;	
 	LCD.pos.l01 = LCDline0 + 4;
@@ -134,6 +141,7 @@ int main(void)
 		// preamble
 		// lcd reboot
 		lcd.reboot();
+		input = ( PINC & 0xF0 ) | ( PINB >> 4 );
 		button.update(&button, input);
 		// uart capture
 		if(uartoneshot){ uartoneshot = 0; uart.rxflush(); strcpy(uartrcv, " "); }
@@ -151,7 +159,7 @@ int main(void)
 		
 		
 		//LED 1
-		if(!strcmp(uartrcv, "led 1\r\n")){
+		if(!strcmp(uartrcv, "led 1\r\n") || (button.HL & 1)){
 			if(output & 1){
 				output&=~1;
 				func.strtovec(LCD.pos.l10, "on ");
@@ -160,13 +168,13 @@ int main(void)
 				func.strtovec(LCD.pos.l10, "off");
 			}
 		}
-		if(!strcmp(uartrcv, "led 1 off\r\n")){
+		if(!strcmp(uartrcv, "led 1 off\r\n") || (button.HL & 2)){
 				output|=1;
 				func.strtovec(LCD.pos.l10, "off");
 		}
 		
 		//LED 2
-		if(!strcmp(uartrcv, "led 2\r\n")){
+		if(!strcmp(uartrcv, "led 2\r\n") || (button.HL & 4)){
 			if(output & 2){
 				output&=~2;
 				func.strtovec(LCD.pos.l11, "on ");
@@ -175,13 +183,13 @@ int main(void)
 				func.strtovec(LCD.pos.l11, "off");
 			}
 		}
-		if(!strcmp(uartrcv, "led 2 off\r\n")){
+		if(!strcmp(uartrcv, "led 2 off\r\n") || (button.HL & 8)){
 			output|=2;
 			func.strtovec(LCD.pos.l11, "off");
 		}
 		
 		//LED 3
-		if(!strcmp(uartrcv, "led 3\r\n")){
+		if(!strcmp(uartrcv, "led 3\r\n") || (button.HL & 16)){
 			if(output & 4){
 				output&=~4;
 				func.strtovec(LCD.pos.l12, "on ");
@@ -190,13 +198,13 @@ int main(void)
 				func.strtovec(LCD.pos.l12, "off");
 			}
 		}
-		if(!strcmp(uartrcv, "led 3 off\r\n")){
+		if(!strcmp(uartrcv, "led 3 off\r\n") || (button.HL & 32)){
 			output|=4;
 			func.strtovec(LCD.pos.l12, "off");
 		}
 		
 		//LED 4
-		if(!strcmp(uartrcv, "led 4\r\n")){
+		if(!strcmp(uartrcv, "led 4\r\n") || (button.HL & 64)){
 			if(output & 8){
 				output&=~8;
 				func.strtovec(LCD.pos.l13, "on ");
@@ -205,7 +213,7 @@ int main(void)
 				func.strtovec(LCD.pos.l13, "off");
 			}
 		}
-		if(!strcmp(uartrcv, "led 4 off\r\n")){
+		if(!strcmp(uartrcv, "led 4 off\r\n") || (button.HL & 128)){
 			output|=8;
 			func.strtovec(LCD.pos.l13, "off");
 		}
@@ -222,7 +230,7 @@ int main(void)
 		
 		//STATUS FEEDBACK
 		if(!strcmp(uartrcv, "status\r\n")){
-			uart.puts(LCDline1);	
+			uart.puts(LCDline1);
 		}
 		
 		
@@ -231,10 +239,10 @@ int main(void)
 
 void PORTINIT(void)
 {
-	DDRB = 0x0B;
-	PORTB = 0x0B;
-	DDRC = 0x0B;
-	PORTC = 0x0B;
+	DDRB = 0x00;
+	PORTB = 0xF0;
+	DDRC = 0x00;
+	PORTC = 0xF0;
 }
 
 /*** File Interrupt ***/

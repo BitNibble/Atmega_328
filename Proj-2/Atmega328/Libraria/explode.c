@@ -4,7 +4,7 @@ Author: Sergio Santos
 	<sergio.salazar.santos@gmail.com>
 License: GNU General Public License
 Hardware: all
-Date: 30112022
+Date: 20042023
 Comment:
     Pin Analysis
 ********************************************************************/
@@ -28,8 +28,8 @@ EXPLODE EXPLODEenable( void )
 	// struct object
 	struct expld explode;
 	// initialize VAR
-	explode.XI = 0;
-	explode.XF = 0;
+	explode.par.XI = 0;
+	explode.par.XF = 0;
 	// function pointers
 	explode.update = EXPLODEupdate;
 	return explode; // return copy
@@ -37,8 +37,8 @@ EXPLODE EXPLODEenable( void )
 // boot (preamble in while loop)
 void EXPLODEupdate(EXPLODE *self, uint8_t x)
 {
-	self->XI = self->XF;
-	self->XF = x;
+	self->par.XI = self->par.XF;
+	self->par.XF = x;
 	self->HL = EXPLODEhl(self);
 	self->LH = EXPLODElh(self);
 	self->HH = EXPLODEhh(self);
@@ -47,27 +47,27 @@ void EXPLODEupdate(EXPLODE *self, uint8_t x)
 // hh
 uint8_t EXPLODEhh(EXPLODE *self)
 {
-	return (self->XI & self->XF);
+	return (self->par.XI & self->par.XF);
 }
 // ll
 uint8_t EXPLODEll(EXPLODE *self)
 {
-	return ~(self->XI | self->XF);
+	return ~(self->par.XI | self->par.XF);
 }
 // lh
 uint8_t EXPLODElh(EXPLODE *self)
 {
 	uint8_t i;
-	i = self->XI ^ self->XF;
-	i &= self->XF;
+	i = self->par.XI ^ self->par.XF;
+	i &= self->par.XF;
 	return i;
 }
 // hl
 uint8_t EXPLODEhl(EXPLODE *self)
 {
 	uint8_t i;
-	i = self->XF ^ self->XI;
-	i &= self->XI;
+	i = self->par.XF ^ self->par.XI;
+	i &= self->par.XI;
 	return i;
 }
 

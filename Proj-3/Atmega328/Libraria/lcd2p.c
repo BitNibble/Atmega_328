@@ -4,7 +4,7 @@ Author: Sergio Santos
 	<sergio.salazar.santos@gmail.com>
 License: GNU General Public License
 Hardware: all
-Date: 12112022
+Date: 20042023
 Comment:
    Tested Atemga128 16Mhz and Atmega328 8Mhz                    
 ************************************************************************/
@@ -89,8 +89,8 @@ LCD0 LCD0enable(volatile uint8_t *cmdddr, volatile uint8_t *cmdpin, volatile uin
 void LCD0_inic(void)
 {
 	// LCD INIC
-	*lcd0cmd_DDR = (1 << RS) | (1 << RW) | (1 << EN) | (0 << NC);
-	*lcd0cmd_PORT = (1 << NC);
+	*lcd0cmd_DDR |= (1 << RS) | (1 << RW) | (1 << EN) | (0 << NC);
+	*lcd0cmd_PORT |= (1 << NC);
 	// INICIALIZACAO LCD datasheet/
 	_delay_ms(40); // using clock at 16Mhz
 	LCD0_write(0x38, INST); // function set
