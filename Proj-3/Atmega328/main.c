@@ -112,7 +112,7 @@ int main(void)
 	
 	m = ATMEGA328enable();
 	func = FUNCenable();
-	lcd = LCD0enable(&DDRB, &PINB, &PORTB, &DDRC, &PINC, &PORTC); //using arduino
+	lcd = LCD0enable(&DDRB, &PINB, &PORTB, &DDRC, &PINC, &PORTC);
 	// HC595 sh = HC595enable(&DDRB,&PORTB,3,1,0); //using arduino
 	sh = HC595enable(&DDRD,&PORTD,4,5,7); //4,5,7 using board from ETT with altered pin.
 	// UART 103 para 9600, 68 para 14400, 25 para 38400, 8 para 115200 at 16Mhz
@@ -128,7 +128,6 @@ int main(void)
 	d = 0;
 	uint8_t uartoneshot = 0;
 	
-	
 	sh.byte(output);
 	func.strtovec(LCD.pos.l10, "off");
 	func.strtovec(LCD.pos.l11, "off");
@@ -141,8 +140,10 @@ int main(void)
 		// preamble
 		// lcd reboot
 		lcd.reboot();
+		
 		input = ( PINC & 0xF0 ) | ( PINB >> 4 );
 		button.update(&button, input);
+		
 		// uart capture
 		if(uartoneshot){ uartoneshot = 0; uart.rxflush(); strcpy(uartrcv, " "); }
 		uartreceive = uart.gets(); // UART1
@@ -221,7 +222,6 @@ int main(void)
 		//ALL OFF
 		if(!strcmp(uartrcv, "all off\r\n")){
 			output = 0xFF;
-			//strcpy(uartmsg, "all off");
 			func.strtovec(LCD.pos.l10, "off");
 			func.strtovec(LCD.pos.l11, "off");
 			func.strtovec(LCD.pos.l12, "off");
