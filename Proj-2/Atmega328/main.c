@@ -2,6 +2,7 @@
 Hardware: Atmega328.c
 Author : Sergio Santos
 	<sergio.salazar.santos@gmail.com>
+License: GNU General Public License
 Date: 15/04/2023 14:00:00
 Comment:
 	Testing Atmega 328 Hardware layer

@@ -7551,11 +7551,11 @@ char LCD0_getch(void)
     2e92:	08 95       	ret
 
 00002e94 <PORTINIT>:
+    }
 }
 
 void PORTINIT(void)
 {
-	//DDRB = 0x00;
 	m.portb.reg->ddr = 0x00;
     2e94:	e9 e0       	ldi	r30, 0x09	; 9
     2e96:	f2 e0       	ldi	r31, 0x02	; 2
@@ -7563,20 +7563,17 @@ void PORTINIT(void)
     2e9a:	b3 89       	ldd	r27, Z+19	; 0x13
     2e9c:	11 96       	adiw	r26, 0x01	; 1
     2e9e:	1c 92       	st	X, r1
-	//PORTB = 0xF0;
 	m.portb.reg->port = 0xF0;
     2ea0:	a2 89       	ldd	r26, Z+18	; 0x12
     2ea2:	b3 89       	ldd	r27, Z+19	; 0x13
     2ea4:	80 ef       	ldi	r24, 0xF0	; 240
     2ea6:	12 96       	adiw	r26, 0x02	; 2
     2ea8:	8c 93       	st	X, r24
-	//DDRC = 0x00;
 	m.portc.reg->ddr = 0x00;
     2eaa:	a4 89       	ldd	r26, Z+20	; 0x14
     2eac:	b5 89       	ldd	r27, Z+21	; 0x15
     2eae:	11 96       	adiw	r26, 0x01	; 1
     2eb0:	1c 92       	st	X, r1
-	//PORTC = 0xF0;
 	m.portc.reg->port = 0xF0;
     2eb2:	04 88       	ldd	r0, Z+20	; 0x14
     2eb4:	f5 89       	ldd	r31, Z+21	; 0x15
