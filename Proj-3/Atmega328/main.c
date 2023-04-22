@@ -90,11 +90,14 @@ char LCDline1[18];
 
 /*** File Header ***/
 void PORTINIT(void);
+void interrupt1(void){d++;}
 
 /*** File Procedure & Function ***/
 int main(void)
 {	
 	PORTINIT();
+	
+	//timer0_ovf = interrupt1;
 	
 	LCD.pos.l00 = LCDline0;
 	LCD.pos.l10 = LCDline1;	
@@ -154,8 +157,7 @@ int main(void)
 		sh.byte(output);
 		
 		lcd.gotoxy(0,0);
-		lcd.string_size("Welcome",7);
-		
+		lcd.string_size("Welcome",7); lcd.hspace(2); lcd.string_size(func.ui16toa(d), 6);
 		lcd.gotoxy(1,0);
 		lcd.string_size(LCDline1, 16);
 		
@@ -249,7 +251,7 @@ void PORTINIT(void)
 /*** File Interrupt ***/
 ISR(TIMER0_OVF_vect)
 {
-	d++;
+	interrupt1();
 	/**
 	// Play around
 	if(i < 8){

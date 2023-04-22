@@ -7,7 +7,7 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, ALLOC, LOAD, DATA
   1 .text         0000198e  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000117  00800100  00800100  00001a02  2**0
+  2 .bss          00000115  00800100  00800100  00001a02  2**0
                   ALLOC
   3 .comment      00000030  00000000  00000000  00001a02  2**0
                   CONTENTS, READONLY
@@ -15,19 +15,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   5 .debug_aranges 00000298  00000000  00000000  00001a70  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   0000a36a  00000000  00000000  00001d08  2**0
+  6 .debug_info   0000a384  00000000  00000000  00001d08  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00001407  00000000  00000000  0000c072  2**0
+  7 .debug_abbrev 00001407  00000000  00000000  0000c08c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00001e6a  00000000  00000000  0000d479  2**0
+  8 .debug_line   00001e6a  00000000  00000000  0000d493  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000684  00000000  00000000  0000f2e4  2**2
+  9 .debug_frame  00000684  00000000  00000000  0000f300  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00001234  00000000  00000000  0000f968  2**0
+ 10 .debug_str    00001243  00000000  00000000  0000f984  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000017bd  00000000  00000000  00010b9c  2**0
+ 11 .debug_loc    000017bd  00000000  00000000  00010bc7  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000218  00000000  00000000  00012359  2**0
+ 12 .debug_ranges 00000218  00000000  00000000  00012384  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -124,7 +124,7 @@ Disassembly of section .text:
       d4:	1d 92       	st	X+, r1
 
 000000d6 <.do_clear_bss_start>:
-      d6:	a7 31       	cpi	r26, 0x17	; 23
+      d6:	a5 31       	cpi	r26, 0x15	; 21
       d8:	b2 07       	cpc	r27, r18
       da:	e1 f7       	brne	.-8      	; 0xd4 <.do_clear_bss_loop>
       dc:	0e 94 67 0c 	call	0x18ce	; 0x18ce <main>
@@ -3548,8 +3548,8 @@ uint8_t TWI_master_read( uint8_t ack_nack )
 UARTvar* uart_gets(void)
 {
 	return rxbuff.raw(&rxbuff);
-    13e4:	e0 91 b3 01 	lds	r30, 0x01B3	; 0x8001b3 <rxbuff+0xa>
-    13e8:	f0 91 b4 01 	lds	r31, 0x01B4	; 0x8001b4 <rxbuff+0xb>
+    13e4:	e0 91 b1 01 	lds	r30, 0x01B1	; 0x8001b1 <rxbuff+0x8>
+    13e8:	f0 91 b2 01 	lds	r31, 0x01B2	; 0x8001b2 <rxbuff+0x9>
     13ec:	89 ea       	ldi	r24, 0xA9	; 169
     13ee:	91 e0       	ldi	r25, 0x01	; 1
     13f0:	09 95       	icall
@@ -3560,8 +3560,8 @@ UARTvar* uart_gets(void)
 void uart_rxflush(void)
 {
 	rxbuff.flush(&rxbuff);
-    13f4:	e0 91 b5 01 	lds	r30, 0x01B5	; 0x8001b5 <rxbuff+0xc>
-    13f8:	f0 91 b6 01 	lds	r31, 0x01B6	; 0x8001b6 <rxbuff+0xd>
+    13f4:	e0 91 b3 01 	lds	r30, 0x01B3	; 0x8001b3 <rxbuff+0xa>
+    13f8:	f0 91 b4 01 	lds	r31, 0x01B4	; 0x8001b4 <rxbuff+0xb>
     13fc:	89 ea       	ldi	r24, 0xA9	; 169
     13fe:	91 e0       	ldi	r25, 0x01	; 1
     1400:	09 95       	icall
@@ -3574,9 +3574,9 @@ UARTvar uart_read(void)
 {
 	UARTvar c;
 	c = UART_Rx;
-    1404:	80 91 b7 01 	lds	r24, 0x01B7	; 0x8001b7 <UART_Rx>
+    1404:	80 91 b5 01 	lds	r24, 0x01B5	; 0x8001b5 <UART_Rx>
 	UART_Rx = 0;
-    1408:	10 92 b7 01 	sts	0x01B7, r1	; 0x8001b7 <UART_Rx>
+    1408:	10 92 b5 01 	sts	0x01B5, r1	; 0x8001b5 <UART_Rx>
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
@@ -3736,13 +3736,13 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
     14cc:	8a 95       	dec	r24
     14ce:	e1 f7       	brne	.-8      	; 0x14c8 <UARTenable+0x5e>
 	rxbuff = BUFFenable(UART_RX_BUFFER_SIZE, UART_RxBuf);
-    14d0:	48 eb       	ldi	r20, 0xB8	; 184
+    14d0:	46 eb       	ldi	r20, 0xB6	; 182
     14d2:	51 e0       	ldi	r21, 0x01	; 1
     14d4:	60 e2       	ldi	r22, 0x20	; 32
     14d6:	ce 01       	movw	r24, r28
     14d8:	01 96       	adiw	r24, 0x01	; 1
     14da:	0e 94 4d 0c 	call	0x189a	; 0x189a <BUFFenable>
-    14de:	8e e0       	ldi	r24, 0x0E	; 14
+    14de:	8c e0       	ldi	r24, 0x0C	; 12
     14e0:	fe 01       	movw	r30, r28
     14e2:	31 96       	adiw	r30, 0x01	; 1
     14e4:	a9 ea       	ldi	r26, 0xA9	; 169
@@ -4219,10 +4219,10 @@ ISR(UART_RX_COMPLETE)
 	
 	UART_Rx = m.usart.reg->udr0;
     17e4:	66 81       	ldd	r22, Z+6	; 0x06
-    17e6:	60 93 b7 01 	sts	0x01B7, r22	; 0x8001b7 <UART_Rx>
+    17e6:	60 93 b5 01 	sts	0x01B5, r22	; 0x8001b5 <UART_Rx>
 	rxbuff.push(&rxbuff, UART_Rx);
-    17ea:	e0 91 b1 01 	lds	r30, 0x01B1	; 0x8001b1 <rxbuff+0x8>
-    17ee:	f0 91 b2 01 	lds	r31, 0x01B2	; 0x8001b2 <rxbuff+0x9>
+    17ea:	e0 91 af 01 	lds	r30, 0x01AF	; 0x8001af <rxbuff+0x6>
+    17ee:	f0 91 b0 01 	lds	r31, 0x01B0	; 0x8001b0 <rxbuff+0x7>
     17f2:	89 ea       	ldi	r24, 0xA9	; 169
     17f4:	91 e0       	ldi	r25, 0x01	; 1
     17f6:	09 95       	icall
@@ -4278,7 +4278,7 @@ ISR(UART_UDR_EMPTY)
 
 void BUFF_push( BUFF* self, BUFFvar data ){
 	BUFFvar* head; BUFFvar* next;
-	head = self->head;
+	head = self->pos.head;
 	if(data){
     1848:	66 23       	and	r22, r22
     184a:	c1 f0       	breq	.+48     	; 0x187c <BUFF_push+0x34>
@@ -4287,14 +4287,14 @@ void BUFF_push( BUFF* self, BUFFvar data ){
 
 void BUFF_push( BUFF* self, BUFFvar data ){
 	BUFFvar* head; BUFFvar* next;
-	head = self->head;
+	head = self->pos.head;
     184c:	dc 01       	movw	r26, r24
     184e:	12 96       	adiw	r26, 0x02	; 2
     1850:	ed 91       	ld	r30, X+
     1852:	fc 91       	ld	r31, X
     1854:	13 97       	sbiw	r26, 0x03	; 3
 	if(data){
-		if( head == self->end ){
+		if( head == self->pos.end ){
     1856:	14 96       	adiw	r26, 0x04	; 4
     1858:	2d 91       	ld	r18, X+
     185a:	3c 91       	ld	r19, X
@@ -4302,7 +4302,7 @@ void BUFF_push( BUFF* self, BUFFvar data ){
     185e:	e2 17       	cp	r30, r18
     1860:	f3 07       	cpc	r31, r19
     1862:	29 f4       	brne	.+10     	; 0x186e <BUFF_push+0x26>
-			head = self->orig;
+			head = self->pos.orig;
     1864:	ed 91       	ld	r30, X+
     1866:	fc 91       	ld	r31, X
 			next = head + 1;
@@ -4318,7 +4318,7 @@ void BUFF_push( BUFF* self, BUFFvar data ){
     1872:	60 83       	st	Z, r22
 			*next = 0;
     1874:	1c 92       	st	X, r1
-			self->head = next;
+			self->pos.head = next;
     1876:	fc 01       	movw	r30, r24
     1878:	b3 83       	std	Z+3, r27	; 0x03
     187a:	a2 83       	std	Z+2, r26	; 0x02
@@ -4329,7 +4329,7 @@ void BUFF_push( BUFF* self, BUFFvar data ){
 }
 
 BUFFvar* BUFF_raw( BUFF* self){
-		return self->orig;
+		return self->pos.orig;
 }
     187e:	fc 01       	movw	r30, r24
     1880:	80 81       	ld	r24, Z
@@ -4340,12 +4340,12 @@ BUFFvar* BUFF_raw( BUFF* self){
 
 void BUFF_flush( BUFF* self ){
 	BUFFvar* head;
-	head = self->orig;
+	head = self->pos.orig;
     1886:	dc 01       	movw	r26, r24
     1888:	ed 91       	ld	r30, X+
     188a:	fc 91       	ld	r31, X
     188c:	11 97       	sbiw	r26, 0x01	; 1
-	self->head = head;
+	self->pos.head = head;
     188e:	13 96       	adiw	r26, 0x03	; 3
     1890:	fc 93       	st	X, r31
     1892:	ee 93       	st	-X, r30
@@ -4362,7 +4362,7 @@ void BUFF_flush(BUFF* self);
 BUFF BUFFenable( uint8_t size_buff, BUFFvar* buff )
 {
     189a:	fc 01       	movw	r30, r24
-	ret.end = buff + ( size_buff - 1 ); // generic
+	ret.pos.end = buff + ( size_buff - 1 ); // generic
 	// function pointers
 	ret.push = BUFF_push;
 	ret.raw = BUFF_raw;
@@ -4381,16 +4381,16 @@ BUFF BUFFenable( uint8_t size_buff, BUFFvar* buff )
     18b0:	44 83       	std	Z+4, r20	; 0x04
     18b2:	84 e2       	ldi	r24, 0x24	; 36
     18b4:	9c e0       	ldi	r25, 0x0C	; 12
-    18b6:	91 87       	std	Z+9, r25	; 0x09
-    18b8:	80 87       	std	Z+8, r24	; 0x08
+    18b6:	97 83       	std	Z+7, r25	; 0x07
+    18b8:	86 83       	std	Z+6, r24	; 0x06
     18ba:	8f e3       	ldi	r24, 0x3F	; 63
     18bc:	9c e0       	ldi	r25, 0x0C	; 12
-    18be:	93 87       	std	Z+11, r25	; 0x0b
-    18c0:	82 87       	std	Z+10, r24	; 0x0a
+    18be:	91 87       	std	Z+9, r25	; 0x09
+    18c0:	80 87       	std	Z+8, r24	; 0x08
     18c2:	83 e4       	ldi	r24, 0x43	; 67
     18c4:	9c e0       	ldi	r25, 0x0C	; 12
-    18c6:	95 87       	std	Z+13, r25	; 0x0d
-    18c8:	84 87       	std	Z+12, r24	; 0x0c
+    18c6:	93 87       	std	Z+11, r25	; 0x0b
+    18c8:	82 87       	std	Z+10, r24	; 0x0a
 }
     18ca:	cf 01       	movw	r24, r30
     18cc:	08 95       	ret
@@ -4420,7 +4420,7 @@ int main(void)
     18ea:	8e e3       	ldi	r24, 0x3E	; 62
     18ec:	fe 01       	movw	r30, r28
     18ee:	31 96       	adiw	r30, 0x01	; 1
-    18f0:	a9 ed       	ldi	r26, 0xD9	; 217
+    18f0:	a7 ed       	ldi	r26, 0xD7	; 215
     18f2:	b1 e0       	ldi	r27, 0x01	; 1
     18f4:	01 90       	ld	r0, Z+
     18f6:	0d 92       	st	X+, r0
@@ -4430,7 +4430,7 @@ int main(void)
 	
 	/***Local Variable***/
 	m328.gpwr.reg->r0=0xFF;
-    18fc:	e9 ed       	ldi	r30, 0xD9	; 217
+    18fc:	e7 ed       	ldi	r30, 0xD7	; 215
     18fe:	f1 e0       	ldi	r31, 0x01	; 1
     1900:	a0 81       	ld	r26, Z
     1902:	b1 81       	ldd	r27, Z+1	; 0x01
@@ -4463,7 +4463,7 @@ int main(void)
     while (TRUE)
     {
 		m328.cpu.reg->gpior0=0xFF;
-    192a:	a9 ed       	ldi	r26, 0xD9	; 217
+    192a:	a7 ed       	ldi	r26, 0xD7	; 215
     192c:	b1 e0       	ldi	r27, 0x01	; 1
     192e:	18 96       	adiw	r26, 0x08	; 8
     1930:	ed 91       	ld	r30, X+

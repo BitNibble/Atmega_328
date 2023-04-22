@@ -1,4 +1,4 @@
-/*********************************************************
+/********************************************************************
 	ATMEGA 328 MAPPING
 Author: Sergio Manuel Santos
 	<sergio.salazar.santos@gmail.com>
@@ -7,7 +7,7 @@ Hardware: Atmega328 by ETT ET-BASE
 Date: 25112022
 Comment: 
 	Virtual Image Atmega 328 mapping.
-**********************************************************/
+*********************************************************************/
 #ifndef _ATMEGA328MAPPING_H_
 	#define _ATMEGA328MAPPING_H_
 
@@ -180,6 +180,18 @@ typedef struct {
 
 /*** Global Header ***/
 ATMEGA328 ATMEGA328enable(void);
+
+// Experiment
+//void (*timer2_compa)(void);
+//void (*timer2_compb)(void);
+//void (*timer2_ovf)(void);
+//void (*timer1_capt)(void);
+//void (*timer1_compa)(void);
+//void (*timer1_compb)(void);
+//void (*timer1_ovf)(void);
+//void (*timer0_compa)(void);
+//void (*timer0_compb)(void);
+//void (*timer0_ovf)(void);
 
 #endif
 /***EOF***/

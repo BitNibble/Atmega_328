@@ -52,8 +52,8 @@ TIMER_COUNTER0 TIMER_COUNTER0enable(unsigned char wavegenmode, unsigned char int
 //	wavegen mode: Normal; PWM phase correct; Fast PWM; default-Normasl;
 //	interrupt: off; overflow; output compare; both; default - non.
 {
-	TIMER_COUNTER0 timer0;
 	mega328 = ATMEGA328enable();
+	TIMER_COUNTER0 timer0;
 	
 	timer0_state = 0;
 	mega328.tc0.reg->tccr0a &= ~((1 << WGM01) | (1 << WGM00));
@@ -456,7 +456,7 @@ void TIMER_COUNTER1_stop(void)
 	mega328.tc1.reg->tcnt1 = mega328.writelhbyte(0X0000);
 	timer1_state = 0;
 }
-/*****************************************************************************************/
+
 TIMER_COUNTER2 TIMER_COUNTER2enable(unsigned char wavegenmode, unsigned char interrupt)
 //	PARAMETER SETTING
 //	wavegen mode: Normal; PWM phase correct; Fast PWM; default-Normasl;
@@ -635,18 +635,6 @@ void TIMER_COUNTER2_stop(void)
 	mega328.tc2.reg->tcnt2 = 0X00;
 	timer2_state = 0;
 }
-
-/*** File Interrupt ***/
-// ISR(TIMER2_COMPA_vect){}
-// ISR(TIMER2_COMPB_vect){}
-// ISR(TIMER2_OVF_vect){}
-// ISR(TIMER1_CAPT_vect){}
-// ISR(TIMER1_COMPA_vect){}
-// ISR(TIMER1_COMPB_vect){}
-// ISR(TIMER1_OVF_vect){}
-// ISR(TIMER0_COMPA_vect){}
-// ISR(TIMER0_COMPB_vect){}
-// ISR(TIMER0_OVF_vect){}
 
 /***EOF***/
 
