@@ -19,8 +19,8 @@ main.d main.o: .././main.c ../Libraria/atmega328mapping.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\eeprom.h \
  ../Libraria/atmega328interrupt.h ../Libraria/atmega328timer.h \
  ../Libraria/atmega328twi.h ../Libraria/atmega328uart.h \
- ../Libraria/function.h ../Libraria/lcd2p.h ../Libraria/keypad.h \
- ../Libraria/74hc595.h ../Libraria/explode.h \
+ ../Libraria/function.h ../Libraria/lcd2p.h ../Libraria/74hc595.h \
+ ../Libraria/explode.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay_basic.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h \
@@ -77,8 +77,6 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 ../Libraria/function.h:
 
 ../Libraria/lcd2p.h:
-
-../Libraria/keypad.h:
 
 ../Libraria/74hc595.h:
 

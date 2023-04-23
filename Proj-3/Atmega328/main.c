@@ -38,7 +38,7 @@ Comment:
 #include "atmega328mapping.h"
 #include "function.h"
 #include "lcd2p.h"
-#include "keypad.h"
+//#include "keypad.h"
 #include "74hc595.h"
 #include "explode.h"
 //#include "atcommands.h"
@@ -148,19 +148,33 @@ int main(void)
 		button.update(&button, input);
 		
 		// uart capture
-		//if(uartoneshot){ uartoneshot = 0;}
 		uartreceive = uart.gets(); // UART1
 		strcpy(uartrcv, uartreceive);
 		
 		if(uart.getch() == '.'){ uart.rxflush(); }
-		else{strcpy( uartmsg, uartreceive); }
+		else{strcpy( uartmsg, uartreceive ); }
+		
 		// procedures
-		
-		
 		sh.byte(output);
 		
 		lcd.gotoxy(0,0);
-		lcd.string_size(uartmsg,16); //lcd.hspace(2); lcd.string_size(func.ui16toa(d), 6);
+		lcd.putch(':'); lcd.string_size(uartmsg,16); //lcd.hspace(2); lcd.string_size(func.ui16toa(d), 6);
+		// check character table of LCD 
+		//for(i=0;i<16;lcd.putch(i),i++);
+		//for(i=16;i<32;lcd.putch(i),i++);
+		//for(i=32;i<64;lcd.putch(i),i++);
+		//for(i=64;i<80;lcd.putch(i),i++);
+		//for(i=80;i<96;lcd.putch(i),i++);
+		//for(i=96;i<112;lcd.putch(i),i++);
+		//for(i=112;i<128;lcd.putch(i),i++);
+		//for(i=128;i<144;lcd.putch(i),i++);
+		//for(i=144;i<160;lcd.putch(i),i++);
+		//for(i=160;i<176;lcd.putch(i),i++);
+		//for(i=176;i<192;lcd.putch(i),i++);
+		//for(i=192;i<208;lcd.putch(i),i++);
+		//for(i=208;i<224;lcd.putch(i),i++);
+		//for(i=224;i<240;lcd.putch(i),i++);
+		//for(i=240;i<255;lcd.putch(i),i++); // 255 is a BLACK P.
 		
 		lcd.gotoxy(1,0);
 		lcd.string_size(LCDline1, 16);
