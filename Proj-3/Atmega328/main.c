@@ -159,6 +159,7 @@ int main(void)
 		
 		lcd.gotoxy(0,0);
 		lcd.putch(':'); lcd.string_size(uartmsg,16); //lcd.hspace(2); lcd.string_size(func.ui16toa(d), 6);
+		
 		// check character table of LCD 
 		//for(i=0;i<16;lcd.putch(i),i++);
 		//for(i=16;i<32;lcd.putch(i),i++);

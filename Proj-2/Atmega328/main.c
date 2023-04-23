@@ -1,8 +1,10 @@
 /***********************************************************
-Hardware: Atmega328.c
+	Testing Hardware Mapping
 Author : Sergio Santos
 	<sergio.salazar.santos@gmail.com>
 License: GNU General Public License
+Hardware: Atmega 328
+Software: Microchip Studio (Version: 7.0.2542)
 Date: 15/04/2023 14:00:00
 Comment:
 	Testing Atmega 328 Hardware layer

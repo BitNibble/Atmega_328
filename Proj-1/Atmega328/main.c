@@ -1,11 +1,24 @@
 /***********************************************************
-Hardware: Atmega328.c
+	Testing Uart Threw FTDI
 Author : Sergio Santos
 	<sergio.salazar.santos@gmail.com>
 License: GNU General Public License
+Hardware: Atmega 328
+Software: Microchip Studio (Version: 7.0.2542)
 Date: 15/04/2023 14:00:00
 Comment:
-	Testing uart threw ftdi.
+		LCD
+	-PB0 pin 14 cmd
+	-PB1 pin 15 cmd
+	-PB2 pin 16 cmd
+	-PB3 pin 17 cmd
+	-PC0 pin 23 data
+	-PC1 pin 24 data
+	-PC2 pin 25 data
+	-PC3 pin 26 data
+		FTDI (MAX 232 bypassed with jumpers)
+	-PD0 pin 2 Tx
+	-PD1 pin 3 Rx
 	
  **********************************************************/
 #define F_CPU 16000000UL
