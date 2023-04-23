@@ -30,7 +30,7 @@ BUFF BUFFenable( uint8_t size_buff, BUFFvar* buff )
 	// inic VAR
 	ret.pos.orig = buff;
 	ret.pos.head = buff;
-	ret.pos.end = buff + ( size_buff - 1 ); // generic
+	ret.pos.end = buff + ( size_buff ); // generic
 	// function pointers
 	ret.push = BUFF_push;
 	ret.raw = BUFF_raw;

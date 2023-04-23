@@ -32,7 +32,7 @@ Comment:
 	#define GLOBAL_INTERRUPT_ENABLE 7
 #endif
 #ifndef UART_RX_BUFFER_SIZE
-	#define UART_RX_BUFFER_SIZE 32
+	#define UART_RX_BUFFER_SIZE 16
 #endif
 #define UARTvar char
 // Parity choices

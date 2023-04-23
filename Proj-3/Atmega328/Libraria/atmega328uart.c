@@ -48,7 +48,7 @@ Comment:
 ATMEGA328 m;
 BUFF rxbuff;
 UARTvar UART_Rx;
-UARTvar UART_RxBuf[UART_RX_BUFFER_SIZE + 1];
+UARTvar UART_RxBuf[UART_RX_BUFFER_SIZE+1];
 uint8_t UART_LastRxError;
 
 /*** File Header ***/

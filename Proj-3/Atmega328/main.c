@@ -41,7 +41,7 @@ Comment:
 #include "keypad.h"
 #include "74hc595.h"
 #include "explode.h"
-#include "atcommands.h"
+//#include "atcommands.h"
 #include <util/delay.h>
 //#include <stdio.h>
 //#include <stdlib.h>
@@ -130,7 +130,6 @@ int main(void)
 	uint8_t input;	
 	uint8_t output = 0xFF;
 	d = 0;
-	uint8_t uartoneshot = 0;
 	
 	sh.byte(output);
 	func.strtovec(LCD.pos.l10, "off");
@@ -149,21 +148,26 @@ int main(void)
 		button.update(&button, input);
 		
 		// uart capture
-		if(uartoneshot){ uartoneshot = 0; uart.rxflush(); strcpy(uartrcv, " "); }
+		//if(uartoneshot){ uartoneshot = 0;}
 		uartreceive = uart.gets(); // UART1
-		if(uart.getch() == '\n'){ uartoneshot = 1; strcpy(uartrcv, uartreceive); }
+		strcpy(uartrcv, uartreceive);
+		
+		if(uart.getch() == '.'){ uart.rxflush(); }
+		else{strcpy( uartmsg, uartreceive); }
 		// procedures
+		
 		
 		sh.byte(output);
 		
 		lcd.gotoxy(0,0);
-		lcd.string_size("Welcome",7); lcd.hspace(2); lcd.string_size(func.ui16toa(d), 6);
+		lcd.string_size(uartmsg,16); //lcd.hspace(2); lcd.string_size(func.ui16toa(d), 6);
+		
 		lcd.gotoxy(1,0);
 		lcd.string_size(LCDline1, 16);
 		
 		
 		//LED 1
-		if(!strcmp(uartrcv, "led 1\r\n") || (button.HL & 1)){
+		if(!strcmp(uartrcv, "led 1.") || (button.HL & 1)){
 			if(output & 1){
 				output&=~1;
 				func.strtovec(LCD.pos.l10, "on ");
@@ -172,13 +176,13 @@ int main(void)
 				func.strtovec(LCD.pos.l10, "off");
 			}
 		}
-		if(!strcmp(uartrcv, "led 1 off\r\n")){
+		if(!strcmp(uartrcv, "led 1 off.")){
 				output|=1;
 				func.strtovec(LCD.pos.l10, "off");
 		}
 		
 		//LED 2
-		if(!strcmp(uartrcv, "led 2\r\n") || (button.HL & 2)){
+		if(!strcmp(uartrcv, "led 2.") || (button.HL & 2)){
 			if(output & 2){
 				output&=~2;
 				func.strtovec(LCD.pos.l11, "on ");
@@ -187,13 +191,13 @@ int main(void)
 				func.strtovec(LCD.pos.l11, "off");
 			}
 		}
-		if(!strcmp(uartrcv, "led 2 off\r\n")){
+		if(!strcmp(uartrcv, "led 2 off.")){
 			output|=2;
 			func.strtovec(LCD.pos.l11, "off");
 		}
 		
 		//LED 3
-		if(!strcmp(uartrcv, "led 3\r\n") || (button.HL & 4)){
+		if(!strcmp(uartrcv, "led 3.") || (button.HL & 4)){
 			if(output & 4){
 				output&=~4;
 				func.strtovec(LCD.pos.l12, "on ");
@@ -202,13 +206,13 @@ int main(void)
 				func.strtovec(LCD.pos.l12, "off");
 			}
 		}
-		if(!strcmp(uartrcv, "led 3 off\r\n")){
+		if(!strcmp(uartrcv, "led 3 off.")){
 			output|=4;
 			func.strtovec(LCD.pos.l12, "off");
 		}
 		
 		//LED 4
-		if(!strcmp(uartrcv, "led 4\r\n") || (button.HL & 8)){
+		if(!strcmp(uartrcv, "led 4.") || (button.HL & 8)){
 			if(output & 8){
 				output&=~8;
 				func.strtovec(LCD.pos.l13, "on ");
@@ -217,13 +221,13 @@ int main(void)
 				func.strtovec(LCD.pos.l13, "off");
 			}
 		}
-		if(!strcmp(uartrcv, "led 4 off\r\n")){
+		if(!strcmp(uartrcv, "led 4 off.")){
 			output|=8;
 			func.strtovec(LCD.pos.l13, "off");
 		}
 		
 		//ALL OFF
-		if(!strcmp(uartrcv, "all off\r\n")){
+		if(!strcmp(uartrcv, "all off.")){
 			output = 0xFF;
 			func.strtovec(LCD.pos.l10, "off");
 			func.strtovec(LCD.pos.l11, "off");
@@ -232,7 +236,7 @@ int main(void)
 		}
 		
 		//STATUS FEEDBACK
-		if(!strcmp(uartrcv, "status\r\n")){
+		if(!strcmp(uartrcv, "status.")){
 			uart.puts(LCDline1);
 		}
 		
