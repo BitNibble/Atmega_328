@@ -170,6 +170,7 @@ HC595_clkpin        0x1               Libraria/74hc595.o
 keypad_PIN          0x2               Libraria/keypad.o
 uartrcv             0x10              main.o
 i2c                 0xc               Libraria/pcf8563rtc.o
+ATstr               0x20              Libraria/atcommands.o
 analogmega328       0x3e              Libraria/atmega328analog.o
 lcd0data_DDR        0x2               Libraria/lcd2p.o
 mm74c923_PORT       0x2               Libraria/mm74c923.o
@@ -214,27 +215,28 @@ Discarded input sections
  .data          0x00000000        0x0 Libraria/atcommands.o
  .bss           0x00000000        0x0 Libraria/atcommands.o
  .rodata.str1.1
-                0x00000000      0x66e Libraria/atcommands.o
+                0x00000000      0x66d Libraria/atcommands.o
  .text.BT05ATcmd
-                0x00000000      0x2e8 Libraria/atcommands.o
+                0x00000000      0x57e Libraria/atcommands.o
  .text.HC42ATcmd
-                0x00000000       0xc2 Libraria/atcommands.o
+                0x00000000      0x270 Libraria/atcommands.o
  .progmem.gcc_sw_table.HC42ATcmd
-                0x00000000       0x38 Libraria/atcommands.o
+                0x00000000       0x3a Libraria/atcommands.o
  .text.HC05ATcmd
-                0x00000000      0x16a Libraria/atcommands.o
+                0x00000000      0x4a0 Libraria/atcommands.o
  .progmem.gcc_sw_table.HC05ATcmd
-                0x00000000       0x70 Libraria/atcommands.o
- .debug_info    0x00000000      0x130 Libraria/atcommands.o
- .debug_abbrev  0x00000000       0xb4 Libraria/atcommands.o
- .debug_loc     0x00000000      0x69e Libraria/atcommands.o
+                0x00000000       0x72 Libraria/atcommands.o
+ .debug_info    0x00000000      0x12f Libraria/atcommands.o
+ .debug_abbrev  0x00000000       0xbb Libraria/atcommands.o
+ .debug_loc     0x00000000      0x60e Libraria/atcommands.o
  .debug_aranges
                 0x00000000       0x30 Libraria/atcommands.o
  .debug_ranges  0x00000000       0x20 Libraria/atcommands.o
- .debug_line    0x00000000      0x718 Libraria/atcommands.o
- .debug_str     0x00000000      0x1a4 Libraria/atcommands.o
+ .debug_line    0x00000000      0x73c Libraria/atcommands.o
+ .debug_str     0x00000000      0x1ad Libraria/atcommands.o
  .comment       0x00000000       0x31 Libraria/atcommands.o
  .debug_frame   0x00000000       0x44 Libraria/atcommands.o
+ COMMON         0x00000000       0x20 Libraria/atcommands.o
  .text          0x00000000        0x0 Libraria/atmega328analog.o
  .data          0x00000000        0x0 Libraria/atmega328analog.o
  .bss           0x00000000        0x0 Libraria/atmega328analog.o
