@@ -407,7 +407,7 @@ long FUNCgcd1(long a, long b)
 			a = b;
 			b = r;
 		}
-	}	
+	}
 	return b;
 }
 uint8_t FUNCpincheck(uint8_t port, uint8_t pin)

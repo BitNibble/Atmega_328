@@ -4,7 +4,7 @@ Author: Sergio Santos
 	<sergio.salazar.santos@gmail.com>
 License: GNU General Public License
 Hardware: Atmega328 by ETT ET-BASE
-Date: 30112022
+Date: 24042023
 Comment:
 	Stable
 ***************************************************************************************************/
@@ -60,7 +60,7 @@ Comment:
 #define Nticks 1023 //anti polling freeze.
 
 /*** File Variable ***/
-ATMEGA328 m;
+ATMEGA328 twimega328;
 
 /*** File Header ***/
 void TWI_init(uint8_t device_id, uint8_t prescaler);
@@ -81,10 +81,10 @@ TWI TWIenable(uint8_t atmega_ID,  uint8_t prescaler)
 	uint8_t tSREG;
 	TWI ic;
 	//inic file var
-	m = ATMEGA328enable();
+	twimega328 = ATMEGA328enable();
 	//inic local var
-	tSREG = m.cpu.reg->sreg;
-	m.cpu.reg->sreg &= ~(1<<GLOBAL_INTERRUPT_ENABLE);
+	tSREG = twimega328.cpu.reg->sreg;
+	twimega328.cpu.reg->sreg &= ~(1<<GLOBAL_INTERRUPT_ENABLE);
 	// Vtable
 	ic.start = TWI_start;
 	ic.connect = TWI_connect;
@@ -94,7 +94,7 @@ TWI TWIenable(uint8_t atmega_ID,  uint8_t prescaler)
 	ic.status = TWI_status;
 	
 	TWI_init(atmega_ID, prescaler);
-	m.cpu.reg->sreg = tSREG;
+	twimega328.cpu.reg->sreg = tSREG;
 	
 	return ic;
 }
@@ -106,39 +106,39 @@ void TWI_init(uint8_t device_id, uint8_t prescaler)
 		cmd = (device_id << 1) | (1 << TWGCE);
 	else
 		cmd = (1 << TWGCE); // no address, but accept general call
-	m.twi.reg->twar = cmd;
-	m.portd.reg->ddr |= TWI_IO_MASK;
-	m.portd.reg->port |= TWI_IO_MASK;
+	twimega328.twi.reg->twar = cmd;
+	twimega328.portd.reg->ddr |= TWI_IO_MASK;
+	twimega328.portd.reg->port |= TWI_IO_MASK;
 	switch(prescaler){
 		case 1:
-			m.twi.reg->twsr &= ~TWI_PRESCALER_MASK;
+			twimega328.twi.reg->twsr &= ~TWI_PRESCALER_MASK;
 		break;
 		case 4:
-			m.twi.reg->twsr |= (1 << TWPS0);
+			twimega328.twi.reg->twsr |= (1 << TWPS0);
 		break;
 		case 16:
-			m.twi.reg->twsr |= (2 << TWPS0);
+			twimega328.twi.reg->twsr |= (2 << TWPS0);
 		break;
 		case 64:
-			m.twi.reg->twsr |= (3 << TWPS0);
+			twimega328.twi.reg->twsr |= (3 << TWPS0);
 		break;
 		default:
 			prescaler = 1;
-			m.twi.reg->twsr &= ~TWI_PRESCALER_MASK;
+			twimega328.twi.reg->twsr &= ~TWI_PRESCALER_MASK;
 		break;
 	}
-	m.twi.reg->twbr = ((F_CPU / TWI_SCL_CLOCK) - 16) / (2 * prescaler);
+	twimega328.twi.reg->twbr = ((F_CPU / TWI_SCL_CLOCK) - 16) / (2 * prescaler);
 	// Standard Config begin
-	//m.twi->twsr = 0x00; //set presca1er bits to zero
-	//m.twi->twbr = 0x46; //SCL frequency is 50K for 16Mhz
-	//m.twi->twcr = 0x04; //enab1e TWI module
+	//twimega328.twi->twsr = 0x00; //set presca1er bits to zero
+	//twimega328.twi->twbr = 0x46; //SCL frequency is 50K for 16Mhz
+	//twimega328.twi->twcr = 0x04; //enab1e TWI module
 	// Standard Config end
 }
 // void TWI_Start(void)
 void TWI_start(void) // $08
 {
 	uint8_t cmd = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);
-	m.twi.reg->twcr = cmd;
+	twimega328.twi.reg->twcr = cmd;
 	
 	TWI_wait_twint( Nticks );
 	
@@ -159,10 +159,10 @@ void TWI_connect( uint8_t address, uint8_t rw )
 		cmd = (address << 1) | (1 << 0);
 	else
 		cmd = (address << 1) | (0 << 0);
-	m.twi.reg->twdr = cmd;
+	twimega328.twi.reg->twdr = cmd;
 	
 	cmd = (1 << TWINT) | (1 << TWEN);
-	m.twi.reg->twcr = cmd;
+	twimega328.twi.reg->twcr = cmd;
 	
 	TWI_wait_twint( Nticks );
 	
@@ -182,10 +182,10 @@ void TWI_connect( uint8_t address, uint8_t rw )
 void TWI_master_write( uint8_t var_twiData_u8 )
 {
 	uint8_t cmd = var_twiData_u8;
-	m.twi.reg->twdr = cmd;
+	twimega328.twi.reg->twdr = cmd;
 	
 	cmd = (1 << TWINT) | (1 << TWEN);
-	m.twi.reg->twcr = cmd;
+	twimega328.twi.reg->twcr = cmd;
 	
 	TWI_wait_twint( Nticks );
 	
@@ -205,7 +205,7 @@ uint8_t TWI_master_read( uint8_t ack_nack )
 	if( ack_nack )
 		cmd |= ( 1 << TWEA );
 	cmd |= ( 1 << TWINT ) | ( 1 << TWEN );
-	m.twi.reg->twcr = cmd;
+	twimega328.twi.reg->twcr = cmd;
 	
 	TWI_wait_twint( Nticks );
 	
@@ -217,28 +217,28 @@ uint8_t TWI_master_read( uint8_t ack_nack )
 		break;
 	}
 	
-	cmd = m.twi.reg->twdr;
+	cmd = twimega328.twi.reg->twdr;
 	return cmd;
 }
 // void TWI_stop(void)
 void TWI_stop(void)
 {
 	uint8_t cmd = (1 << TWINT) | (1 << TWEN) | (1 << TWSTO);
-	m.twi.reg->twcr = cmd;
+	twimega328.twi.reg->twcr = cmd;
 	
 	_delay_us(100); //wait for a short time
 }
 // auxiliary
 uint8_t TWI_status( void )
 {
-	uint8_t cmd = m.twi.reg->twsr & TWI_STATUS_MASK;
+	uint8_t cmd = twimega328.twi.reg->twsr & TWI_STATUS_MASK;
 	return cmd;
 }
 
 void TWI_wait_twint( uint16_t nticks ) // hardware triggered
 {
 	unsigned int i;
-	for(i = 0; !( m.twi.reg->twcr & (1 << TWINT)); i++ ){ // wait for acknowledgment confirmation bit.
+	for(i = 0; !( twimega328.twi.reg->twcr & (1 << TWINT)); i++ ){ // wait for acknowledgment confirmation bit.
 		if( i > nticks ) // timeout
 			break;
 	}

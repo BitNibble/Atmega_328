@@ -4,7 +4,7 @@ Author: Sergio Manuel Santos
 	<sergio.salazar.santos@gmail.com>
 License: GNU General Public License
 Hardware: Atmega328
-Date: 01122022
+Date: 24042023
 Comment:
 	Very Stable
 *************************************************************************/
@@ -29,7 +29,7 @@ Comment:
  	#error "Not Atmega328"
 #endif
 /*** File Variable ***/
-ATMEGA328 m;
+ATMEGA328 analogmega328;
 static volatile int ADC_VALUE[MAX_CHANNEL];
 static volatile int ADC_CHANNEL_GAIN[MAX_CHANNEL];
 static volatile int ADC_N_CHANNEL;
@@ -47,12 +47,12 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
 // setup, and list of channels to be probed
 {
 	uint8_t tSREG;
-	m = ATMEGA328enable();
+	analogmega328 = ATMEGA328enable();
 	va_list list;
 	int i;
 
-	tSREG = m.cpu.reg->sreg;
-	m.cpu.reg->sreg &= ~ (1 << GLOBAL_INTERRUPT_ENABLE);
+	tSREG = analogmega328.cpu.reg->sreg;
+	analogmega328.cpu.reg->sreg &= ~ (1 << GLOBAL_INTERRUPT_ENABLE);
 	
 	ADC_N_CHANNEL = n_channel;
 	ADC_SELECTOR = 0;
@@ -62,17 +62,17 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
 	//Vtable
 	analog.read = ANALOG_read;
 	
-	m.adc.reg->admux &= ~(3 << REFS0);
+	analogmega328.adc.reg->admux &= ~(3 << REFS0);
 	switch( Vreff ){
 		case 0:
 			analog.VREFF = 0;
 		break;
 		case 1:
-			m.adc.reg->admux |=	(1 << REFS0);
+			analogmega328.adc.reg->admux |=	(1 << REFS0);
 			analog.VREFF = 1;
 		break;
 		case 3:
-			m.adc.reg->admux |=	(3 << REFS0);
+			analogmega328.adc.reg->admux |=	(3 << REFS0);
 			analog.VREFF = 3;
 		break;
 		default:
@@ -80,58 +80,58 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
 		break;
 	}
 	
-	m.adc.reg->admux &= ~(1 << ADLAR);
+	analogmega328.adc.reg->admux &= ~(1 << ADLAR);
 	
 	va_start(list, n_channel);
 	for( i = 0; i < n_channel; i++ ){
 		ADC_CHANNEL_GAIN[i] = va_arg(list, int);
 	}
 	va_end(list);
-	m.adc.reg->admux &= ~MUX_MASK;
-	m.adc.reg->admux |= (MUX_MASK & ADC_CHANNEL_GAIN[ADC_SELECTOR]);
+	analogmega328.adc.reg->admux &= ~MUX_MASK;
+	analogmega328.adc.reg->admux |= (MUX_MASK & ADC_CHANNEL_GAIN[ADC_SELECTOR]);
 	
-	m.adc.reg->adcsra |= (1 << ADEN);
-	m.adc.reg->adcsra |= (1 << ADSC);
-	m.adc.reg->adcsra &= ~(1 << ADATE);
-	m.adc.reg->adscrb &= ~(7 << ADTS0);
-	m.adc.reg->adcsra |= (1 << ADIE);
+	analogmega328.adc.reg->adcsra |= (1 << ADEN);
+	analogmega328.adc.reg->adcsra |= (1 << ADSC);
+	analogmega328.adc.reg->adcsra &= ~(1 << ADATE);
+	analogmega328.adc.reg->adscrb &= ~(7 << ADTS0);
+	analogmega328.adc.reg->adcsra |= (1 << ADIE);
 	
-	m.adc.reg->adcsra &= ~(7 << ADPS0);
+	analogmega328.adc.reg->adcsra &= ~(7 << ADPS0);
 	switch( Divfactor ){
 		case 2: // 1
 			analog.DIVISION_FACTOR = 2;
 		break;
 		case 4: // 2
-			m.adc.reg->adcsra |= (1 << ADPS1);
+			analogmega328.adc.reg->adcsra |= (1 << ADPS1);
 			analog.DIVISION_FACTOR = 4;
 		break;
 		case 8: // 3
-			m.adc.reg->adcsra |= (3 << ADPS0);
+			analogmega328.adc.reg->adcsra |= (3 << ADPS0);
 			analog.DIVISION_FACTOR = 8;
 		break;
 		case 16: // 4
-			m.adc.reg->adcsra |= (1 << ADPS2);
+			analogmega328.adc.reg->adcsra |= (1 << ADPS2);
 			analog.DIVISION_FACTOR	=	16;
 		break;
 		case 32: // 5
-			m.adc.reg->adcsra |= (5 << ADPS0);
+			analogmega328.adc.reg->adcsra |= (5 << ADPS0);
 			analog.DIVISION_FACTOR = 32;
 		break;
 		case 64: // 6
-			m.adc.reg->adcsra |= (6 << ADPS0);
+			analogmega328.adc.reg->adcsra |= (6 << ADPS0);
 			analog.DIVISION_FACTOR = 64;
 		break;
 		case 128: // 7
-			m.adc.reg->adcsra |= (7 << ADPS0);
+			analogmega328.adc.reg->adcsra |= (7 << ADPS0);
 			analog.DIVISION_FACTOR = 128;
 		break;
 		default:
-			m.adc.reg->adcsra |= (7 << ADPS0);
+			analogmega328.adc.reg->adcsra |= (7 << ADPS0);
 			analog.DIVISION_FACTOR = 128;
 		break;
 	}
-	m.cpu.reg->sreg = tSREG;
-	m.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
+	analogmega328.cpu.reg->sreg = tSREG;
+	analogmega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
 	
 	return analog;
 }
@@ -140,9 +140,9 @@ int ANALOG_read(int selection)
 {
 	uint8_t ADSC_FLAG;
 	ADSC_FLAG = (1 << ADSC);
-	if( !(m.adc.reg->adcsra & ADSC_FLAG) ){
+	if( !(analogmega328.adc.reg->adcsra & ADSC_FLAG) ){
 		//ADC_SELECT
-		m.adc.reg->adcsra |= (1 << ADSC);
+		analogmega328.adc.reg->adcsra |= (1 << ADSC);
 	}	
 	return ADC_VALUE[selection];
 }
@@ -165,8 +165,8 @@ ISR(ANALOG_INTERRUPT)
 			ADC_SELECTOR++;
 		else
 			ADC_SELECTOR = 0;
-		m.adc.reg->admux &= ~MUX_MASK;
-		m.adc.reg->admux |= (ADC_CHANNEL_GAIN[ADC_SELECTOR] & MUX_MASK);
+		analogmega328.adc.reg->admux &= ~MUX_MASK;
+		analogmega328.adc.reg->admux |= (ADC_CHANNEL_GAIN[ADC_SELECTOR] & MUX_MASK);
 	}		
 }
 

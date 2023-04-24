@@ -4,7 +4,7 @@ Author:	Sergio Manuel Santos
 	<sergio.salazar.santos@gmail.com>
 License: GNU General Public License
 Hardware: Atmega328 by ETT ET-BASE
-Date: 02122022
+Date: 24042023
 Comment:
 	stable
 *************************************************************************/
@@ -45,7 +45,7 @@ Comment:
 #endif
 
 /*** File Variable ***/
-ATMEGA328 m;
+ATMEGA328 uartmega328;
 BUFF rxbuff;
 UARTvar UART_Rx;
 UARTvar UART_RxBuf[UART_RX_BUFFER_SIZE+1];
@@ -64,10 +64,10 @@ void uart_puts(UARTvar* s);
 UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbits, unsigned int Parity )
 {
 	uint8_t tSREG;
-	tSREG = m.cpu.reg->sreg;
-	m.cpu.reg->sreg &= ~(1 << GLOBAL_INTERRUPT_ENABLE);
+	tSREG = uartmega328.cpu.reg->sreg;
+	uartmega328.cpu.reg->sreg &= ~(1 << GLOBAL_INTERRUPT_ENABLE);
 	UART uart;
-	m = ATMEGA328enable();
+	uartmega328 = ATMEGA328enable();
 	rxbuff = BUFFenable(UART_RX_BUFFER_SIZE, UART_RxBuf);
 	uart.ubrr = baudrate;
 	// Vtable
@@ -81,89 +81,89 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
 	// Set baud rate
 	if ( baudrate & 0x8000 ) 
 	{
-   		m.usart.reg->ucsr0a = (1 << U2X0);  //Enable 2x speed 
+   		uartmega328.usart.reg->ucsr0a = (1 << U2X0);  //Enable 2x speed 
    		baudrate &= ~0x8000;
    	}
-	m.usart.reg->ubrr0 =  m.writehlbyte(baudrate);
+	uartmega328.usart.reg->ubrr0 =  uartmega328.writehlbyte(baudrate);
 	// Enable USART receiver and transmitter and receive complete interrupt
-	m.usart.reg->ucsr0b = _BV(RXCIE0) | (1 << RXEN0) | (1 << TXEN0);
+	uartmega328.usart.reg->ucsr0b = _BV(RXCIE0) | (1 << RXEN0) | (1 << TXEN0);
 	// Set frame format: asynchronous, 8data, no parity, 1stop bit
 	#ifdef URSEL0
-		m.usart.reg->ucsr0c = (1 << URSEL0) | (3 << UCSZ00);
+		uartmega328.usart.reg->ucsr0c = (1 << URSEL0) | (3 << UCSZ00);
 		uart.FDbits = 8;
 		uart.Stopbits = 1;
 		uart.Parity = 0;
 	#else
 		switch(FDbits){
 			case 9:
-				m.usart.reg->ucsr0b |= (1 << UCSZ02);
-				m.usart.reg->ucsr0c |= (3 << UCSZ00);
+				uartmega328.usart.reg->ucsr0b |= (1 << UCSZ02);
+				uartmega328.usart.reg->ucsr0c |= (3 << UCSZ00);
 				uart.FDbits = 9;
 			break;
 			case 8:
-				m.usart.reg->ucsr0b &= ~(1 << UCSZ02);
-				m.usart.reg->ucsr0c |= (3 << UCSZ00);
+				uartmega328.usart.reg->ucsr0b &= ~(1 << UCSZ02);
+				uartmega328.usart.reg->ucsr0c |= (3 << UCSZ00);
 				uart.FDbits=8;
 			break;
 			case 7:
-				m.usart.reg->ucsr0b &= ~(1 << UCSZ02);
-				m.usart.reg->ucsr0c |= (1 << UCSZ01);
-				m.usart.reg->ucsr0c &= ~(1 << UCSZ00);
+				uartmega328.usart.reg->ucsr0b &= ~(1 << UCSZ02);
+				uartmega328.usart.reg->ucsr0c |= (1 << UCSZ01);
+				uartmega328.usart.reg->ucsr0c &= ~(1 << UCSZ00);
 				uart.FDbits=7;
 			break;
 			case 6:	
-				m.usart.reg->ucsr0b &= ~(1 << UCSZ02);
-				m.usart.reg->ucsr0c &= ~(1 << UCSZ01);
-				m.usart.reg->ucsr0c |= (1 << UCSZ00);
+				uartmega328.usart.reg->ucsr0b &= ~(1 << UCSZ02);
+				uartmega328.usart.reg->ucsr0c &= ~(1 << UCSZ01);
+				uartmega328.usart.reg->ucsr0c |= (1 << UCSZ00);
 				uart.FDbits = 6;
 			break;
 			case 5:	
-				m.usart.reg->ucsr0b &= ~(1 << UCSZ02);
-				m.usart.reg->ucsr0c &= ~(3 << UCSZ00);
+				uartmega328.usart.reg->ucsr0b &= ~(1 << UCSZ02);
+				uartmega328.usart.reg->ucsr0c &= ~(3 << UCSZ00);
 				uart.FDbits=5;
 			break;
 			default:
-				m.usart.reg->ucsr0b &= ~(1 << UCSZ02);
-				m.usart.reg->ucsr0c |= (3 << UCSZ00);
+				uartmega328.usart.reg->ucsr0b &= ~(1 << UCSZ02);
+				uartmega328.usart.reg->ucsr0c |= (3 << UCSZ00);
 				uart.FDbits = 8;
 			break;
 		}
 		switch(Stopbits){
 			case 1:
-				m.usart.reg->ucsr0c &= ~(1 << USBS0);
+				uartmega328.usart.reg->ucsr0c &= ~(1 << USBS0);
 				uart.Stopbits = 1;
 			break;
 			case 2:
-				m.usart.reg->ucsr0c |= (1 << USBS0);
+				uartmega328.usart.reg->ucsr0c |= (1 << USBS0);
 				uart.Stopbits=2;
 			break;	
 			default:
-				m.usart.reg->ucsr0c &= ~(1 << USBS0);
+				uartmega328.usart.reg->ucsr0c &= ~(1 << USBS0);
 				uart.Stopbits=1;
 			break;
 		}
 		switch(Parity){
 			case 0:
-				m.usart.reg->ucsr0c &= ~(3 << UPM00);
+				uartmega328.usart.reg->ucsr0c &= ~(3 << UPM00);
 				uart.Parity=0;
 			break;
 			case 2:
-				m.usart.reg->ucsr0c |= (1 << UPM01);
-				m.usart.reg->ucsr0c &= ~(1 << UPM00);
+				uartmega328.usart.reg->ucsr0c |= (1 << UPM01);
+				uartmega328.usart.reg->ucsr0c &= ~(1 << UPM00);
 				uart.Parity=2;
 			break;
 			case 3:
-				m.usart.reg->ucsr0c |= (3 << UPM00);
+				uartmega328.usart.reg->ucsr0c |= (3 << UPM00);
 				uart.Parity=3;
-			break;	
+			break;
 			default:
-				m.usart.reg->ucsr0c &= ~(3 << UPM00);
+				uartmega328.usart.reg->ucsr0c &= ~(3 << UPM00);
 				uart.Parity=0;
 			break;
 		}
 	#endif
-	m.cpu.reg->sreg = tSREG;
-	m.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
+	uartmega328.cpu.reg->sreg = tSREG;
+	uartmega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
 	return uart;
 }
 
@@ -189,8 +189,8 @@ void uart_rxflush(void)
 }
 void uart_write(UARTvar data)
 {
-	m.usart.reg->udr0 = data;
-	m.usart.reg->ucsr0b |= _BV(UDRIE0);
+	uartmega328.usart.reg->udr0 = data;
+	uartmega328.usart.reg->ucsr0b |= _BV(UDRIE0);
 	_delay_ms(1);
 }
 void uart_putch(UARTvar c)
@@ -212,19 +212,19 @@ ISR(UART_RX_COMPLETE)
 	unsigned char bit9;
     unsigned char usr;
 	
-	usr  = m.usart.reg->ucsr0a;
-    bit9 = m.usart.reg->ucsr0b;
+	usr  = uartmega328.usart.reg->ucsr0a;
+    bit9 = uartmega328.usart.reg->ucsr0b;
     bit9 = 0x01 & (bit9 >> 1);
 	
     UART_LastRxError = (usr & (_BV(FE0) | _BV(DOR0)));
 	
-	UART_Rx = m.usart.reg->udr0;
+	UART_Rx = uartmega328.usart.reg->udr0;
 	rxbuff.push(&rxbuff, UART_Rx);
 }
 
 ISR(UART_UDR_EMPTY)
 { // USART, UDR Empty Handler
-	m.usart.reg->ucsr0b &= ~_BV( UDRIE0 );
+	uartmega328.usart.reg->ucsr0b &= ~_BV( UDRIE0 );
 }
 
 // ISR(USART_TX_vect){}

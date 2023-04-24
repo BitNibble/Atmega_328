@@ -1,4 +1,4 @@
-/*********************************************************
+/********************************************************************
 	ATMEGA 328 MAPPING
 Author: Sergio Manuel Santos
 	<sergio.salazar.santos@gmail.com>
@@ -7,7 +7,7 @@ Hardware: Atmega328 by ETT ET-BASE
 Date: 07122022
 Comment:
 	Virtual Image Atmega 328 mapping and linking.
-**********************************************************/
+*********************************************************************/
 /*** File Library ***/
 #include "atmega328mapping.h"
 
@@ -31,6 +31,9 @@ Comment:
 // STATIC RAM
 #define InterruptVectors 0x0100
 
+/***File Variable***/
+ATMEGA328 ret;
+
 /***File Header***/
 uint16_t ReadHLByte(HighLowByte reg);
 uint16_t ReadLHByte(HighLowByte reg);
@@ -39,8 +42,7 @@ HighLowByte WriteLHByte(uint16_t val);
 uint16_t SwapByte(uint16_t num);
 
 /*** File Procedure & Function ***/
-ATMEGA328 ATMEGA328enable(void){ 
-	ATMEGA328 ret;
+ATMEGA328 ATMEGA328enable(void){
 	// Assign
 	// GPWR
 	ret.gpwr.reg = (Atmega328GPWR_TypeDef*) GPWRaddr;
@@ -163,9 +165,22 @@ uint16_t SwapByte(uint16_t num)
 // ISR(USART_TX_vect){}
 // ISR(ADC_vect){}
 // ISR(EE_READY_vect){}
+// ISR(ANALOG_INTERRUPT)
 // ISR(ANALOG_COMP_vect){}
 // ISR(TWI_vect){}
 // ISR(SPM_READY_vect){}
+
+// Experiment
+//ISR(TIMER2_COMPA_vect){if(timer2_compa)timer2_compa();}
+//ISR(TIMER2_COMPB_vect){if(timer2_compb)timer2_compb();}
+//ISR(TIMER2_OVF_vect){if(timer2_ovf)timer2_ovf();}
+//ISR(TIMER1_CAPT_vect){if(timer1_capt)timer1_capt();}
+//ISR(TIMER1_COMPA_vect){if(timer1_compa)timer1_compa();}
+//ISR(TIMER1_COMPB_vect){if(timer1_compb)timer1_compb();}
+//ISR(TIMER1_OVF_vect){if(timer1_ovf)timer1_ovf();}
+//ISR(TIMER0_COMPA_vect){if(timer0_compa)timer0_compa();}
+//ISR(TIMER0_COMPB_vect){if(timer0_compb)timer0_compb();}
+//ISR(TIMER0_OVF_vect){if(timer0_ovf)timer0_ovf();}
 
 /***EOF***/
 

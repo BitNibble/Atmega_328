@@ -165,6 +165,7 @@ uint16_t SwapByte(uint16_t num)
 // ISR(USART_TX_vect){}
 // ISR(ADC_vect){}
 // ISR(EE_READY_vect){}
+// ISR(ANALOG_INTERRUPT)
 // ISR(ANALOG_COMP_vect){}
 // ISR(TWI_vect){}
 // ISR(SPM_READY_vect){}

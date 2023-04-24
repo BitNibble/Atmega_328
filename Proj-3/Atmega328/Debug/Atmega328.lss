@@ -7,7 +7,7 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, ALLOC, LOAD, DATA
   1 .text         000043bc  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000295  00800162  00800162  000044b2  2**0
+  2 .bss          0000034f  00800162  00800162  000044b2  2**0
                   ALLOC
   3 .comment      0000005c  00000000  00000000  000044b2  2**0
                   CONTENTS, READONLY
@@ -15,19 +15,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   5 .debug_aranges 00000568  00000000  00000000  0000454c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   0000e12f  00000000  00000000  00004ab4  2**0
+  6 .debug_info   0000e135  00000000  00000000  00004ab4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00001eac  00000000  00000000  00012be3  2**0
+  7 .debug_abbrev 00001e9b  00000000  00000000  00012be9  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000037e0  00000000  00000000  00014a8f  2**0
+  8 .debug_line   000037e0  00000000  00000000  00014a84  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000ef4  00000000  00000000  00018270  2**2
+  9 .debug_frame  00000ef4  00000000  00000000  00018264  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    0000194e  00000000  00000000  00019164  2**0
+ 10 .debug_str    00001978  00000000  00000000  00019158  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    0000423e  00000000  00000000  0001aab2  2**0
+ 11 .debug_loc    0000423e  00000000  00000000  0001aad0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000498  00000000  00000000  0001ecf0  2**0
+ 12 .debug_ranges 00000498  00000000  00000000  0001ed0e  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -180,7 +180,7 @@ Disassembly of section .text:
      14c:	d9 f7       	brne	.-10     	; 0x144 <__do_copy_data+0xc>
 
 0000014e <__do_clear_bss>:
-     14e:	23 e0       	ldi	r18, 0x03	; 3
+     14e:	24 e0       	ldi	r18, 0x04	; 4
      150:	a2 e6       	ldi	r26, 0x62	; 98
      152:	b1 e0       	ldi	r27, 0x01	; 1
      154:	01 c0       	rjmp	.+2      	; 0x158 <.do_clear_bss_start>
@@ -189,7 +189,7 @@ Disassembly of section .text:
      156:	1d 92       	st	X+, r1
 
 00000158 <.do_clear_bss_start>:
-     158:	a7 3f       	cpi	r26, 0xF7	; 247
+     158:	a1 3b       	cpi	r26, 0xB1	; 177
      15a:	b2 07       	cpc	r27, r18
      15c:	e1 f7       	brne	.-8      	; 0x156 <.do_clear_bss_loop>
      15e:	0e 94 6b 17 	call	0x2ed6	; 0x2ed6 <main>
@@ -505,14 +505,14 @@ int ANALOG_read(int selection)
 {
 	uint8_t ADSC_FLAG;
 	ADSC_FLAG = (1 << ADSC);
-	if( !(m.adc.reg->adcsra & ADSC_FLAG) ){
-     366:	e0 91 fb 01 	lds	r30, 0x01FB	; 0x8001fb <m+0x4>
-     36a:	f0 91 fc 01 	lds	r31, 0x01FC	; 0x8001fc <m+0x5>
+	if( !(analogmega328.adc.reg->adcsra & ADSC_FLAG) ){
+     366:	e0 91 fb 01 	lds	r30, 0x01FB	; 0x8001fb <analogmega328+0x4>
+     36a:	f0 91 fc 01 	lds	r31, 0x01FC	; 0x8001fc <analogmega328+0x5>
      36e:	22 81       	ldd	r18, Z+2	; 0x02
      370:	26 fd       	sbrc	r18, 6
      372:	02 c0       	rjmp	.+4      	; 0x378 <ANALOG_read+0x12>
 		//ADC_SELECT
-		m.adc.reg->adcsra |= (1 << ADSC);
+		analogmega328.adc.reg->adcsra |= (1 << ADSC);
      374:	20 64       	ori	r18, 0x40	; 64
      376:	22 83       	std	Z+2, r18	; 0x02
 	}	
@@ -559,7 +559,7 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
      3b4:	ff ac       	ldd	r15, Y+63	; 0x3f
      3b6:	2b 97       	sbiw	r28, 0x0b	; 11
 	uint8_t tSREG;
-	m = ATMEGA328enable();
+	analogmega328 = ATMEGA328enable();
      3b8:	ce 01       	movw	r24, r28
      3ba:	01 96       	adiw	r24, 0x01	; 1
      3bc:	0e 94 20 04 	call	0x840	; 0x840 <ATMEGA328enable>
@@ -575,7 +575,7 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
 	va_list list;
 	int i;
 
-	tSREG = m.cpu.reg->sreg;
+	tSREG = analogmega328.cpu.reg->sreg;
      3d2:	e7 ef       	ldi	r30, 0xF7	; 247
      3d4:	f1 e0       	ldi	r31, 0x01	; 1
      3d6:	a0 85       	ldd	r26, Z+8	; 0x08
@@ -583,7 +583,7 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
      3da:	91 96       	adiw	r26, 0x21	; 33
      3dc:	4c 91       	ld	r20, X
      3de:	91 97       	sbiw	r26, 0x21	; 33
-	m.cpu.reg->sreg &= ~ (1 << GLOBAL_INTERRUPT_ENABLE);
+	analogmega328.cpu.reg->sreg &= ~ (1 << GLOBAL_INTERRUPT_ENABLE);
      3e0:	84 2f       	mov	r24, r20
      3e2:	8f 77       	andi	r24, 0x7F	; 127
      3e4:	91 96       	adiw	r26, 0x21	; 33
@@ -602,7 +602,7 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
 	//Vtable
 	analog.read = ANALOG_read;
 	
-	m.adc.reg->admux &= ~(3 << REFS0);
+	analogmega328.adc.reg->admux &= ~(3 << REFS0);
      3fc:	04 80       	ldd	r0, Z+4	; 0x04
      3fe:	f5 81       	ldd	r31, Z+5	; 0x05
      400:	e0 2d       	mov	r30, r0
@@ -619,9 +619,9 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
 			analog.VREFF = 0;
 		break;
 		case 1:
-			m.adc.reg->admux |=	(1 << REFS0);
-     412:	e0 91 fb 01 	lds	r30, 0x01FB	; 0x8001fb <m+0x4>
-     416:	f0 91 fc 01 	lds	r31, 0x01FC	; 0x8001fc <m+0x5>
+			analogmega328.adc.reg->admux |=	(1 << REFS0);
+     412:	e0 91 fb 01 	lds	r30, 0x01FB	; 0x8001fb <analogmega328+0x4>
+     416:	f0 91 fc 01 	lds	r31, 0x01FC	; 0x8001fc <analogmega328+0x5>
      41a:	84 81       	ldd	r24, Z+4	; 0x04
      41c:	80 64       	ori	r24, 0x40	; 64
      41e:	84 83       	std	Z+4, r24	; 0x04
@@ -630,9 +630,9 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
 		break;
      422:	0a c0       	rjmp	.+20     	; 0x438 <__LOCK_REGION_LENGTH__+0x38>
 		case 3:
-			m.adc.reg->admux |=	(3 << REFS0);
-     424:	e0 91 fb 01 	lds	r30, 0x01FB	; 0x8001fb <m+0x4>
-     428:	f0 91 fc 01 	lds	r31, 0x01FC	; 0x8001fc <m+0x5>
+			analogmega328.adc.reg->admux |=	(3 << REFS0);
+     424:	e0 91 fb 01 	lds	r30, 0x01FB	; 0x8001fb <analogmega328+0x4>
+     428:	f0 91 fc 01 	lds	r31, 0x01FC	; 0x8001fc <analogmega328+0x5>
      42c:	84 81       	ldd	r24, Z+4	; 0x04
      42e:	80 6c       	ori	r24, 0xC0	; 192
      430:	84 83       	std	Z+4, r24	; 0x04
@@ -642,7 +642,7 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
      434:	01 c0       	rjmp	.+2      	; 0x438 <__LOCK_REGION_LENGTH__+0x38>
 	analog.read = ANALOG_read;
 	
-	m.adc.reg->admux &= ~(3 << REFS0);
+	analogmega328.adc.reg->admux &= ~(3 << REFS0);
 	switch( Vreff ){
 		case 0:
 			analog.VREFF = 0;
@@ -652,9 +652,9 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
 		break;
 	}
 	
-	m.adc.reg->admux &= ~(1 << ADLAR);
-     438:	e0 91 fb 01 	lds	r30, 0x01FB	; 0x8001fb <m+0x4>
-     43c:	f0 91 fc 01 	lds	r31, 0x01FC	; 0x8001fc <m+0x5>
+	analogmega328.adc.reg->admux &= ~(1 << ADLAR);
+     438:	e0 91 fb 01 	lds	r30, 0x01FB	; 0x8001fb <analogmega328+0x4>
+     43c:	f0 91 fc 01 	lds	r31, 0x01FC	; 0x8001fc <analogmega328+0x5>
      440:	84 81       	ldd	r24, Z+4	; 0x04
      442:	8f 7d       	andi	r24, 0xDF	; 223
      444:	84 83       	std	Z+4, r24	; 0x04
@@ -681,7 +681,7 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
      466:	20 83       	st	Z, r18
 	}
 	
-	m.adc.reg->admux &= ~(1 << ADLAR);
+	analogmega328.adc.reg->admux &= ~(1 << ADLAR);
 	
 	va_start(list, n_channel);
 	for( i = 0; i < n_channel; i++ ){
@@ -692,7 +692,7 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
 		ADC_CHANNEL_GAIN[i] = va_arg(list, int);
 	}
 	va_end(list);
-	m.adc.reg->admux &= ~MUX_MASK;
+	analogmega328.adc.reg->admux &= ~MUX_MASK;
      470:	e7 ef       	ldi	r30, 0xF7	; 247
      472:	f1 e0       	ldi	r31, 0x01	; 1
      474:	a4 81       	ldd	r26, Z+4	; 0x04
@@ -703,7 +703,7 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
      47e:	80 7f       	andi	r24, 0xF0	; 240
      480:	14 96       	adiw	r26, 0x04	; 4
      482:	8c 93       	st	X, r24
-	m.adc.reg->admux |= (MUX_MASK & ADC_CHANNEL_GAIN[ADC_SELECTOR]);
+	analogmega328.adc.reg->admux |= (MUX_MASK & ADC_CHANNEL_GAIN[ADC_SELECTOR]);
      484:	a0 91 67 01 	lds	r26, 0x0167	; 0x800167 <ADC_SELECTOR>
      488:	b0 91 68 01 	lds	r27, 0x0168	; 0x800168 <ADC_SELECTOR+0x1>
      48c:	aa 0f       	add	r26, r26
@@ -723,7 +723,7 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
      4a8:	14 96       	adiw	r26, 0x04	; 4
      4aa:	8c 93       	st	X, r24
 	
-	m.adc.reg->adcsra |= (1 << ADEN);
+	analogmega328.adc.reg->adcsra |= (1 << ADEN);
      4ac:	a4 81       	ldd	r26, Z+4	; 0x04
      4ae:	b5 81       	ldd	r27, Z+5	; 0x05
      4b0:	12 96       	adiw	r26, 0x02	; 2
@@ -732,7 +732,7 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
      4b6:	80 68       	ori	r24, 0x80	; 128
      4b8:	12 96       	adiw	r26, 0x02	; 2
      4ba:	8c 93       	st	X, r24
-	m.adc.reg->adcsra |= (1 << ADSC);
+	analogmega328.adc.reg->adcsra |= (1 << ADSC);
      4bc:	a4 81       	ldd	r26, Z+4	; 0x04
      4be:	b5 81       	ldd	r27, Z+5	; 0x05
      4c0:	12 96       	adiw	r26, 0x02	; 2
@@ -741,7 +741,7 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
      4c6:	80 64       	ori	r24, 0x40	; 64
      4c8:	12 96       	adiw	r26, 0x02	; 2
      4ca:	8c 93       	st	X, r24
-	m.adc.reg->adcsra &= ~(1 << ADATE);
+	analogmega328.adc.reg->adcsra &= ~(1 << ADATE);
      4cc:	a4 81       	ldd	r26, Z+4	; 0x04
      4ce:	b5 81       	ldd	r27, Z+5	; 0x05
      4d0:	12 96       	adiw	r26, 0x02	; 2
@@ -750,7 +750,7 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
      4d6:	8f 7d       	andi	r24, 0xDF	; 223
      4d8:	12 96       	adiw	r26, 0x02	; 2
      4da:	8c 93       	st	X, r24
-	m.adc.reg->adscrb &= ~(7 << ADTS0);
+	analogmega328.adc.reg->adscrb &= ~(7 << ADTS0);
      4dc:	a4 81       	ldd	r26, Z+4	; 0x04
      4de:	b5 81       	ldd	r27, Z+5	; 0x05
      4e0:	13 96       	adiw	r26, 0x03	; 3
@@ -759,7 +759,7 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
      4e6:	88 7f       	andi	r24, 0xF8	; 248
      4e8:	13 96       	adiw	r26, 0x03	; 3
      4ea:	8c 93       	st	X, r24
-	m.adc.reg->adcsra |= (1 << ADIE);
+	analogmega328.adc.reg->adcsra |= (1 << ADIE);
      4ec:	a4 81       	ldd	r26, Z+4	; 0x04
      4ee:	b5 81       	ldd	r27, Z+5	; 0x05
      4f0:	12 96       	adiw	r26, 0x02	; 2
@@ -769,7 +769,7 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
      4f8:	12 96       	adiw	r26, 0x02	; 2
      4fa:	8c 93       	st	X, r24
 	
-	m.adc.reg->adcsra &= ~(7 << ADPS0);
+	analogmega328.adc.reg->adcsra &= ~(7 << ADPS0);
      4fc:	04 80       	ldd	r0, Z+4	; 0x04
      4fe:	f5 81       	ldd	r31, Z+5	; 0x05
      500:	e0 2d       	mov	r30, r0
@@ -798,9 +798,9 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
 			analog.DIVISION_FACTOR = 2;
 		break;
 		case 4: // 2
-			m.adc.reg->adcsra |= (1 << ADPS1);
-     52a:	e0 91 fb 01 	lds	r30, 0x01FB	; 0x8001fb <m+0x4>
-     52e:	f0 91 fc 01 	lds	r31, 0x01FC	; 0x8001fc <m+0x5>
+			analogmega328.adc.reg->adcsra |= (1 << ADPS1);
+     52a:	e0 91 fb 01 	lds	r30, 0x01FB	; 0x8001fb <analogmega328+0x4>
+     52e:	f0 91 fc 01 	lds	r31, 0x01FC	; 0x8001fc <analogmega328+0x5>
      532:	82 81       	ldd	r24, Z+2	; 0x02
      534:	82 60       	ori	r24, 0x02	; 2
      536:	82 83       	std	Z+2, r24	; 0x02
@@ -809,9 +809,9 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
 		break;
      53a:	37 c0       	rjmp	.+110    	; 0x5aa <__LOCK_REGION_LENGTH__+0x1aa>
 		case 8: // 3
-			m.adc.reg->adcsra |= (3 << ADPS0);
-     53c:	e0 91 fb 01 	lds	r30, 0x01FB	; 0x8001fb <m+0x4>
-     540:	f0 91 fc 01 	lds	r31, 0x01FC	; 0x8001fc <m+0x5>
+			analogmega328.adc.reg->adcsra |= (3 << ADPS0);
+     53c:	e0 91 fb 01 	lds	r30, 0x01FB	; 0x8001fb <analogmega328+0x4>
+     540:	f0 91 fc 01 	lds	r31, 0x01FC	; 0x8001fc <analogmega328+0x5>
      544:	82 81       	ldd	r24, Z+2	; 0x02
      546:	83 60       	ori	r24, 0x03	; 3
      548:	82 83       	std	Z+2, r24	; 0x02
@@ -820,9 +820,9 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
 		break;
      54c:	2e c0       	rjmp	.+92     	; 0x5aa <__LOCK_REGION_LENGTH__+0x1aa>
 		case 16: // 4
-			m.adc.reg->adcsra |= (1 << ADPS2);
-     54e:	e0 91 fb 01 	lds	r30, 0x01FB	; 0x8001fb <m+0x4>
-     552:	f0 91 fc 01 	lds	r31, 0x01FC	; 0x8001fc <m+0x5>
+			analogmega328.adc.reg->adcsra |= (1 << ADPS2);
+     54e:	e0 91 fb 01 	lds	r30, 0x01FB	; 0x8001fb <analogmega328+0x4>
+     552:	f0 91 fc 01 	lds	r31, 0x01FC	; 0x8001fc <analogmega328+0x5>
      556:	82 81       	ldd	r24, Z+2	; 0x02
      558:	84 60       	ori	r24, 0x04	; 4
      55a:	82 83       	std	Z+2, r24	; 0x02
@@ -831,9 +831,9 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
 		break;
      55e:	25 c0       	rjmp	.+74     	; 0x5aa <__LOCK_REGION_LENGTH__+0x1aa>
 		case 32: // 5
-			m.adc.reg->adcsra |= (5 << ADPS0);
-     560:	e0 91 fb 01 	lds	r30, 0x01FB	; 0x8001fb <m+0x4>
-     564:	f0 91 fc 01 	lds	r31, 0x01FC	; 0x8001fc <m+0x5>
+			analogmega328.adc.reg->adcsra |= (5 << ADPS0);
+     560:	e0 91 fb 01 	lds	r30, 0x01FB	; 0x8001fb <analogmega328+0x4>
+     564:	f0 91 fc 01 	lds	r31, 0x01FC	; 0x8001fc <analogmega328+0x5>
      568:	82 81       	ldd	r24, Z+2	; 0x02
      56a:	85 60       	ori	r24, 0x05	; 5
      56c:	82 83       	std	Z+2, r24	; 0x02
@@ -842,9 +842,9 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
 		break;
      570:	1c c0       	rjmp	.+56     	; 0x5aa <__LOCK_REGION_LENGTH__+0x1aa>
 		case 64: // 6
-			m.adc.reg->adcsra |= (6 << ADPS0);
-     572:	e0 91 fb 01 	lds	r30, 0x01FB	; 0x8001fb <m+0x4>
-     576:	f0 91 fc 01 	lds	r31, 0x01FC	; 0x8001fc <m+0x5>
+			analogmega328.adc.reg->adcsra |= (6 << ADPS0);
+     572:	e0 91 fb 01 	lds	r30, 0x01FB	; 0x8001fb <analogmega328+0x4>
+     576:	f0 91 fc 01 	lds	r31, 0x01FC	; 0x8001fc <analogmega328+0x5>
      57a:	82 81       	ldd	r24, Z+2	; 0x02
      57c:	86 60       	ori	r24, 0x06	; 6
      57e:	82 83       	std	Z+2, r24	; 0x02
@@ -853,9 +853,9 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
 		break;
      582:	13 c0       	rjmp	.+38     	; 0x5aa <__LOCK_REGION_LENGTH__+0x1aa>
 		case 128: // 7
-			m.adc.reg->adcsra |= (7 << ADPS0);
-     584:	e0 91 fb 01 	lds	r30, 0x01FB	; 0x8001fb <m+0x4>
-     588:	f0 91 fc 01 	lds	r31, 0x01FC	; 0x8001fc <m+0x5>
+			analogmega328.adc.reg->adcsra |= (7 << ADPS0);
+     584:	e0 91 fb 01 	lds	r30, 0x01FB	; 0x8001fb <analogmega328+0x4>
+     588:	f0 91 fc 01 	lds	r31, 0x01FC	; 0x8001fc <analogmega328+0x5>
      58c:	82 81       	ldd	r24, Z+2	; 0x02
      58e:	87 60       	ori	r24, 0x07	; 7
      590:	82 83       	std	Z+2, r24	; 0x02
@@ -864,9 +864,9 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
 		break;
      594:	0a c0       	rjmp	.+20     	; 0x5aa <__LOCK_REGION_LENGTH__+0x1aa>
 		default:
-			m.adc.reg->adcsra |= (7 << ADPS0);
-     596:	e0 91 fb 01 	lds	r30, 0x01FB	; 0x8001fb <m+0x4>
-     59a:	f0 91 fc 01 	lds	r31, 0x01FC	; 0x8001fc <m+0x5>
+			analogmega328.adc.reg->adcsra |= (7 << ADPS0);
+     596:	e0 91 fb 01 	lds	r30, 0x01FB	; 0x8001fb <analogmega328+0x4>
+     59a:	f0 91 fc 01 	lds	r31, 0x01FC	; 0x8001fc <analogmega328+0x5>
      59e:	82 81       	ldd	r24, Z+2	; 0x02
      5a0:	87 60       	ori	r24, 0x07	; 7
      5a2:	82 83       	std	Z+2, r24	; 0x02
@@ -874,21 +874,21 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
      5a4:	20 e8       	ldi	r18, 0x80	; 128
 		break;
      5a6:	01 c0       	rjmp	.+2      	; 0x5aa <__LOCK_REGION_LENGTH__+0x1aa>
-	m.adc.reg->adcsra |= (1 << ADIE);
+	analogmega328.adc.reg->adcsra |= (1 << ADIE);
 	
-	m.adc.reg->adcsra &= ~(7 << ADPS0);
+	analogmega328.adc.reg->adcsra &= ~(7 << ADPS0);
 	switch( Divfactor ){
 		case 2: // 1
 			analog.DIVISION_FACTOR = 2;
      5a8:	22 e0       	ldi	r18, 0x02	; 2
-			m.adc.reg->adcsra |= (7 << ADPS0);
+			analogmega328.adc.reg->adcsra |= (7 << ADPS0);
 			analog.DIVISION_FACTOR = 128;
 		break;
 	}
-	m.cpu.reg->sreg = tSREG;
-	m.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
-     5aa:	e0 91 ff 01 	lds	r30, 0x01FF	; 0x8001ff <m+0x8>
-     5ae:	f0 91 00 02 	lds	r31, 0x0200	; 0x800200 <m+0x9>
+	analogmega328.cpu.reg->sreg = tSREG;
+	analogmega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
+     5aa:	e0 91 ff 01 	lds	r30, 0x01FF	; 0x8001ff <analogmega328+0x8>
+     5ae:	f0 91 00 02 	lds	r31, 0x0200	; 0x800200 <analogmega328+0x9>
      5b2:	40 68       	ori	r20, 0x80	; 128
      5b4:	41 a3       	std	Z+33, r20	; 0x21
 	
@@ -1002,7 +1002,7 @@ ISR(ANALOG_INTERRUPT)
 			ADC_SELECTOR = 0;
      6a0:	10 92 68 01 	sts	0x0168, r1	; 0x800168 <ADC_SELECTOR+0x1>
      6a4:	10 92 67 01 	sts	0x0167, r1	; 0x800167 <ADC_SELECTOR>
-		m.adc.reg->admux &= ~MUX_MASK;
+		analogmega328.adc.reg->admux &= ~MUX_MASK;
      6a8:	a7 ef       	ldi	r26, 0xF7	; 247
      6aa:	b1 e0       	ldi	r27, 0x01	; 1
      6ac:	14 96       	adiw	r26, 0x04	; 4
@@ -1012,7 +1012,7 @@ ISR(ANALOG_INTERRUPT)
      6b4:	84 81       	ldd	r24, Z+4	; 0x04
      6b6:	80 7f       	andi	r24, 0xF0	; 240
      6b8:	84 83       	std	Z+4, r24	; 0x04
-		m.adc.reg->admux |= (ADC_CHANNEL_GAIN[ADC_SELECTOR] & MUX_MASK);
+		analogmega328.adc.reg->admux |= (ADC_CHANNEL_GAIN[ADC_SELECTOR] & MUX_MASK);
      6ba:	e0 91 67 01 	lds	r30, 0x0167	; 0x800167 <ADC_SELECTOR>
      6be:	f0 91 68 01 	lds	r31, 0x0168	; 0x800168 <ADC_SELECTOR+0x1>
      6c2:	ee 0f       	add	r30, r30
@@ -1577,7 +1577,7 @@ ATMEGA328 ATMEGA328enable(void){
      936:	20 91 8d 01 	lds	r18, 0x018D	; 0x80018d <timer0_state>
      93a:	21 11       	cpse	r18, r1
      93c:	71 c0       	rjmp	.+226    	; 0xa20 <TIMER_COUNTER0_start+0xea>
-		mega328.tc0.reg->ocr0a = 0XFF;
+		timermega328.tc0.reg->ocr0a = 0XFF;
      93e:	e3 e7       	ldi	r30, 0x73	; 115
      940:	f2 e0       	ldi	r31, 0x02	; 2
      942:	a6 8d       	ldd	r26, Z+30	; 0x1e
@@ -1585,7 +1585,7 @@ ATMEGA328 ATMEGA328enable(void){
      946:	2f ef       	ldi	r18, 0xFF	; 255
      948:	52 96       	adiw	r26, 0x12	; 18
      94a:	2c 93       	st	X, r18
-		mega328.tc0.reg->tccr0b &= ~(7 << CS00); // No clock source. (Timer/Counter stopped)
+		timermega328.tc0.reg->tccr0b &= ~(7 << CS00); // No clock source. (Timer/Counter stopped)
      94c:	06 8c       	ldd	r0, Z+30	; 0x1e
      94e:	f7 8d       	ldd	r31, Z+31	; 0x1f
      950:	e0 2d       	mov	r30, r0
@@ -1621,80 +1621,80 @@ ATMEGA328 ATMEGA328enable(void){
      98a:	c9 f5       	brne	.+114    	; 0x9fe <TIMER_COUNTER0_start+0xc8>
      98c:	10 c0       	rjmp	.+32     	; 0x9ae <TIMER_COUNTER0_start+0x78>
 			case 1: // clk T0S /(No prescaler)
-				mega328.tc0.reg->tccr0b |= (1 << CS00);
-     98e:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <mega328+0x1e>
-     992:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <mega328+0x1f>
+				timermega328.tc0.reg->tccr0b |= (1 << CS00);
+     98e:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <timermega328+0x1e>
+     992:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <timermega328+0x1f>
      996:	80 89       	ldd	r24, Z+16	; 0x10
      998:	81 60       	ori	r24, 0x01	; 1
      99a:	80 8b       	std	Z+16, r24	; 0x10
 			break;
      99c:	37 c0       	rjmp	.+110    	; 0xa0c <TIMER_COUNTER0_start+0xd6>
 			case 8: // clk T0S /8 (From prescaler)
-				mega328.tc0.reg->tccr0b |= (1 << CS01);
-     99e:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <mega328+0x1e>
-     9a2:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <mega328+0x1f>
+				timermega328.tc0.reg->tccr0b |= (1 << CS01);
+     99e:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <timermega328+0x1e>
+     9a2:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <timermega328+0x1f>
      9a6:	80 89       	ldd	r24, Z+16	; 0x10
      9a8:	82 60       	ori	r24, 0x02	; 2
      9aa:	80 8b       	std	Z+16, r24	; 0x10
 			break;
      9ac:	2f c0       	rjmp	.+94     	; 0xa0c <TIMER_COUNTER0_start+0xd6>
 			case 64: // clk T0S /64 (From prescaler)
-				mega328.tc0.reg->tccr0b |= (3 << CS00);
-     9ae:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <mega328+0x1e>
-     9b2:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <mega328+0x1f>
+				timermega328.tc0.reg->tccr0b |= (3 << CS00);
+     9ae:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <timermega328+0x1e>
+     9b2:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <timermega328+0x1f>
      9b6:	80 89       	ldd	r24, Z+16	; 0x10
      9b8:	83 60       	ori	r24, 0x03	; 3
      9ba:	80 8b       	std	Z+16, r24	; 0x10
 			break;
      9bc:	27 c0       	rjmp	.+78     	; 0xa0c <TIMER_COUNTER0_start+0xd6>
 			case 256: // clk T 0 S /256 (From prescaler)
-				mega328.tc0.reg->tccr0b |= (4 << CS00);
-     9be:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <mega328+0x1e>
-     9c2:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <mega328+0x1f>
+				timermega328.tc0.reg->tccr0b |= (4 << CS00);
+     9be:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <timermega328+0x1e>
+     9c2:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <timermega328+0x1f>
      9c6:	80 89       	ldd	r24, Z+16	; 0x10
      9c8:	84 60       	ori	r24, 0x04	; 4
      9ca:	80 8b       	std	Z+16, r24	; 0x10
 			break;
      9cc:	1f c0       	rjmp	.+62     	; 0xa0c <TIMER_COUNTER0_start+0xd6>
 			case 1024: // clk T 0 S /1024 (From prescaler)
-				mega328.tc0.reg->tccr0b |= (5 << CS00);
-     9ce:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <mega328+0x1e>
-     9d2:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <mega328+0x1f>
+				timermega328.tc0.reg->tccr0b |= (5 << CS00);
+     9ce:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <timermega328+0x1e>
+     9d2:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <timermega328+0x1f>
      9d6:	80 89       	ldd	r24, Z+16	; 0x10
      9d8:	85 60       	ori	r24, 0x05	; 5
      9da:	80 8b       	std	Z+16, r24	; 0x10
 			break;
      9dc:	17 c0       	rjmp	.+46     	; 0xa0c <TIMER_COUNTER0_start+0xd6>
 			case 3: // External clock source on T0 pin. Clock on falling edge.
-				mega328.tc0.reg->tccr0b |= (6 << CS00);
-     9de:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <mega328+0x1e>
-     9e2:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <mega328+0x1f>
+				timermega328.tc0.reg->tccr0b |= (6 << CS00);
+     9de:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <timermega328+0x1e>
+     9e2:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <timermega328+0x1f>
      9e6:	80 89       	ldd	r24, Z+16	; 0x10
      9e8:	86 60       	ori	r24, 0x06	; 6
      9ea:	80 8b       	std	Z+16, r24	; 0x10
 			break;
      9ec:	0f c0       	rjmp	.+30     	; 0xa0c <TIMER_COUNTER0_start+0xd6>
 			case 5: // External clock source on T0 pin. Clock on rising edge.
-				mega328.tc0.reg->tccr0b |= (7 << CS00);
-     9ee:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <mega328+0x1e>
-     9f2:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <mega328+0x1f>
+				timermega328.tc0.reg->tccr0b |= (7 << CS00);
+     9ee:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <timermega328+0x1e>
+     9f2:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <timermega328+0x1f>
      9f6:	80 89       	ldd	r24, Z+16	; 0x10
      9f8:	87 60       	ori	r24, 0x07	; 7
      9fa:	80 8b       	std	Z+16, r24	; 0x10
 			break;
      9fc:	07 c0       	rjmp	.+14     	; 0xa0c <TIMER_COUNTER0_start+0xd6>
 			default:
-				mega328.tc0.reg->tccr0b |= (5 << CS00);
-     9fe:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <mega328+0x1e>
-     a02:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <mega328+0x1f>
+				timermega328.tc0.reg->tccr0b |= (5 << CS00);
+     9fe:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <timermega328+0x1e>
+     a02:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <timermega328+0x1f>
      a06:	80 89       	ldd	r24, Z+16	; 0x10
      a08:	85 60       	ori	r24, 0x05	; 5
      a0a:	80 8b       	std	Z+16, r24	; 0x10
 			break;
 		}
-		mega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
-     a0c:	e0 91 7b 02 	lds	r30, 0x027B	; 0x80027b <mega328+0x8>
-     a10:	f0 91 7c 02 	lds	r31, 0x027C	; 0x80027c <mega328+0x9>
+		timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
+     a0c:	e0 91 7b 02 	lds	r30, 0x027B	; 0x80027b <timermega328+0x8>
+     a10:	f0 91 7c 02 	lds	r31, 0x027C	; 0x80027c <timermega328+0x9>
      a14:	81 a1       	ldd	r24, Z+33	; 0x21
      a16:	80 68       	ori	r24, 0x80	; 128
      a18:	81 a3       	std	Z+33, r24	; 0x21
@@ -1709,9 +1709,9 @@ ATMEGA328 ATMEGA328enable(void){
 //	Set OC0 on compare match when up-counting. Clear OC0 on compare match when downcounting. Set OC0 on compare match ;
 //	default-Normal port operation, OC0 disconnected.
 {
-	mega328.tc0.reg->tccr0a &= ~((1 << COM0A0) | (1 << COM0A1));
-     a22:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <mega328+0x1e>
-     a26:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <mega328+0x1f>
+	timermega328.tc0.reg->tccr0a &= ~((1 << COM0A0) | (1 << COM0A1));
+     a22:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <timermega328+0x1e>
+     a26:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <timermega328+0x1f>
      a2a:	97 85       	ldd	r25, Z+15	; 0x0f
      a2c:	9f 73       	andi	r25, 0x3F	; 63
      a2e:	97 87       	std	Z+15, r25	; 0x0f
@@ -1726,9 +1726,9 @@ ATMEGA328 ATMEGA328enable(void){
 		break;
 		case 1: // Reserved
 				// Toggle OC0 on compare match
-			mega328.tc0.reg->tccr0a |= (1 << COM0A0);
-     a3c:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <mega328+0x1e>
-     a40:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <mega328+0x1f>
+			timermega328.tc0.reg->tccr0a |= (1 << COM0A0);
+     a3c:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <timermega328+0x1e>
+     a40:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <timermega328+0x1f>
      a44:	87 85       	ldd	r24, Z+15	; 0x0f
      a46:	80 64       	ori	r24, 0x40	; 64
      a48:	87 87       	std	Z+15, r24	; 0x0f
@@ -1737,9 +1737,9 @@ ATMEGA328 ATMEGA328enable(void){
 		case 2: // Clear OC0 on compare match when up-counting. Set OC0 on compare
 				// match when down counting.
 				// Clear OC0 on compare match
-			mega328.tc0.reg->tccr0a |= (1 << COM0A1);
-     a4c:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <mega328+0x1e>
-     a50:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <mega328+0x1f>
+			timermega328.tc0.reg->tccr0a |= (1 << COM0A1);
+     a4c:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <timermega328+0x1e>
+     a50:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <timermega328+0x1f>
      a54:	87 85       	ldd	r24, Z+15	; 0x0f
      a56:	80 68       	ori	r24, 0x80	; 128
      a58:	87 87       	std	Z+15, r24	; 0x0f
@@ -1748,9 +1748,9 @@ ATMEGA328 ATMEGA328enable(void){
 		case 3: // Set OC0 on compare match when up-counting. Clear OC0 on compare
 				// match when down counting.
 				// Set OC0 on compare match
-			mega328.tc0.reg->tccr0a |= (1 << COM0A0) | (1 << COM0A1);
-     a5c:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <mega328+0x1e>
-     a60:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <mega328+0x1f>
+			timermega328.tc0.reg->tccr0a |= (1 << COM0A0) | (1 << COM0A1);
+     a5c:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <timermega328+0x1e>
+     a60:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <timermega328+0x1f>
      a64:	87 85       	ldd	r24, Z+15	; 0x0f
      a66:	80 6c       	ori	r24, 0xC0	; 192
      a68:	87 87       	std	Z+15, r24	; 0x0f
@@ -1762,9 +1762,9 @@ ATMEGA328 ATMEGA328enable(void){
 //	Set OC0 on compare match when up-counting. Clear OC0 on compare match when downcounting. Set OC0 on compare match ;
 //	default-Normal port operation, OC0 disconnected.
 {
-	mega328.tc0.reg->tccr0a &= ~((1 << COM0B0) | (1 << COM0B1));
-     a6c:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <mega328+0x1e>
-     a70:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <mega328+0x1f>
+	timermega328.tc0.reg->tccr0a &= ~((1 << COM0B0) | (1 << COM0B1));
+     a6c:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <timermega328+0x1e>
+     a70:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <timermega328+0x1f>
      a74:	97 85       	ldd	r25, Z+15	; 0x0f
      a76:	9f 7c       	andi	r25, 0xCF	; 207
      a78:	97 87       	std	Z+15, r25	; 0x0f
@@ -1779,9 +1779,9 @@ ATMEGA328 ATMEGA328enable(void){
 		break;
 		case 1: // Reserved
 				// Toggle OC0 on compare match
-			mega328.tc0.reg->tccr0a |= (1 << COM0B0);
-     a86:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <mega328+0x1e>
-     a8a:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <mega328+0x1f>
+			timermega328.tc0.reg->tccr0a |= (1 << COM0B0);
+     a86:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <timermega328+0x1e>
+     a8a:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <timermega328+0x1f>
      a8e:	87 85       	ldd	r24, Z+15	; 0x0f
      a90:	80 61       	ori	r24, 0x10	; 16
      a92:	87 87       	std	Z+15, r24	; 0x0f
@@ -1790,9 +1790,9 @@ ATMEGA328 ATMEGA328enable(void){
 		case 2: // Clear OC0 on compare match when up-counting. Set OC0 on compare
 				// match when down counting.
 				// Clear OC0 on compare match
-			mega328.tc0.reg->tccr0a |= (1 << COM0B1);
-     a96:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <mega328+0x1e>
-     a9a:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <mega328+0x1f>
+			timermega328.tc0.reg->tccr0a |= (1 << COM0B1);
+     a96:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <timermega328+0x1e>
+     a9a:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <timermega328+0x1f>
      a9e:	87 85       	ldd	r24, Z+15	; 0x0f
      aa0:	80 62       	ori	r24, 0x20	; 32
      aa2:	87 87       	std	Z+15, r24	; 0x0f
@@ -1801,9 +1801,9 @@ ATMEGA328 ATMEGA328enable(void){
 		case 3: // Set OC0 on compare match when up-counting. Clear OC0 on compare
 				// match when down counting.
 				// Set OC0 on compare match
-			mega328.tc0.reg->tccr0a |= (1 << COM0B0) | (1 << COM0B1);
-     aa6:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <mega328+0x1e>
-     aaa:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <mega328+0x1f>
+			timermega328.tc0.reg->tccr0a |= (1 << COM0B0) | (1 << COM0B1);
+     aa6:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <timermega328+0x1e>
+     aaa:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <timermega328+0x1f>
      aae:	87 85       	ldd	r24, Z+15	; 0x0f
      ab0:	80 63       	ori	r24, 0x30	; 48
      ab2:	87 87       	std	Z+15, r24	; 0x0f
@@ -1815,9 +1815,9 @@ ATMEGA328 ATMEGA328enable(void){
 }
 void TIMER_COUNTER0_compareA(unsigned char compare)
 {
-	mega328.tc0.reg->ocr0a = compare;
-     ab6:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <mega328+0x1e>
-     aba:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <mega328+0x1f>
+	timermega328.tc0.reg->ocr0a = compare;
+     ab6:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <timermega328+0x1e>
+     aba:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <timermega328+0x1f>
      abe:	82 8b       	std	Z+18, r24	; 0x12
      ac0:	08 95       	ret
 
@@ -1825,9 +1825,9 @@ void TIMER_COUNTER0_compareA(unsigned char compare)
 }
 void TIMER_COUNTER0_compareB(unsigned char compare)
 {
-	mega328.tc0.reg->ocr0b = compare;
-     ac2:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <mega328+0x1e>
-     ac6:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <mega328+0x1f>
+	timermega328.tc0.reg->ocr0b = compare;
+     ac2:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <timermega328+0x1e>
+     ac6:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <timermega328+0x1f>
      aca:	83 8b       	std	Z+19, r24	; 0x13
      acc:	08 95       	ret
 
@@ -1836,7 +1836,7 @@ void TIMER_COUNTER0_compareB(unsigned char compare)
 void TIMER_COUNTER0_stop(void)
 // stops timer by setting prescaler to zero
 {
-	mega328.tc0.reg->tccr0b &= ~(7 << CS00); // No clock source. (Timer/Counter stopped)
+	timermega328.tc0.reg->tccr0b &= ~(7 << CS00); // No clock source. (Timer/Counter stopped)
      ace:	e3 e7       	ldi	r30, 0x73	; 115
      ad0:	f2 e0       	ldi	r31, 0x02	; 2
      ad2:	a6 8d       	ldd	r26, Z+30	; 0x1e
@@ -1847,7 +1847,7 @@ void TIMER_COUNTER0_stop(void)
      adc:	88 7f       	andi	r24, 0xF8	; 248
      ade:	50 96       	adiw	r26, 0x10	; 16
      ae0:	8c 93       	st	X, r24
-	mega328.tc0.reg->tcnt0 = 0X00;
+	timermega328.tc0.reg->tcnt0 = 0X00;
      ae2:	06 8c       	ldd	r0, Z+30	; 0x1e
      ae4:	f7 8d       	ldd	r31, Z+31	; 0x1f
      ae6:	e0 2d       	mov	r30, r0
@@ -1874,7 +1874,7 @@ void TIMER_COUNTER0_stop(void)
      afe:	90 91 8c 01 	lds	r25, 0x018C	; 0x80018c <timer1_state>
      b02:	91 11       	cpse	r25, r1
      b04:	72 c0       	rjmp	.+228    	; 0xbea <TIMER_COUNTER1_start+0xfa>
-		mega328.tc1.reg->ocr1a = mega328.writelhbyte(0xFFFF);
+		timermega328.tc1.reg->ocr1a = timermega328.writelhbyte(0xFFFF);
      b06:	03 e7       	ldi	r16, 0x73	; 115
      b08:	12 e0       	ldi	r17, 0x02	; 2
      b0a:	d8 01       	movw	r26, r16
@@ -1896,7 +1896,7 @@ void TIMER_COUNTER0_stop(void)
      b2a:	f7 01       	movw	r30, r14
      b2c:	91 83       	std	Z+1, r25	; 0x01
      b2e:	80 83       	st	Z, r24
-		mega328.tc1.reg->tccr1b &= ~(7 << CS10); // No clock source. (Timer/Counter stopped)
+		timermega328.tc1.reg->tccr1b &= ~(7 << CS10); // No clock source. (Timer/Counter stopped)
      b30:	d8 01       	movw	r26, r16
      b32:	5a 96       	adiw	r26, 0x1a	; 26
      b34:	2d 91       	ld	r18, X+
@@ -1935,7 +1935,7 @@ void TIMER_COUNTER0_stop(void)
      b74:	59 f5       	brne	.+86     	; 0xbcc <TIMER_COUNTER1_start+0xdc>
      b76:	0c c0       	rjmp	.+24     	; 0xb90 <TIMER_COUNTER1_start+0xa0>
 			case 1: // clkI/O/1 (No prescaler)
-				mega328.tc1.reg->tccr1b |= (1 << CS10);
+				timermega328.tc1.reg->tccr1b |= (1 << CS10);
      b78:	f9 01       	movw	r30, r18
      b7a:	e5 5b       	subi	r30, 0xB5	; 181
      b7c:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -1944,7 +1944,7 @@ void TIMER_COUNTER0_stop(void)
 			break;
      b82:	29 c0       	rjmp	.+82     	; 0xbd6 <TIMER_COUNTER1_start+0xe6>
 			case 8: // clkI/O/8 (From prescaler)
-				mega328.tc1.reg->tccr1b |= (1 << CS11);
+				timermega328.tc1.reg->tccr1b |= (1 << CS11);
      b84:	f9 01       	movw	r30, r18
      b86:	e5 5b       	subi	r30, 0xB5	; 181
      b88:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -1953,7 +1953,7 @@ void TIMER_COUNTER0_stop(void)
 			break;
      b8e:	23 c0       	rjmp	.+70     	; 0xbd6 <TIMER_COUNTER1_start+0xe6>
 			case 64: // clkI/O/64 (From prescaler)
-				mega328.tc1.reg->tccr1b |= (3 << CS10);
+				timermega328.tc1.reg->tccr1b |= (3 << CS10);
      b90:	f9 01       	movw	r30, r18
      b92:	e5 5b       	subi	r30, 0xB5	; 181
      b94:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -1962,7 +1962,7 @@ void TIMER_COUNTER0_stop(void)
 			break;
      b9a:	1d c0       	rjmp	.+58     	; 0xbd6 <TIMER_COUNTER1_start+0xe6>
 			case 256: // clkI/O/256 (From prescaler)
-				mega328.tc1.reg->tccr1b |= (1 << CS12);
+				timermega328.tc1.reg->tccr1b |= (1 << CS12);
      b9c:	f9 01       	movw	r30, r18
      b9e:	e5 5b       	subi	r30, 0xB5	; 181
      ba0:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -1971,7 +1971,7 @@ void TIMER_COUNTER0_stop(void)
 			break;
      ba6:	17 c0       	rjmp	.+46     	; 0xbd6 <TIMER_COUNTER1_start+0xe6>
 			case 1024: // clkI/O/1024 (From prescaler)
-				mega328.tc1.reg->tccr1b |= (5 << CS10);
+				timermega328.tc1.reg->tccr1b |= (5 << CS10);
      ba8:	f9 01       	movw	r30, r18
      baa:	e5 5b       	subi	r30, 0xB5	; 181
      bac:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -1980,7 +1980,7 @@ void TIMER_COUNTER0_stop(void)
 			break;
      bb2:	11 c0       	rjmp	.+34     	; 0xbd6 <TIMER_COUNTER1_start+0xe6>
 			case 3: // External clock source on Tn pin. Clock on falling edge
-				mega328.tc1.reg->tccr1b |= (6 << CS10);
+				timermega328.tc1.reg->tccr1b |= (6 << CS10);
      bb4:	f9 01       	movw	r30, r18
      bb6:	e5 5b       	subi	r30, 0xB5	; 181
      bb8:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -1989,7 +1989,7 @@ void TIMER_COUNTER0_stop(void)
 			break;
      bbe:	0b c0       	rjmp	.+22     	; 0xbd6 <TIMER_COUNTER1_start+0xe6>
 			case 5: // External clock source on Tn pin. Clock on rising edge
-				mega328.tc1.reg->tccr1b |= (7 << CS10);
+				timermega328.tc1.reg->tccr1b |= (7 << CS10);
      bc0:	f9 01       	movw	r30, r18
      bc2:	e5 5b       	subi	r30, 0xB5	; 181
      bc4:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -1998,7 +1998,7 @@ void TIMER_COUNTER0_stop(void)
 			break;
      bca:	05 c0       	rjmp	.+10     	; 0xbd6 <TIMER_COUNTER1_start+0xe6>
 			default:
-				mega328.tc1.reg->tccr1b |= (5 << CS10);
+				timermega328.tc1.reg->tccr1b |= (5 << CS10);
      bcc:	f9 01       	movw	r30, r18
      bce:	e5 5b       	subi	r30, 0xB5	; 181
      bd0:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2006,9 +2006,9 @@ void TIMER_COUNTER0_stop(void)
      bd4:	80 83       	st	Z, r24
 			break;
 		}
-		mega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
-     bd6:	e0 91 7b 02 	lds	r30, 0x027B	; 0x80027b <mega328+0x8>
-     bda:	f0 91 7c 02 	lds	r31, 0x027C	; 0x80027c <mega328+0x9>
+		timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
+     bd6:	e0 91 7b 02 	lds	r30, 0x027B	; 0x80027b <timermega328+0x8>
+     bda:	f0 91 7c 02 	lds	r31, 0x027C	; 0x80027c <timermega328+0x9>
      bde:	81 a1       	ldd	r24, Z+33	; 0x21
      be0:	80 68       	ori	r24, 0x80	; 128
      be2:	81 a3       	std	Z+33, r24	; 0x21
@@ -2028,9 +2028,9 @@ void TIMER_COUNTER0_stop(void)
 00000bf8 <TIMER_COUNTER1_compoutmodeA>:
 void TIMER_COUNTER1_compoutmodeA(unsigned char compoutmode)
 {
-	mega328.tc1.reg->tccr1a &= ~(3 << COM1A0);
-     bf8:	20 91 8d 02 	lds	r18, 0x028D	; 0x80028d <mega328+0x1a>
-     bfc:	30 91 8e 02 	lds	r19, 0x028E	; 0x80028e <mega328+0x1b>
+	timermega328.tc1.reg->tccr1a &= ~(3 << COM1A0);
+     bf8:	20 91 8d 02 	lds	r18, 0x028D	; 0x80028d <timermega328+0x1a>
+     bfc:	30 91 8e 02 	lds	r19, 0x028E	; 0x80028e <timermega328+0x1b>
      c00:	f9 01       	movw	r30, r18
      c02:	e6 5b       	subi	r30, 0xB6	; 182
      c04:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2048,7 +2048,7 @@ void TIMER_COUNTER1_compoutmodeA(unsigned char compoutmode)
 }
 void TIMER_COUNTER1_compoutmodeA(unsigned char compoutmode)
 {
-	mega328.tc1.reg->tccr1a &= ~(3 << COM1A0);
+	timermega328.tc1.reg->tccr1a &= ~(3 << COM1A0);
      c16:	90 83       	st	Z, r25
      c18:	08 95       	ret
 	switch(compoutmode){ // see table 53, 54, 55 in data sheet for more information
@@ -2056,7 +2056,7 @@ void TIMER_COUNTER1_compoutmodeA(unsigned char compoutmode)
 		break;
 		case 1: // Reserved
 				// Toggle OC0 on compare match
-			mega328.tc1.reg->tccr1a |= (1 << COM1A0);
+			timermega328.tc1.reg->tccr1a |= (1 << COM1A0);
      c1a:	f9 01       	movw	r30, r18
      c1c:	e6 5b       	subi	r30, 0xB6	; 182
      c1e:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2067,7 +2067,7 @@ void TIMER_COUNTER1_compoutmodeA(unsigned char compoutmode)
 		case 2: // Clear OC0 on compare match when up-counting. Set OC0 on compare
 				// match when down counting.
 				// Clear OC0 on compare match
-			mega328.tc1.reg->tccr1a |= (1 << COM1A1);
+			timermega328.tc1.reg->tccr1a |= (1 << COM1A1);
      c26:	f9 01       	movw	r30, r18
      c28:	e6 5b       	subi	r30, 0xB6	; 182
      c2a:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2078,7 +2078,7 @@ void TIMER_COUNTER1_compoutmodeA(unsigned char compoutmode)
 		case 3: // Set OC0 on compare match when up-counting. Clear OC0 on compare
 				// match when down counting.
 				// Set OC0 on compare match
-			mega328.tc1.reg->tccr1a |= (1 << COM1A0) | (1 << COM1A1);
+			timermega328.tc1.reg->tccr1a |= (1 << COM1A0) | (1 << COM1A1);
      c32:	f9 01       	movw	r30, r18
      c34:	e6 5b       	subi	r30, 0xB6	; 182
      c36:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2092,9 +2092,9 @@ void TIMER_COUNTER1_compoutmodeA(unsigned char compoutmode)
 }
 void TIMER_COUNTER1_compoutmodeB(unsigned char compoutmode)
 {
-	mega328.tc1.reg->tccr1a &= ~(3 << COM1B0);
-     c3e:	20 91 8d 02 	lds	r18, 0x028D	; 0x80028d <mega328+0x1a>
-     c42:	30 91 8e 02 	lds	r19, 0x028E	; 0x80028e <mega328+0x1b>
+	timermega328.tc1.reg->tccr1a &= ~(3 << COM1B0);
+     c3e:	20 91 8d 02 	lds	r18, 0x028D	; 0x80028d <timermega328+0x1a>
+     c42:	30 91 8e 02 	lds	r19, 0x028E	; 0x80028e <timermega328+0x1b>
      c46:	f9 01       	movw	r30, r18
      c48:	e6 5b       	subi	r30, 0xB6	; 182
      c4a:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2112,7 +2112,7 @@ void TIMER_COUNTER1_compoutmodeB(unsigned char compoutmode)
 }
 void TIMER_COUNTER1_compoutmodeB(unsigned char compoutmode)
 {
-	mega328.tc1.reg->tccr1a &= ~(3 << COM1B0);
+	timermega328.tc1.reg->tccr1a &= ~(3 << COM1B0);
      c5c:	90 83       	st	Z, r25
      c5e:	08 95       	ret
 	switch(compoutmode){ // see table 53, 54, 55 in data sheet for more information
@@ -2120,7 +2120,7 @@ void TIMER_COUNTER1_compoutmodeB(unsigned char compoutmode)
 		break;
 		case 1: // Reserved
 				// Toggle OC0 on compare match
-			mega328.tc1.reg->tccr1a |= (1 << COM1B0);
+			timermega328.tc1.reg->tccr1a |= (1 << COM1B0);
      c60:	f9 01       	movw	r30, r18
      c62:	e6 5b       	subi	r30, 0xB6	; 182
      c64:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2131,7 +2131,7 @@ void TIMER_COUNTER1_compoutmodeB(unsigned char compoutmode)
 		case 2: // Clear OC0 on compare match when up-counting. Set OC0 on compare
 				// match when down counting.
 				// Clear OC0 on compare match
-			mega328.tc1.reg->tccr1a |= (1 << COM1B1);
+			timermega328.tc1.reg->tccr1a |= (1 << COM1B1);
      c6c:	f9 01       	movw	r30, r18
      c6e:	e6 5b       	subi	r30, 0xB6	; 182
      c70:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2142,7 +2142,7 @@ void TIMER_COUNTER1_compoutmodeB(unsigned char compoutmode)
 		case 3: // Set OC0 on compare match when up-counting. Clear OC0 on compare
 				// match when down counting.
 				// Set OC0 on compare match
-			mega328.tc1.reg->tccr1a |= (1 << COM1B0) | (1 << COM1B1);
+			timermega328.tc1.reg->tccr1a |= (1 << COM1B0) | (1 << COM1B1);
      c78:	f9 01       	movw	r30, r18
      c7a:	e6 5b       	subi	r30, 0xB6	; 182
      c7c:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2159,7 +2159,7 @@ void TIMER_COUNTER1_compareA(uint16_t compare)
 {
      c84:	cf 93       	push	r28
      c86:	df 93       	push	r29
-	mega328.tc1.reg->ocr1a = mega328.writelhbyte(compare);
+	timermega328.tc1.reg->ocr1a = timermega328.writelhbyte(compare);
      c88:	e3 e7       	ldi	r30, 0x73	; 115
      c8a:	f2 e0       	ldi	r31, 0x02	; 2
      c8c:	c2 8d       	ldd	r28, Z+26	; 0x1a
@@ -2182,7 +2182,7 @@ void TIMER_COUNTER1_compareB(uint16_t compare)
 {
      ca6:	cf 93       	push	r28
      ca8:	df 93       	push	r29
-	mega328.tc1.reg->ocr1b = mega328.writelhbyte(compare);
+	timermega328.tc1.reg->ocr1b = timermega328.writelhbyte(compare);
      caa:	e3 e7       	ldi	r30, 0x73	; 115
      cac:	f2 e0       	ldi	r31, 0x02	; 2
      cae:	c2 8d       	ldd	r28, Z+26	; 0x1a
@@ -2206,7 +2206,7 @@ void TIMER_COUNTER1_stop(void)
 {
      cc8:	cf 93       	push	r28
      cca:	df 93       	push	r29
-	mega328.tc1.reg->tccr1b &= ~(7 << CS10); // No clock source. (Timer/Counter stopped)
+	timermega328.tc1.reg->tccr1b &= ~(7 << CS10); // No clock source. (Timer/Counter stopped)
      ccc:	e3 e7       	ldi	r30, 0x73	; 115
      cce:	f2 e0       	ldi	r31, 0x02	; 2
      cd0:	82 8d       	ldd	r24, Z+26	; 0x1a
@@ -2217,7 +2217,7 @@ void TIMER_COUNTER1_stop(void)
      cda:	2c 91       	ld	r18, X
      cdc:	28 7f       	andi	r18, 0xF8	; 248
      cde:	2c 93       	st	X, r18
-	mega328.tc1.reg->tcnt1 = mega328.writelhbyte(0X0000);
+	timermega328.tc1.reg->tcnt1 = timermega328.writelhbyte(0X0000);
      ce0:	ec 01       	movw	r28, r24
      ce2:	c2 5b       	subi	r28, 0xB2	; 178
      ce4:	df 4f       	sbci	r29, 0xFF	; 255
@@ -2248,15 +2248,15 @@ void TIMER_COUNTER1_stop(void)
      d02:	80 91 8b 01 	lds	r24, 0x018B	; 0x80018b <timer2_state>
      d06:	81 11       	cpse	r24, r1
      d08:	60 c0       	rjmp	.+192    	; 0xdca <TIMER_COUNTER2_start+0xca>
-		mega328.tc2.reg->ocr2a = 0XFF;
-     d0a:	20 91 95 02 	lds	r18, 0x0295	; 0x800295 <mega328+0x22>
-     d0e:	30 91 96 02 	lds	r19, 0x0296	; 0x800296 <mega328+0x23>
+		timermega328.tc2.reg->ocr2a = 0XFF;
+     d0a:	20 91 95 02 	lds	r18, 0x0295	; 0x800295 <timermega328+0x22>
+     d0e:	30 91 96 02 	lds	r19, 0x0296	; 0x800296 <timermega328+0x23>
      d12:	f9 01       	movw	r30, r18
      d14:	e4 58       	subi	r30, 0x84	; 132
      d16:	ff 4f       	sbci	r31, 0xFF	; 255
      d18:	8f ef       	ldi	r24, 0xFF	; 255
      d1a:	80 83       	st	Z, r24
-		mega328.tc2.reg->tccr2b &= ~(7 << CS20); // No clock source. (Timer/Counter stopped)
+		timermega328.tc2.reg->tccr2b &= ~(7 << CS20); // No clock source. (Timer/Counter stopped)
      d1c:	32 97       	sbiw	r30, 0x02	; 2
      d1e:	90 81       	ld	r25, Z
      d20:	98 7f       	andi	r25, 0xF8	; 248
@@ -2289,7 +2289,7 @@ void TIMER_COUNTER1_stop(void)
      d54:	59 f5       	brne	.+86     	; 0xdac <TIMER_COUNTER2_start+0xac>
      d56:	18 c0       	rjmp	.+48     	; 0xd88 <TIMER_COUNTER2_start+0x88>
 			case 1: // clkI/O/(No prescaler)
-				mega328.tc2.reg->tccr2b |= (1 << CS20);
+				timermega328.tc2.reg->tccr2b |= (1 << CS20);
      d58:	f9 01       	movw	r30, r18
      d5a:	e6 58       	subi	r30, 0x86	; 134
      d5c:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2298,7 +2298,7 @@ void TIMER_COUNTER1_stop(void)
 			break;
      d62:	29 c0       	rjmp	.+82     	; 0xdb6 <TIMER_COUNTER2_start+0xb6>
 			case 8: // clkI/O/8 (From prescaler)
-				mega328.tc2.reg->tccr2b |= (1 << CS21);
+				timermega328.tc2.reg->tccr2b |= (1 << CS21);
      d64:	f9 01       	movw	r30, r18
      d66:	e6 58       	subi	r30, 0x86	; 134
      d68:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2307,7 +2307,7 @@ void TIMER_COUNTER1_stop(void)
 			break;
      d6e:	23 c0       	rjmp	.+70     	; 0xdb6 <TIMER_COUNTER2_start+0xb6>
 			case 32: // clkI/O/32 (From prescaler)
-				mega328.tc2.reg->tccr2b |= (1 << CS21) | (1 << CS20);
+				timermega328.tc2.reg->tccr2b |= (1 << CS21) | (1 << CS20);
      d70:	f9 01       	movw	r30, r18
      d72:	e6 58       	subi	r30, 0x86	; 134
      d74:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2316,7 +2316,7 @@ void TIMER_COUNTER1_stop(void)
 			break;
      d7a:	1d c0       	rjmp	.+58     	; 0xdb6 <TIMER_COUNTER2_start+0xb6>
 			case 64: // clkI/O/64 (From prescaler)
-				mega328.tc2.reg->tccr2b |= (1 << CS22);
+				timermega328.tc2.reg->tccr2b |= (1 << CS22);
      d7c:	f9 01       	movw	r30, r18
      d7e:	e6 58       	subi	r30, 0x86	; 134
      d80:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2325,7 +2325,7 @@ void TIMER_COUNTER1_stop(void)
 			break;
      d86:	17 c0       	rjmp	.+46     	; 0xdb6 <TIMER_COUNTER2_start+0xb6>
 			case 128: // clkI/O/128 (From prescaler)
-				mega328.tc2.reg->tccr2b |= (1 << CS22) | (1 << CS20);
+				timermega328.tc2.reg->tccr2b |= (1 << CS22) | (1 << CS20);
      d88:	f9 01       	movw	r30, r18
      d8a:	e6 58       	subi	r30, 0x86	; 134
      d8c:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2334,7 +2334,7 @@ void TIMER_COUNTER1_stop(void)
 			break;
      d92:	11 c0       	rjmp	.+34     	; 0xdb6 <TIMER_COUNTER2_start+0xb6>
 			case 256: // clkI/O/256 (From prescaler)
-				mega328.tc2.reg->tccr2b |= (1 << CS22) | (1 << CS21);
+				timermega328.tc2.reg->tccr2b |= (1 << CS22) | (1 << CS21);
      d94:	f9 01       	movw	r30, r18
      d96:	e6 58       	subi	r30, 0x86	; 134
      d98:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2343,7 +2343,7 @@ void TIMER_COUNTER1_stop(void)
 			break;
      d9e:	0b c0       	rjmp	.+22     	; 0xdb6 <TIMER_COUNTER2_start+0xb6>
 			case 1024: // clkI/O/1024 (From prescaler)
-				mega328.tc2.reg->tccr2b |= (7 << CS20);
+				timermega328.tc2.reg->tccr2b |= (7 << CS20);
      da0:	f9 01       	movw	r30, r18
      da2:	e6 58       	subi	r30, 0x86	; 134
      da4:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2352,7 +2352,7 @@ void TIMER_COUNTER1_stop(void)
 			break;
      daa:	05 c0       	rjmp	.+10     	; 0xdb6 <TIMER_COUNTER2_start+0xb6>
 			default:
-				mega328.tc2.reg->tccr2b |= (7 << CS20);
+				timermega328.tc2.reg->tccr2b |= (7 << CS20);
      dac:	f9 01       	movw	r30, r18
      dae:	e6 58       	subi	r30, 0x86	; 134
      db0:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2360,9 +2360,9 @@ void TIMER_COUNTER1_stop(void)
      db4:	90 83       	st	Z, r25
 			break;
 		}
-		mega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
-     db6:	e0 91 7b 02 	lds	r30, 0x027B	; 0x80027b <mega328+0x8>
-     dba:	f0 91 7c 02 	lds	r31, 0x027C	; 0x80027c <mega328+0x9>
+		timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
+     db6:	e0 91 7b 02 	lds	r30, 0x027B	; 0x80027b <timermega328+0x8>
+     dba:	f0 91 7c 02 	lds	r31, 0x027C	; 0x80027c <timermega328+0x9>
      dbe:	81 a1       	ldd	r24, Z+33	; 0x21
      dc0:	80 68       	ori	r24, 0x80	; 128
      dc2:	81 a3       	std	Z+33, r24	; 0x21
@@ -2377,9 +2377,9 @@ void TIMER_COUNTER1_stop(void)
 //	Set OC0 on compare match when up-counting. Clear OC0 on compare match when downcounting. Set OC0 on compare match ;
 //	default-Normal port operation, OC0 disconnected.
 {
-	mega328.tc2.reg->tccr2a &= ~((1 << COM2A0) | (1 << COM2A1));
-     dcc:	20 91 95 02 	lds	r18, 0x0295	; 0x800295 <mega328+0x22>
-     dd0:	30 91 96 02 	lds	r19, 0x0296	; 0x800296 <mega328+0x23>
+	timermega328.tc2.reg->tccr2a &= ~((1 << COM2A0) | (1 << COM2A1));
+     dcc:	20 91 95 02 	lds	r18, 0x0295	; 0x800295 <timermega328+0x22>
+     dd0:	30 91 96 02 	lds	r19, 0x0296	; 0x800296 <timermega328+0x23>
      dd4:	f9 01       	movw	r30, r18
      dd6:	e7 58       	subi	r30, 0x87	; 135
      dd8:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2397,7 +2397,7 @@ void TIMER_COUNTER1_stop(void)
 //	Set OC0 on compare match when up-counting. Clear OC0 on compare match when downcounting. Set OC0 on compare match ;
 //	default-Normal port operation, OC0 disconnected.
 {
-	mega328.tc2.reg->tccr2a &= ~((1 << COM2A0) | (1 << COM2A1));
+	timermega328.tc2.reg->tccr2a &= ~((1 << COM2A0) | (1 << COM2A1));
      dea:	90 83       	st	Z, r25
      dec:	08 95       	ret
 	switch(compoutmode){ // see table 53, 54, 55 in data sheet for more information
@@ -2405,7 +2405,7 @@ void TIMER_COUNTER1_stop(void)
 		break;
 		case 1: // Reserved
 				// Toggle OC0 on compare match
-			mega328.tc2.reg->tccr2a |= (1 << COM2A0);
+			timermega328.tc2.reg->tccr2a |= (1 << COM2A0);
      dee:	f9 01       	movw	r30, r18
      df0:	e7 58       	subi	r30, 0x87	; 135
      df2:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2416,7 +2416,7 @@ void TIMER_COUNTER1_stop(void)
 		case 2: // Clear OC0 on compare match when up-counting. Set OC0 on compare
 				// match when down counting.
 				// Clear OC0 on compare match
-			mega328.tc2.reg->tccr2a |= (1 << COM2A1);
+			timermega328.tc2.reg->tccr2a |= (1 << COM2A1);
      dfa:	f9 01       	movw	r30, r18
      dfc:	e7 58       	subi	r30, 0x87	; 135
      dfe:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2427,7 +2427,7 @@ void TIMER_COUNTER1_stop(void)
 		case 3: // Set OC0 on compare match when up-counting. Clear OC0 on compare
 				// match when down counting.
 				// Set OC0 on compare match
-			mega328.tc2.reg->tccr2a |= (1 << COM2A0) | (1 << COM2A1);
+			timermega328.tc2.reg->tccr2a |= (1 << COM2A0) | (1 << COM2A1);
      e06:	f9 01       	movw	r30, r18
      e08:	e7 58       	subi	r30, 0x87	; 135
      e0a:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2441,9 +2441,9 @@ void TIMER_COUNTER1_stop(void)
 //	Set OC0 on compare match when up-counting. Clear OC0 on compare match when downcounting. Set OC0 on compare match ;
 //	default-Normal port operation, OC0 disconnected.
 {
-	mega328.tc2.reg->tccr2a &= ~((1 << COM2B0) | (1 << COM2B1));
-     e12:	20 91 95 02 	lds	r18, 0x0295	; 0x800295 <mega328+0x22>
-     e16:	30 91 96 02 	lds	r19, 0x0296	; 0x800296 <mega328+0x23>
+	timermega328.tc2.reg->tccr2a &= ~((1 << COM2B0) | (1 << COM2B1));
+     e12:	20 91 95 02 	lds	r18, 0x0295	; 0x800295 <timermega328+0x22>
+     e16:	30 91 96 02 	lds	r19, 0x0296	; 0x800296 <timermega328+0x23>
      e1a:	f9 01       	movw	r30, r18
      e1c:	e7 58       	subi	r30, 0x87	; 135
      e1e:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2461,7 +2461,7 @@ void TIMER_COUNTER1_stop(void)
 //	Set OC0 on compare match when up-counting. Clear OC0 on compare match when downcounting. Set OC0 on compare match ;
 //	default-Normal port operation, OC0 disconnected.
 {
-	mega328.tc2.reg->tccr2a &= ~((1 << COM2B0) | (1 << COM2B1));
+	timermega328.tc2.reg->tccr2a &= ~((1 << COM2B0) | (1 << COM2B1));
      e30:	90 83       	st	Z, r25
      e32:	08 95       	ret
 	switch(compoutmode){ // see table 53, 54, 55 in data sheet for more information
@@ -2469,7 +2469,7 @@ void TIMER_COUNTER1_stop(void)
 		break;
 		case 1: // Reserved
 				// Toggle OC0 on compare match
-			mega328.tc2.reg->tccr2a |= (1 << COM2B0);
+			timermega328.tc2.reg->tccr2a |= (1 << COM2B0);
      e34:	f9 01       	movw	r30, r18
      e36:	e7 58       	subi	r30, 0x87	; 135
      e38:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2480,7 +2480,7 @@ void TIMER_COUNTER1_stop(void)
 		case 2: // Clear OC0 on compare match when up-counting. Set OC0 on compare
 				// match when down counting.
 				// Clear OC0 on compare match
-			mega328.tc2.reg->tccr2a |= (1 << COM2B1);
+			timermega328.tc2.reg->tccr2a |= (1 << COM2B1);
      e40:	f9 01       	movw	r30, r18
      e42:	e7 58       	subi	r30, 0x87	; 135
      e44:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2491,7 +2491,7 @@ void TIMER_COUNTER1_stop(void)
 		case 3: // Set OC0 on compare match when up-counting. Clear OC0 on compare
 				// match when down counting.
 				// Set OC0 on compare match
-			mega328.tc2.reg->tccr2a |= (1 << COM2B0) | (1 << COM2B1);
+			timermega328.tc2.reg->tccr2a |= (1 << COM2B0) | (1 << COM2B1);
      e4c:	f9 01       	movw	r30, r18
      e4e:	e7 58       	subi	r30, 0x87	; 135
      e50:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2505,9 +2505,9 @@ void TIMER_COUNTER1_stop(void)
 }
 void TIMER_COUNTER2_compareA(unsigned char compare)
 {
-	mega328.tc2.reg->ocr2a = compare;
-     e58:	e0 91 95 02 	lds	r30, 0x0295	; 0x800295 <mega328+0x22>
-     e5c:	f0 91 96 02 	lds	r31, 0x0296	; 0x800296 <mega328+0x23>
+	timermega328.tc2.reg->ocr2a = compare;
+     e58:	e0 91 95 02 	lds	r30, 0x0295	; 0x800295 <timermega328+0x22>
+     e5c:	f0 91 96 02 	lds	r31, 0x0296	; 0x800296 <timermega328+0x23>
      e60:	e4 58       	subi	r30, 0x84	; 132
      e62:	ff 4f       	sbci	r31, 0xFF	; 255
      e64:	80 83       	st	Z, r24
@@ -2517,9 +2517,9 @@ void TIMER_COUNTER2_compareA(unsigned char compare)
 }
 	void TIMER_COUNTER2_compareB(unsigned char compare)
 {
-	mega328.tc2.reg->ocr2b = compare;
-     e68:	e0 91 95 02 	lds	r30, 0x0295	; 0x800295 <mega328+0x22>
-     e6c:	f0 91 96 02 	lds	r31, 0x0296	; 0x800296 <mega328+0x23>
+	timermega328.tc2.reg->ocr2b = compare;
+     e68:	e0 91 95 02 	lds	r30, 0x0295	; 0x800295 <timermega328+0x22>
+     e6c:	f0 91 96 02 	lds	r31, 0x0296	; 0x800296 <timermega328+0x23>
      e70:	e3 58       	subi	r30, 0x83	; 131
      e72:	ff 4f       	sbci	r31, 0xFF	; 255
      e74:	80 83       	st	Z, r24
@@ -2530,16 +2530,16 @@ void TIMER_COUNTER2_compareA(unsigned char compare)
 void TIMER_COUNTER2_stop(void)
 // stops timer by setting prescaler to zero
 {
-	mega328.tc2.reg->tccr2b &= ~(7 << CS20); // No clock source. (Timer/Counter stopped)
-     e78:	80 91 95 02 	lds	r24, 0x0295	; 0x800295 <mega328+0x22>
-     e7c:	90 91 96 02 	lds	r25, 0x0296	; 0x800296 <mega328+0x23>
+	timermega328.tc2.reg->tccr2b &= ~(7 << CS20); // No clock source. (Timer/Counter stopped)
+     e78:	80 91 95 02 	lds	r24, 0x0295	; 0x800295 <timermega328+0x22>
+     e7c:	90 91 96 02 	lds	r25, 0x0296	; 0x800296 <timermega328+0x23>
      e80:	fc 01       	movw	r30, r24
      e82:	e6 58       	subi	r30, 0x86	; 134
      e84:	ff 4f       	sbci	r31, 0xFF	; 255
      e86:	20 81       	ld	r18, Z
      e88:	28 7f       	andi	r18, 0xF8	; 248
      e8a:	20 83       	st	Z, r18
-	mega328.tc2.reg->tcnt2 = 0X00;
+	timermega328.tc2.reg->tcnt2 = 0X00;
      e8c:	31 96       	adiw	r30, 0x01	; 1
      e8e:	10 82       	st	Z, r1
 	timer2_state = 0;
@@ -2570,7 +2570,7 @@ TIMER_COUNTER0 TIMER_COUNTER0enable(unsigned char wavegenmode, unsigned char int
      eb2:	8c 01       	movw	r16, r24
      eb4:	e6 2e       	mov	r14, r22
      eb6:	f4 2e       	mov	r15, r20
-	mega328 = ATMEGA328enable();
+	timermega328 = ATMEGA328enable();
      eb8:	ce 01       	movw	r24, r28
      eba:	01 96       	adiw	r24, 0x01	; 1
      ebc:	0e 94 20 04 	call	0x840	; 0x840 <ATMEGA328enable>
@@ -2587,7 +2587,7 @@ TIMER_COUNTER0 TIMER_COUNTER0enable(unsigned char wavegenmode, unsigned char int
 	
 	timer0_state = 0;
      ed2:	10 92 8d 01 	sts	0x018D, r1	; 0x80018d <timer0_state>
-	mega328.tc0.reg->tccr0a &= ~((1 << WGM01) | (1 << WGM00));
+	timermega328.tc0.reg->tccr0a &= ~((1 << WGM01) | (1 << WGM00));
      ed6:	e3 e7       	ldi	r30, 0x73	; 115
      ed8:	f2 e0       	ldi	r31, 0x02	; 2
      eda:	a6 8d       	ldd	r26, Z+30	; 0x1e
@@ -2598,7 +2598,7 @@ TIMER_COUNTER0 TIMER_COUNTER0enable(unsigned char wavegenmode, unsigned char int
      ee4:	8c 7f       	andi	r24, 0xFC	; 252
      ee6:	1f 96       	adiw	r26, 0x0f	; 15
      ee8:	8c 93       	st	X, r24
-	mega328.tc0.reg->tccr0b &= ~(1 << WGM02);
+	timermega328.tc0.reg->tccr0b &= ~(1 << WGM02);
      eea:	06 8c       	ldd	r0, Z+30	; 0x1e
      eec:	f7 8d       	ldd	r31, Z+31	; 0x1f
      eee:	e0 2d       	mov	r30, r0
@@ -2628,34 +2628,34 @@ TIMER_COUNTER0 TIMER_COUNTER0enable(unsigned char wavegenmode, unsigned char int
 		case 0: // Normal
 		break;
 		case 1: // PWM, Phase Correct, 8-bit
-			mega328.tc0.reg->tccr0a |= (1 << WGM00);
-     f1c:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <mega328+0x1e>
-     f20:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <mega328+0x1f>
+			timermega328.tc0.reg->tccr0a |= (1 << WGM00);
+     f1c:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <timermega328+0x1e>
+     f20:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <timermega328+0x1f>
      f24:	87 85       	ldd	r24, Z+15	; 0x0f
      f26:	81 60       	ori	r24, 0x01	; 1
      f28:	87 87       	std	Z+15, r24	; 0x0f
 		break;
      f2a:	31 c0       	rjmp	.+98     	; 0xf8e <TIMER_COUNTER0enable+0xf8>
 		case 2: // PWM, Phase Correct, 9-bit
-			mega328.tc0.reg->tccr0a |= (1 << WGM01);
-     f2c:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <mega328+0x1e>
-     f30:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <mega328+0x1f>
+			timermega328.tc0.reg->tccr0a |= (1 << WGM01);
+     f2c:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <timermega328+0x1e>
+     f30:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <timermega328+0x1f>
      f34:	87 85       	ldd	r24, Z+15	; 0x0f
      f36:	82 60       	ori	r24, 0x02	; 2
      f38:	87 87       	std	Z+15, r24	; 0x0f
 		break;
      f3a:	29 c0       	rjmp	.+82     	; 0xf8e <TIMER_COUNTER0enable+0xf8>
 		case 3: // Fast PWM
-			mega328.tc0.reg->tccr0a |= (1 << WGM00) | (1 << WGM01);
-     f3c:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <mega328+0x1e>
-     f40:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <mega328+0x1f>
+			timermega328.tc0.reg->tccr0a |= (1 << WGM00) | (1 << WGM01);
+     f3c:	e0 91 91 02 	lds	r30, 0x0291	; 0x800291 <timermega328+0x1e>
+     f40:	f0 91 92 02 	lds	r31, 0x0292	; 0x800292 <timermega328+0x1f>
      f44:	87 85       	ldd	r24, Z+15	; 0x0f
      f46:	83 60       	ori	r24, 0x03	; 3
      f48:	87 87       	std	Z+15, r24	; 0x0f
 		break;
      f4a:	21 c0       	rjmp	.+66     	; 0xf8e <TIMER_COUNTER0enable+0xf8>
 		case 5: // PWM, Phase Correct
-			mega328.tc0.reg->tccr0a |= (1 << WGM00);
+			timermega328.tc0.reg->tccr0a |= (1 << WGM00);
      f4c:	e3 e7       	ldi	r30, 0x73	; 115
      f4e:	f2 e0       	ldi	r31, 0x02	; 2
      f50:	a6 8d       	ldd	r26, Z+30	; 0x1e
@@ -2666,7 +2666,7 @@ TIMER_COUNTER0 TIMER_COUNTER0enable(unsigned char wavegenmode, unsigned char int
      f5a:	81 60       	ori	r24, 0x01	; 1
      f5c:	1f 96       	adiw	r26, 0x0f	; 15
      f5e:	8c 93       	st	X, r24
-			mega328.tc0.reg->tccr0b |= (1 << WGM02);
+			timermega328.tc0.reg->tccr0b |= (1 << WGM02);
      f60:	06 8c       	ldd	r0, Z+30	; 0x1e
      f62:	f7 8d       	ldd	r31, Z+31	; 0x1f
      f64:	e0 2d       	mov	r30, r0
@@ -2676,7 +2676,7 @@ TIMER_COUNTER0 TIMER_COUNTER0enable(unsigned char wavegenmode, unsigned char int
 		break;
      f6c:	10 c0       	rjmp	.+32     	; 0xf8e <TIMER_COUNTER0enable+0xf8>
 		case 7: // Fast PWM
-			mega328.tc0.reg->tccr0a |= (1 << WGM00) | (1 << WGM01);
+			timermega328.tc0.reg->tccr0a |= (1 << WGM00) | (1 << WGM01);
      f6e:	e3 e7       	ldi	r30, 0x73	; 115
      f70:	f2 e0       	ldi	r31, 0x02	; 2
      f72:	a6 8d       	ldd	r26, Z+30	; 0x1e
@@ -2687,7 +2687,7 @@ TIMER_COUNTER0 TIMER_COUNTER0enable(unsigned char wavegenmode, unsigned char int
      f7c:	83 60       	ori	r24, 0x03	; 3
      f7e:	1f 96       	adiw	r26, 0x0f	; 15
      f80:	8c 93       	st	X, r24
-			mega328.tc0.reg->tccr0b |= (1 << WGM02);
+			timermega328.tc0.reg->tccr0b |= (1 << WGM02);
      f82:	06 8c       	ldd	r0, Z+30	; 0x1e
      f84:	f7 8d       	ldd	r31, Z+31	; 0x1f
      f86:	e0 2d       	mov	r30, r0
@@ -2698,9 +2698,9 @@ TIMER_COUNTER0 TIMER_COUNTER0enable(unsigned char wavegenmode, unsigned char int
 		default:
 		break;
 	}
-	mega328.tc0.reg->timsk0 &= ~((1 << OCIE0B) | (1 << OCIE0A) | (1 << TOIE0));
-     f8e:	a0 91 91 02 	lds	r26, 0x0291	; 0x800291 <mega328+0x1e>
-     f92:	b0 91 92 02 	lds	r27, 0x0292	; 0x800292 <mega328+0x1f>
+	timermega328.tc0.reg->timsk0 &= ~((1 << OCIE0B) | (1 << OCIE0A) | (1 << TOIE0));
+     f8e:	a0 91 91 02 	lds	r26, 0x0291	; 0x800291 <timermega328+0x1e>
+     f92:	b0 91 92 02 	lds	r27, 0x0292	; 0x800292 <timermega328+0x1f>
      f96:	d9 96       	adiw	r26, 0x39	; 57
      f98:	8c 91       	ld	r24, X
      f9a:	d9 97       	sbiw	r26, 0x39	; 57
@@ -2716,12 +2716,12 @@ TIMER_COUNTER0 TIMER_COUNTER0enable(unsigned char wavegenmode, unsigned char int
      fac:	ec 5c       	subi	r30, 0xCC	; 204
      fae:	ff 4f       	sbci	r31, 0xFF	; 255
      fb0:	0c 94 b8 1e 	jmp	0x3d70	; 0x3d70 <__tablejump2__>
-			mega328.tc0.reg->tccr0b |= (1 << WGM02);
+			timermega328.tc0.reg->tccr0b |= (1 << WGM02);
 		break;
 		default:
 		break;
 	}
-	mega328.tc0.reg->timsk0 &= ~((1 << OCIE0B) | (1 << OCIE0A) | (1 << TOIE0));
+	timermega328.tc0.reg->timsk0 &= ~((1 << OCIE0B) | (1 << OCIE0A) | (1 << TOIE0));
      fb4:	d9 96       	adiw	r26, 0x39	; 57
      fb6:	8c 93       	st	X, r24
      fb8:	1b c0       	rjmp	.+54     	; 0xff0 <TIMER_COUNTER0enable+0x15a>
@@ -2729,49 +2729,49 @@ TIMER_COUNTER0 TIMER_COUNTER0enable(unsigned char wavegenmode, unsigned char int
 		case 0: 
 		break;
 		case 1:
-			mega328.tc0.reg->timsk0 |= (1 << TOIE0);
+			timermega328.tc0.reg->timsk0 |= (1 << TOIE0);
      fba:	81 60       	ori	r24, 0x01	; 1
      fbc:	d9 96       	adiw	r26, 0x39	; 57
      fbe:	8c 93       	st	X, r24
 		break;
      fc0:	17 c0       	rjmp	.+46     	; 0xff0 <TIMER_COUNTER0enable+0x15a>
 		case 2:
-			mega328.tc0.reg->timsk0 |= (1 << OCIE0A);
+			timermega328.tc0.reg->timsk0 |= (1 << OCIE0A);
      fc2:	82 60       	ori	r24, 0x02	; 2
      fc4:	d9 96       	adiw	r26, 0x39	; 57
      fc6:	8c 93       	st	X, r24
 		break;
      fc8:	13 c0       	rjmp	.+38     	; 0xff0 <TIMER_COUNTER0enable+0x15a>
 		case 3:
-			mega328.tc0.reg->timsk0 |= (1 << OCIE0B);
+			timermega328.tc0.reg->timsk0 |= (1 << OCIE0B);
      fca:	84 60       	ori	r24, 0x04	; 4
      fcc:	d9 96       	adiw	r26, 0x39	; 57
      fce:	8c 93       	st	X, r24
 		break;
      fd0:	0f c0       	rjmp	.+30     	; 0xff0 <TIMER_COUNTER0enable+0x15a>
 		case 4:
-			mega328.tc0.reg->timsk0 |= (1 << TOIE0) | (1 << OCIE0A);
+			timermega328.tc0.reg->timsk0 |= (1 << TOIE0) | (1 << OCIE0A);
      fd2:	83 60       	ori	r24, 0x03	; 3
      fd4:	d9 96       	adiw	r26, 0x39	; 57
      fd6:	8c 93       	st	X, r24
 		break;
      fd8:	0b c0       	rjmp	.+22     	; 0xff0 <TIMER_COUNTER0enable+0x15a>
 		case 5:
-			mega328.tc0.reg->timsk0 |= (1 << TOIE0) | (1 << OCIE0B);
+			timermega328.tc0.reg->timsk0 |= (1 << TOIE0) | (1 << OCIE0B);
      fda:	85 60       	ori	r24, 0x05	; 5
      fdc:	d9 96       	adiw	r26, 0x39	; 57
      fde:	8c 93       	st	X, r24
 		break;
      fe0:	07 c0       	rjmp	.+14     	; 0xff0 <TIMER_COUNTER0enable+0x15a>
 		case 6:
-			mega328.tc0.reg->timsk0 |= (1 << TOIE0) | (1 << OCIE0A) | (1 << OCIE0B);
+			timermega328.tc0.reg->timsk0 |= (1 << TOIE0) | (1 << OCIE0A) | (1 << OCIE0B);
      fe2:	87 60       	ori	r24, 0x07	; 7
      fe4:	d9 96       	adiw	r26, 0x39	; 57
      fe6:	8c 93       	st	X, r24
 		break;
      fe8:	03 c0       	rjmp	.+6      	; 0xff0 <TIMER_COUNTER0enable+0x15a>
 		case 7:
-			mega328.tc0.reg->timsk0 |= (1 << OCIE0A) | (1 << OCIE0B);
+			timermega328.tc0.reg->timsk0 |= (1 << OCIE0A) | (1 << OCIE0B);
      fea:	86 60       	ori	r24, 0x06	; 6
      fec:	d9 96       	adiw	r26, 0x39	; 57
      fee:	8c 93       	st	X, r24
@@ -2847,7 +2847,7 @@ TIMER_COUNTER0 TIMER_COUNTER0enable(unsigned char wavegenmode, unsigned char int
     105c:	06 2f       	mov	r16, r22
     105e:	14 2f       	mov	r17, r20
 	TIMER_COUNTER1 timer1;
-	mega328 = ATMEGA328enable();
+	timermega328 = ATMEGA328enable();
     1060:	ce 01       	movw	r24, r28
     1062:	01 96       	adiw	r24, 0x01	; 1
     1064:	0e 94 20 04 	call	0x840	; 0x840 <ATMEGA328enable>
@@ -2863,16 +2863,16 @@ TIMER_COUNTER0 TIMER_COUNTER0enable(unsigned char wavegenmode, unsigned char int
 	
 	timer1_state = 0;
     107a:	10 92 8c 01 	sts	0x018C, r1	; 0x80018c <timer1_state>
-	mega328.tc1.reg->tccr1a &= ~((1 << WGM11) | (1 << WGM10));
-    107e:	20 91 8d 02 	lds	r18, 0x028D	; 0x80028d <mega328+0x1a>
-    1082:	30 91 8e 02 	lds	r19, 0x028E	; 0x80028e <mega328+0x1b>
+	timermega328.tc1.reg->tccr1a &= ~((1 << WGM11) | (1 << WGM10));
+    107e:	20 91 8d 02 	lds	r18, 0x028D	; 0x80028d <timermega328+0x1a>
+    1082:	30 91 8e 02 	lds	r19, 0x028E	; 0x80028e <timermega328+0x1b>
     1086:	f9 01       	movw	r30, r18
     1088:	e6 5b       	subi	r30, 0xB6	; 182
     108a:	ff 4f       	sbci	r31, 0xFF	; 255
     108c:	50 81       	ld	r21, Z
     108e:	5c 7f       	andi	r21, 0xFC	; 252
     1090:	50 83       	st	Z, r21
-	mega328.tc1.reg->tccr1b &= ~((1 << WGM13) | (1 << WGM12));
+	timermega328.tc1.reg->tccr1b &= ~((1 << WGM13) | (1 << WGM12));
     1092:	31 96       	adiw	r30, 0x01	; 1
     1094:	40 81       	ld	r20, Z
     1096:	47 7e       	andi	r20, 0xE7	; 231
@@ -2892,7 +2892,7 @@ TIMER_COUNTER0 TIMER_COUNTER0enable(unsigned char wavegenmode, unsigned char int
 		case 0: // Normal
 		break;
 		case 1: // PWM, Phase Correct, 8-bit
-			mega328.tc1.reg->tccr1a |= (1 << WGM10);
+			timermega328.tc1.reg->tccr1a |= (1 << WGM10);
     10b2:	f9 01       	movw	r30, r18
     10b4:	e6 5b       	subi	r30, 0xB6	; 182
     10b6:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2901,7 +2901,7 @@ TIMER_COUNTER0 TIMER_COUNTER0enable(unsigned char wavegenmode, unsigned char int
 		break;
     10bc:	6e c0       	rjmp	.+220    	; 0x119a <TIMER_COUNTER1enable+0x15c>
 		case 2:	// PWM, Phase Correct, 9-bit
-			mega328.tc1.reg->tccr1a |= (1 << WGM11);
+			timermega328.tc1.reg->tccr1a |= (1 << WGM11);
     10be:	f9 01       	movw	r30, r18
     10c0:	e6 5b       	subi	r30, 0xB6	; 182
     10c2:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2910,7 +2910,7 @@ TIMER_COUNTER0 TIMER_COUNTER0enable(unsigned char wavegenmode, unsigned char int
 		break;
     10c8:	68 c0       	rjmp	.+208    	; 0x119a <TIMER_COUNTER1enable+0x15c>
 		case 3:	// PWM, Phase Correct, 10-bit
-			mega328.tc1.reg->tccr1a |= (1 << WGM11) | (1 << WGM10);
+			timermega328.tc1.reg->tccr1a |= (1 << WGM11) | (1 << WGM10);
     10ca:	f9 01       	movw	r30, r18
     10cc:	e6 5b       	subi	r30, 0xB6	; 182
     10ce:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2919,7 +2919,7 @@ TIMER_COUNTER0 TIMER_COUNTER0enable(unsigned char wavegenmode, unsigned char int
 		break;
     10d4:	62 c0       	rjmp	.+196    	; 0x119a <TIMER_COUNTER1enable+0x15c>
 		case 4:	// CTC
-			mega328.tc1.reg->tccr1b |= (1 << WGM12);
+			timermega328.tc1.reg->tccr1b |= (1 << WGM12);
     10d6:	f9 01       	movw	r30, r18
     10d8:	e5 5b       	subi	r30, 0xB5	; 181
     10da:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2928,46 +2928,46 @@ TIMER_COUNTER0 TIMER_COUNTER0enable(unsigned char wavegenmode, unsigned char int
 		break;
     10e0:	5c c0       	rjmp	.+184    	; 0x119a <TIMER_COUNTER1enable+0x15c>
 		case 5:	// Fast PWM, 8-bit
-			mega328.tc1.reg->tccr1a |= (1 << WGM10);
+			timermega328.tc1.reg->tccr1a |= (1 << WGM10);
     10e2:	f9 01       	movw	r30, r18
     10e4:	e6 5b       	subi	r30, 0xB6	; 182
     10e6:	ff 4f       	sbci	r31, 0xFF	; 255
     10e8:	51 60       	ori	r21, 0x01	; 1
     10ea:	50 83       	st	Z, r21
-			mega328.tc1.reg->tccr1b |= (1 << WGM12);
+			timermega328.tc1.reg->tccr1b |= (1 << WGM12);
     10ec:	31 96       	adiw	r30, 0x01	; 1
     10ee:	48 60       	ori	r20, 0x08	; 8
     10f0:	40 83       	st	Z, r20
 		break;
     10f2:	53 c0       	rjmp	.+166    	; 0x119a <TIMER_COUNTER1enable+0x15c>
 		case 6:	// Fast PWM, 9-bit
-			mega328.tc1.reg->tccr1a |= (1 << WGM11);
+			timermega328.tc1.reg->tccr1a |= (1 << WGM11);
     10f4:	f9 01       	movw	r30, r18
     10f6:	e6 5b       	subi	r30, 0xB6	; 182
     10f8:	ff 4f       	sbci	r31, 0xFF	; 255
     10fa:	52 60       	ori	r21, 0x02	; 2
     10fc:	50 83       	st	Z, r21
-			mega328.tc1.reg->tccr1b |= (1 << WGM12);
+			timermega328.tc1.reg->tccr1b |= (1 << WGM12);
     10fe:	31 96       	adiw	r30, 0x01	; 1
     1100:	48 60       	ori	r20, 0x08	; 8
     1102:	40 83       	st	Z, r20
 		break;
     1104:	4a c0       	rjmp	.+148    	; 0x119a <TIMER_COUNTER1enable+0x15c>
 		case 7:	// Fast PWM, 10-bit
-			mega328.tc1.reg->tccr1a |= (1 << WGM11) | (1 << WGM10);
+			timermega328.tc1.reg->tccr1a |= (1 << WGM11) | (1 << WGM10);
     1106:	f9 01       	movw	r30, r18
     1108:	e6 5b       	subi	r30, 0xB6	; 182
     110a:	ff 4f       	sbci	r31, 0xFF	; 255
     110c:	53 60       	ori	r21, 0x03	; 3
     110e:	50 83       	st	Z, r21
-			mega328.tc1.reg->tccr1b |= (1 << WGM12);
+			timermega328.tc1.reg->tccr1b |= (1 << WGM12);
     1110:	31 96       	adiw	r30, 0x01	; 1
     1112:	48 60       	ori	r20, 0x08	; 8
     1114:	40 83       	st	Z, r20
 		break;
     1116:	41 c0       	rjmp	.+130    	; 0x119a <TIMER_COUNTER1enable+0x15c>
 		case 8:	// PWM, Phase and Frequency Correct
-			mega328.tc1.reg->tccr1b |= (1 << WGM13);
+			timermega328.tc1.reg->tccr1b |= (1 << WGM13);
     1118:	f9 01       	movw	r30, r18
     111a:	e5 5b       	subi	r30, 0xB5	; 181
     111c:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -2976,46 +2976,46 @@ TIMER_COUNTER0 TIMER_COUNTER0enable(unsigned char wavegenmode, unsigned char int
 		break;
     1122:	3b c0       	rjmp	.+118    	; 0x119a <TIMER_COUNTER1enable+0x15c>
 		case 9:	// PWM, Phase and Frequency Correct
-			mega328.tc1.reg->tccr1a |= (1 << WGM10);
+			timermega328.tc1.reg->tccr1a |= (1 << WGM10);
     1124:	f9 01       	movw	r30, r18
     1126:	e6 5b       	subi	r30, 0xB6	; 182
     1128:	ff 4f       	sbci	r31, 0xFF	; 255
     112a:	51 60       	ori	r21, 0x01	; 1
     112c:	50 83       	st	Z, r21
-			mega328.tc1.reg->tccr1b |= (1 << WGM13);
+			timermega328.tc1.reg->tccr1b |= (1 << WGM13);
     112e:	31 96       	adiw	r30, 0x01	; 1
     1130:	40 61       	ori	r20, 0x10	; 16
     1132:	40 83       	st	Z, r20
 		break;
     1134:	32 c0       	rjmp	.+100    	; 0x119a <TIMER_COUNTER1enable+0x15c>
 		case 10: // PWM, Phase Correct
-			mega328.tc1.reg->tccr1a |= (1 << WGM11);
+			timermega328.tc1.reg->tccr1a |= (1 << WGM11);
     1136:	f9 01       	movw	r30, r18
     1138:	e6 5b       	subi	r30, 0xB6	; 182
     113a:	ff 4f       	sbci	r31, 0xFF	; 255
     113c:	52 60       	ori	r21, 0x02	; 2
     113e:	50 83       	st	Z, r21
-			mega328.tc1.reg->tccr1b |= (1 << WGM13);
+			timermega328.tc1.reg->tccr1b |= (1 << WGM13);
     1140:	31 96       	adiw	r30, 0x01	; 1
     1142:	40 61       	ori	r20, 0x10	; 16
     1144:	40 83       	st	Z, r20
 		break;
     1146:	29 c0       	rjmp	.+82     	; 0x119a <TIMER_COUNTER1enable+0x15c>
 		case 11: // PWM, Phase Correct
-			mega328.tc1.reg->tccr1a |= (1 << WGM11) | (1 << WGM10);
+			timermega328.tc1.reg->tccr1a |= (1 << WGM11) | (1 << WGM10);
     1148:	f9 01       	movw	r30, r18
     114a:	e6 5b       	subi	r30, 0xB6	; 182
     114c:	ff 4f       	sbci	r31, 0xFF	; 255
     114e:	53 60       	ori	r21, 0x03	; 3
     1150:	50 83       	st	Z, r21
-			mega328.tc1.reg->tccr1b |= (1 << WGM13);
+			timermega328.tc1.reg->tccr1b |= (1 << WGM13);
     1152:	31 96       	adiw	r30, 0x01	; 1
     1154:	40 61       	ori	r20, 0x10	; 16
     1156:	40 83       	st	Z, r20
 		break;
     1158:	20 c0       	rjmp	.+64     	; 0x119a <TIMER_COUNTER1enable+0x15c>
 		case 12: // CTC
-			mega328.tc1.reg->tccr1b |= (1 << WGM13) | (1 << WGM12);
+			timermega328.tc1.reg->tccr1b |= (1 << WGM13) | (1 << WGM12);
     115a:	f9 01       	movw	r30, r18
     115c:	e5 5b       	subi	r30, 0xB5	; 181
     115e:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -3024,39 +3024,39 @@ TIMER_COUNTER0 TIMER_COUNTER0enable(unsigned char wavegenmode, unsigned char int
 		break;
     1164:	1a c0       	rjmp	.+52     	; 0x119a <TIMER_COUNTER1enable+0x15c>
 		case 13: // (Reserved)
-			mega328.tc1.reg->tccr1a |= (1 << WGM10);
+			timermega328.tc1.reg->tccr1a |= (1 << WGM10);
     1166:	f9 01       	movw	r30, r18
     1168:	e6 5b       	subi	r30, 0xB6	; 182
     116a:	ff 4f       	sbci	r31, 0xFF	; 255
     116c:	51 60       	ori	r21, 0x01	; 1
     116e:	50 83       	st	Z, r21
-			mega328.tc1.reg->tccr1b |= (1 << WGM13) | (1 << WGM12);
+			timermega328.tc1.reg->tccr1b |= (1 << WGM13) | (1 << WGM12);
     1170:	31 96       	adiw	r30, 0x01	; 1
     1172:	48 61       	ori	r20, 0x18	; 24
     1174:	40 83       	st	Z, r20
 		break;
     1176:	11 c0       	rjmp	.+34     	; 0x119a <TIMER_COUNTER1enable+0x15c>
 		case 14: // Fast PWM
-			mega328.tc1.reg->tccr1a |= (1 << WGM11);
+			timermega328.tc1.reg->tccr1a |= (1 << WGM11);
     1178:	f9 01       	movw	r30, r18
     117a:	e6 5b       	subi	r30, 0xB6	; 182
     117c:	ff 4f       	sbci	r31, 0xFF	; 255
     117e:	52 60       	ori	r21, 0x02	; 2
     1180:	50 83       	st	Z, r21
-			mega328.tc1.reg->tccr1b |= (1 << WGM13) | (1 << WGM12);
+			timermega328.tc1.reg->tccr1b |= (1 << WGM13) | (1 << WGM12);
     1182:	31 96       	adiw	r30, 0x01	; 1
     1184:	48 61       	ori	r20, 0x18	; 24
     1186:	40 83       	st	Z, r20
 		break;
     1188:	08 c0       	rjmp	.+16     	; 0x119a <TIMER_COUNTER1enable+0x15c>
 		case 15: // Fast PWM
-			mega328.tc1.reg->tccr1a |= (1 << WGM11) | (1 << WGM10);
+			timermega328.tc1.reg->tccr1a |= (1 << WGM11) | (1 << WGM10);
     118a:	f9 01       	movw	r30, r18
     118c:	e6 5b       	subi	r30, 0xB6	; 182
     118e:	ff 4f       	sbci	r31, 0xFF	; 255
     1190:	53 60       	ori	r21, 0x03	; 3
     1192:	50 83       	st	Z, r21
-			mega328.tc1.reg->tccr1b |= (1 << WGM13) | (1 << WGM12);
+			timermega328.tc1.reg->tccr1b |= (1 << WGM13) | (1 << WGM12);
     1194:	31 96       	adiw	r30, 0x01	; 1
     1196:	48 61       	ori	r20, 0x18	; 24
     1198:	40 83       	st	Z, r20
@@ -3064,14 +3064,14 @@ TIMER_COUNTER0 TIMER_COUNTER0enable(unsigned char wavegenmode, unsigned char int
 		default:
 		break;
 	}
-	mega328.tc1.reg->tccr1a &= ~((3 << COM1A0) | (3 << COM1B0));
+	timermega328.tc1.reg->tccr1a &= ~((3 << COM1A0) | (3 << COM1B0));
     119a:	f9 01       	movw	r30, r18
     119c:	e6 5b       	subi	r30, 0xB6	; 182
     119e:	ff 4f       	sbci	r31, 0xFF	; 255
     11a0:	80 81       	ld	r24, Z
     11a2:	8f 70       	andi	r24, 0x0F	; 15
     11a4:	80 83       	st	Z, r24
-	mega328.tc1.reg->timsk1 &= ~((1 << ICIE1)  | (1 << OCIE1B) | (1 << OCIE1A) | (1 << TOIE1));
+	timermega328.tc1.reg->timsk1 &= ~((1 << ICIE1)  | (1 << OCIE1B) | (1 << OCIE1A) | (1 << TOIE1));
     11a6:	f9 01       	movw	r30, r18
     11a8:	81 ad       	ldd	r24, Z+57	; 0x39
     11aa:	88 7d       	andi	r24, 0xD8	; 216
@@ -3090,8 +3090,8 @@ TIMER_COUNTER0 TIMER_COUNTER0enable(unsigned char wavegenmode, unsigned char int
 		default:
 		break;
 	}
-	mega328.tc1.reg->tccr1a &= ~((3 << COM1A0) | (3 << COM1B0));
-	mega328.tc1.reg->timsk1 &= ~((1 << ICIE1)  | (1 << OCIE1B) | (1 << OCIE1A) | (1 << TOIE1));
+	timermega328.tc1.reg->tccr1a &= ~((3 << COM1A0) | (3 << COM1B0));
+	timermega328.tc1.reg->timsk1 &= ~((1 << ICIE1)  | (1 << OCIE1B) | (1 << OCIE1A) | (1 << TOIE1));
     11c2:	f9 01       	movw	r30, r18
     11c4:	81 af       	std	Z+57, r24	; 0x39
     11c6:	2b c0       	rjmp	.+86     	; 0x121e <TIMER_COUNTER1enable+0x1e0>
@@ -3099,77 +3099,77 @@ TIMER_COUNTER0 TIMER_COUNTER0enable(unsigned char wavegenmode, unsigned char int
 		case 0:
 		break;
 		case 1:
-			mega328.tc1.reg->timsk1 |= (1 << TOIE1);
+			timermega328.tc1.reg->timsk1 |= (1 << TOIE1);
     11c8:	81 60       	ori	r24, 0x01	; 1
     11ca:	f9 01       	movw	r30, r18
     11cc:	81 af       	std	Z+57, r24	; 0x39
 		break;
     11ce:	27 c0       	rjmp	.+78     	; 0x121e <TIMER_COUNTER1enable+0x1e0>
 		case 2:
-			mega328.tc1.reg->timsk1 |= (1 << OCIE1A);
+			timermega328.tc1.reg->timsk1 |= (1 << OCIE1A);
     11d0:	82 60       	ori	r24, 0x02	; 2
     11d2:	f9 01       	movw	r30, r18
     11d4:	81 af       	std	Z+57, r24	; 0x39
 		break;
     11d6:	23 c0       	rjmp	.+70     	; 0x121e <TIMER_COUNTER1enable+0x1e0>
 		case 3:
-			mega328.tc1.reg->timsk1 |= (1 << OCIE1B);
+			timermega328.tc1.reg->timsk1 |= (1 << OCIE1B);
     11d8:	84 60       	ori	r24, 0x04	; 4
     11da:	f9 01       	movw	r30, r18
     11dc:	81 af       	std	Z+57, r24	; 0x39
 		break;
     11de:	1f c0       	rjmp	.+62     	; 0x121e <TIMER_COUNTER1enable+0x1e0>
 		case 4:
-			mega328.tc1.reg->timsk1 |= (1 << ICIE1);
+			timermega328.tc1.reg->timsk1 |= (1 << ICIE1);
     11e0:	80 62       	ori	r24, 0x20	; 32
     11e2:	f9 01       	movw	r30, r18
     11e4:	81 af       	std	Z+57, r24	; 0x39
 		break;
     11e6:	1b c0       	rjmp	.+54     	; 0x121e <TIMER_COUNTER1enable+0x1e0>
 		case 5:
-			mega328.tc1.reg->timsk1 |= (1 << OCIE1A) | (1 << OCIE1B);
+			timermega328.tc1.reg->timsk1 |= (1 << OCIE1A) | (1 << OCIE1B);
     11e8:	86 60       	ori	r24, 0x06	; 6
     11ea:	f9 01       	movw	r30, r18
     11ec:	81 af       	std	Z+57, r24	; 0x39
 		break;
     11ee:	17 c0       	rjmp	.+46     	; 0x121e <TIMER_COUNTER1enable+0x1e0>
 		case 6:
-			mega328.tc1.reg->timsk1 |= (1 << OCIE1A) | (1 << TOIE1);
+			timermega328.tc1.reg->timsk1 |= (1 << OCIE1A) | (1 << TOIE1);
     11f0:	83 60       	ori	r24, 0x03	; 3
     11f2:	f9 01       	movw	r30, r18
     11f4:	81 af       	std	Z+57, r24	; 0x39
 		break;
     11f6:	13 c0       	rjmp	.+38     	; 0x121e <TIMER_COUNTER1enable+0x1e0>
 		case 7:
-			mega328.tc1.reg->timsk1 |= (1 << OCIE1B) | (1 << TOIE1);
+			timermega328.tc1.reg->timsk1 |= (1 << OCIE1B) | (1 << TOIE1);
     11f8:	85 60       	ori	r24, 0x05	; 5
     11fa:	f9 01       	movw	r30, r18
     11fc:	81 af       	std	Z+57, r24	; 0x39
 		break;
     11fe:	0f c0       	rjmp	.+30     	; 0x121e <TIMER_COUNTER1enable+0x1e0>
 		case 8:
-			mega328.tc1.reg->timsk1 |= (1 << ICIE1) | (1 << TOIE1);
+			timermega328.tc1.reg->timsk1 |= (1 << ICIE1) | (1 << TOIE1);
     1200:	81 62       	ori	r24, 0x21	; 33
     1202:	f9 01       	movw	r30, r18
     1204:	81 af       	std	Z+57, r24	; 0x39
 		break;
     1206:	0b c0       	rjmp	.+22     	; 0x121e <TIMER_COUNTER1enable+0x1e0>
 		case 9:
-			mega328.tc1.reg->timsk1 |= (1 << OCIE1A) | (1 << OCIE1B) | (1 << TOIE1);
+			timermega328.tc1.reg->timsk1 |= (1 << OCIE1A) | (1 << OCIE1B) | (1 << TOIE1);
     1208:	87 60       	ori	r24, 0x07	; 7
     120a:	f9 01       	movw	r30, r18
     120c:	81 af       	std	Z+57, r24	; 0x39
 		break;
     120e:	07 c0       	rjmp	.+14     	; 0x121e <TIMER_COUNTER1enable+0x1e0>
 		case 10:
-			mega328.tc1.reg->timsk1 |= (1 << ICIE1) | (1 << OCIE1A) | (1 << OCIE1B) | (1 << TOIE1);
+			timermega328.tc1.reg->timsk1 |= (1 << ICIE1) | (1 << OCIE1A) | (1 << OCIE1B) | (1 << TOIE1);
     1210:	87 62       	ori	r24, 0x27	; 39
     1212:	f9 01       	movw	r30, r18
     1214:	81 af       	std	Z+57, r24	; 0x39
 		break;
     1216:	03 c0       	rjmp	.+6      	; 0x121e <TIMER_COUNTER1enable+0x1e0>
 		case 11:
-			mega328.tc1.reg->timsk1 |= (1 << OCIE1A) | (1 << OCIE1B);
+			timermega328.tc1.reg->timsk1 |= (1 << OCIE1A) | (1 << OCIE1B);
     1218:	86 60       	ori	r24, 0x06	; 6
     121a:	f9 01       	movw	r30, r18
     121c:	81 af       	std	Z+57, r24	; 0x39
@@ -3245,7 +3245,7 @@ TIMER_COUNTER2 TIMER_COUNTER2enable(unsigned char wavegenmode, unsigned char int
     128a:	e6 2e       	mov	r14, r22
     128c:	f4 2e       	mov	r15, r20
 	TIMER_COUNTER2 timer2;
-	mega328 = ATMEGA328enable();
+	timermega328 = ATMEGA328enable();
     128e:	ce 01       	movw	r24, r28
     1290:	01 96       	adiw	r24, 0x01	; 1
     1292:	0e 94 20 04 	call	0x840	; 0x840 <ATMEGA328enable>
@@ -3261,16 +3261,16 @@ TIMER_COUNTER2 TIMER_COUNTER2enable(unsigned char wavegenmode, unsigned char int
 	
 	timer2_state = 0;
     12a8:	10 92 8b 01 	sts	0x018B, r1	; 0x80018b <timer2_state>
-	mega328.tc2.reg->tccr2a &= ~((1 << WGM21) | (1 << WGM20));
-    12ac:	e0 91 95 02 	lds	r30, 0x0295	; 0x800295 <mega328+0x22>
-    12b0:	f0 91 96 02 	lds	r31, 0x0296	; 0x800296 <mega328+0x23>
+	timermega328.tc2.reg->tccr2a &= ~((1 << WGM21) | (1 << WGM20));
+    12ac:	e0 91 95 02 	lds	r30, 0x0295	; 0x800295 <timermega328+0x22>
+    12b0:	f0 91 96 02 	lds	r31, 0x0296	; 0x800296 <timermega328+0x23>
     12b4:	df 01       	movw	r26, r30
     12b6:	a7 58       	subi	r26, 0x87	; 135
     12b8:	bf 4f       	sbci	r27, 0xFF	; 255
     12ba:	8c 91       	ld	r24, X
     12bc:	8c 7f       	andi	r24, 0xFC	; 252
     12be:	8c 93       	st	X, r24
-	mega328.tc2.reg->tccr2b &= ~(1<<WGM22);
+	timermega328.tc2.reg->tccr2b &= ~(1<<WGM22);
     12c0:	11 96       	adiw	r26, 0x01	; 1
     12c2:	9c 91       	ld	r25, X
     12c4:	97 7f       	andi	r25, 0xF7	; 247
@@ -3298,7 +3298,7 @@ TIMER_COUNTER2 TIMER_COUNTER2enable(unsigned char wavegenmode, unsigned char int
 		case 0: // Normal
 		break;
 		case 1: // PWM, Phase Correct
-			mega328.tc2.reg->tccr2a |=(1 << WGM20);
+			timermega328.tc2.reg->tccr2a |=(1 << WGM20);
     12ee:	df 01       	movw	r26, r30
     12f0:	a7 58       	subi	r26, 0x87	; 135
     12f2:	bf 4f       	sbci	r27, 0xFF	; 255
@@ -3307,7 +3307,7 @@ TIMER_COUNTER2 TIMER_COUNTER2enable(unsigned char wavegenmode, unsigned char int
 		break;
     12f8:	1d c0       	rjmp	.+58     	; 0x1334 <TIMER_COUNTER2enable+0xc8>
 		case 2: // CTC
-			mega328.tc2.reg->tccr2a |= (1 << WGM21);
+			timermega328.tc2.reg->tccr2a |= (1 << WGM21);
     12fa:	df 01       	movw	r26, r30
     12fc:	a7 58       	subi	r26, 0x87	; 135
     12fe:	bf 4f       	sbci	r27, 0xFF	; 255
@@ -3316,7 +3316,7 @@ TIMER_COUNTER2 TIMER_COUNTER2enable(unsigned char wavegenmode, unsigned char int
 		break;
     1304:	17 c0       	rjmp	.+46     	; 0x1334 <TIMER_COUNTER2enable+0xc8>
 		case 3: // Fast PWM
-			mega328.tc2.reg->tccr2a |= (1 << WGM20) | (1 << WGM21);
+			timermega328.tc2.reg->tccr2a |= (1 << WGM20) | (1 << WGM21);
     1306:	df 01       	movw	r26, r30
     1308:	a7 58       	subi	r26, 0x87	; 135
     130a:	bf 4f       	sbci	r27, 0xFF	; 255
@@ -3325,26 +3325,26 @@ TIMER_COUNTER2 TIMER_COUNTER2enable(unsigned char wavegenmode, unsigned char int
 		break;
     1310:	11 c0       	rjmp	.+34     	; 0x1334 <TIMER_COUNTER2enable+0xc8>
 		case 5: // PWM, Phase Correct
-			mega328.tc2.reg->tccr2a |= (1 << WGM20);
+			timermega328.tc2.reg->tccr2a |= (1 << WGM20);
     1312:	df 01       	movw	r26, r30
     1314:	a7 58       	subi	r26, 0x87	; 135
     1316:	bf 4f       	sbci	r27, 0xFF	; 255
     1318:	81 60       	ori	r24, 0x01	; 1
     131a:	8c 93       	st	X, r24
-			mega328.tc2.reg->tccr2b |= (1 << WGM22);
+			timermega328.tc2.reg->tccr2b |= (1 << WGM22);
     131c:	11 96       	adiw	r26, 0x01	; 1
     131e:	98 60       	ori	r25, 0x08	; 8
     1320:	9c 93       	st	X, r25
 		break;
     1322:	08 c0       	rjmp	.+16     	; 0x1334 <TIMER_COUNTER2enable+0xc8>
 		case 7: // Fast PWM
-			mega328.tc2.reg->tccr2a |= (1 << WGM20) | (1 << WGM21);
+			timermega328.tc2.reg->tccr2a |= (1 << WGM20) | (1 << WGM21);
     1324:	df 01       	movw	r26, r30
     1326:	a7 58       	subi	r26, 0x87	; 135
     1328:	bf 4f       	sbci	r27, 0xFF	; 255
     132a:	83 60       	ori	r24, 0x03	; 3
     132c:	8c 93       	st	X, r24
-			mega328.tc2.reg->tccr2b |= (1 << WGM22);
+			timermega328.tc2.reg->tccr2b |= (1 << WGM22);
     132e:	11 96       	adiw	r26, 0x01	; 1
     1330:	98 60       	ori	r25, 0x08	; 8
     1332:	9c 93       	st	X, r25
@@ -3352,7 +3352,7 @@ TIMER_COUNTER2 TIMER_COUNTER2enable(unsigned char wavegenmode, unsigned char int
 		default:
 		break;
 	}
-	mega328.tc2.reg->timsk2 &= ~((1 << OCIE2B) | (1 << OCIE2A) | (1 << TOIE2));
+	timermega328.tc2.reg->timsk2 &= ~((1 << OCIE2B) | (1 << OCIE2A) | (1 << TOIE2));
     1334:	81 ad       	ldd	r24, Z+57	; 0x39
     1336:	88 7f       	andi	r24, 0xF8	; 248
 	switch(interrupt){
@@ -3376,49 +3376,49 @@ TIMER_COUNTER2 TIMER_COUNTER2enable(unsigned char wavegenmode, unsigned char int
     135a:	96 e0       	ldi	r25, 0x06	; 6
     135c:	f9 16       	cp	r15, r25
     135e:	89 f0       	breq	.+34     	; 0x1382 <TIMER_COUNTER2enable+0x116>
-			mega328.tc2.reg->tccr2b |= (1 << WGM22);
+			timermega328.tc2.reg->tccr2b |= (1 << WGM22);
 		break;
 		default:
 		break;
 	}
-	mega328.tc2.reg->timsk2 &= ~((1 << OCIE2B) | (1 << OCIE2A) | (1 << TOIE2));
+	timermega328.tc2.reg->timsk2 &= ~((1 << OCIE2B) | (1 << OCIE2A) | (1 << TOIE2));
     1360:	81 af       	std	Z+57, r24	; 0x39
     1362:	11 c0       	rjmp	.+34     	; 0x1386 <TIMER_COUNTER2enable+0x11a>
 	switch(interrupt){
 		case 0: 
 		break;
 		case 1:
-			mega328.tc2.reg->timsk2 |= (1 << TOIE2);
+			timermega328.tc2.reg->timsk2 |= (1 << TOIE2);
     1364:	81 60       	ori	r24, 0x01	; 1
     1366:	81 af       	std	Z+57, r24	; 0x39
 		break;
     1368:	0e c0       	rjmp	.+28     	; 0x1386 <TIMER_COUNTER2enable+0x11a>
 		case 2:
-			mega328.tc2.reg->timsk2 |= (1 << OCIE2A);
+			timermega328.tc2.reg->timsk2 |= (1 << OCIE2A);
     136a:	82 60       	ori	r24, 0x02	; 2
     136c:	81 af       	std	Z+57, r24	; 0x39
 		break;
     136e:	0b c0       	rjmp	.+22     	; 0x1386 <TIMER_COUNTER2enable+0x11a>
 		case 3:
-			mega328.tc2.reg->timsk2 |= (1 << TOIE2) | (1 << OCIE2A);
+			timermega328.tc2.reg->timsk2 |= (1 << TOIE2) | (1 << OCIE2A);
     1370:	83 60       	ori	r24, 0x03	; 3
     1372:	81 af       	std	Z+57, r24	; 0x39
 		break;
     1374:	08 c0       	rjmp	.+16     	; 0x1386 <TIMER_COUNTER2enable+0x11a>
 		case 4:
-			mega328.tc2.reg->timsk2 |= (1 << TOIE2) | (1 << OCIE2B);
+			timermega328.tc2.reg->timsk2 |= (1 << TOIE2) | (1 << OCIE2B);
     1376:	85 60       	ori	r24, 0x05	; 5
     1378:	81 af       	std	Z+57, r24	; 0x39
 		break;
     137a:	05 c0       	rjmp	.+10     	; 0x1386 <TIMER_COUNTER2enable+0x11a>
 		case 5:
-			mega328.tc2.reg->timsk2 |= (1 << OCIE2B) | (1 << OCIE2A);
+			timermega328.tc2.reg->timsk2 |= (1 << OCIE2B) | (1 << OCIE2A);
     137c:	86 60       	ori	r24, 0x06	; 6
     137e:	81 af       	std	Z+57, r24	; 0x39
 		break;
     1380:	02 c0       	rjmp	.+4      	; 0x1386 <TIMER_COUNTER2enable+0x11a>
 		case 6:
-			mega328.tc2.reg->timsk2 |= (1 << OCIE2B) | (1 << OCIE2A) | (1 << TOIE2);
+			timermega328.tc2.reg->timsk2 |= (1 << OCIE2B) | (1 << OCIE2A) | (1 << TOIE2);
     1382:	87 60       	ori	r24, 0x07	; 7
     1384:	81 af       	std	Z+57, r24	; 0x39
 	timer2.compoutmodeB = TIMER_COUNTER2_compoutmodeB;
@@ -3474,9 +3474,9 @@ TIMER_COUNTER2 TIMER_COUNTER2enable(unsigned char wavegenmode, unsigned char int
 // auxiliary
 uint8_t TWI_status( void )
 {
-	uint8_t cmd = m.twi.reg->twsr & TWI_STATUS_MASK;
-    13d4:	e0 91 1d 02 	lds	r30, 0x021D	; 0x80021d <m+0x26>
-    13d8:	f0 91 1e 02 	lds	r31, 0x021E	; 0x80021e <m+0x27>
+	uint8_t cmd = twimega328.twi.reg->twsr & TWI_STATUS_MASK;
+    13d4:	e0 91 d7 02 	lds	r30, 0x02D7	; 0x8002d7 <twimega328+0x26>
+    13d8:	f0 91 d8 02 	lds	r31, 0x02D8	; 0x8002d8 <twimega328+0x27>
 	return cmd;
     13dc:	81 81       	ldd	r24, Z+1	; 0x01
 }
@@ -3489,9 +3489,9 @@ uint8_t TWI_status( void )
 void TWI_stop(void)
 {
 	uint8_t cmd = (1 << TWINT) | (1 << TWEN) | (1 << TWSTO);
-	m.twi.reg->twcr = cmd;
-    13e2:	e0 91 1d 02 	lds	r30, 0x021D	; 0x80021d <m+0x26>
-    13e6:	f0 91 1e 02 	lds	r31, 0x021E	; 0x80021e <m+0x27>
+	twimega328.twi.reg->twcr = cmd;
+    13e2:	e0 91 d7 02 	lds	r30, 0x02D7	; 0x8002d7 <twimega328+0x26>
+    13e6:	f0 91 d8 02 	lds	r31, 0x02D8	; 0x8002d8 <twimega328+0x27>
     13ea:	84 e9       	ldi	r24, 0x94	; 148
     13ec:	84 83       	std	Z+4, r24	; 0x04
 	#else
@@ -3528,14 +3528,14 @@ void TWI_init(uint8_t device_id, uint8_t prescaler)
 	else
 		cmd = (1 << TWGCE); // no address, but accept general call
     140a:	81 e0       	ldi	r24, 0x01	; 1
-	m.twi.reg->twar = cmd;
-    140c:	e7 ef       	ldi	r30, 0xF7	; 247
-    140e:	f1 e0       	ldi	r31, 0x01	; 1
+	twimega328.twi.reg->twar = cmd;
+    140c:	e1 eb       	ldi	r30, 0xB1	; 177
+    140e:	f2 e0       	ldi	r31, 0x02	; 2
     1410:	a6 a1       	ldd	r26, Z+38	; 0x26
     1412:	b7 a1       	ldd	r27, Z+39	; 0x27
     1414:	12 96       	adiw	r26, 0x02	; 2
     1416:	8c 93       	st	X, r24
-	m.portd.reg->ddr |= TWI_IO_MASK;
+	twimega328.portd.reg->ddr |= TWI_IO_MASK;
     1418:	a6 89       	ldd	r26, Z+22	; 0x16
     141a:	b7 89       	ldd	r27, Z+23	; 0x17
     141c:	11 96       	adiw	r26, 0x01	; 1
@@ -3544,7 +3544,7 @@ void TWI_init(uint8_t device_id, uint8_t prescaler)
     1422:	80 63       	ori	r24, 0x30	; 48
     1424:	11 96       	adiw	r26, 0x01	; 1
     1426:	8c 93       	st	X, r24
-	m.portd.reg->port |= TWI_IO_MASK;
+	twimega328.portd.reg->port |= TWI_IO_MASK;
     1428:	06 88       	ldd	r0, Z+22	; 0x16
     142a:	f7 89       	ldd	r31, Z+23	; 0x17
     142c:	e0 2d       	mov	r30, r0
@@ -3564,36 +3564,36 @@ void TWI_init(uint8_t device_id, uint8_t prescaler)
     1446:	c9 f0       	breq	.+50     	; 0x147a <TWI_init+0x7e>
     1448:	20 c0       	rjmp	.+64     	; 0x148a <TWI_init+0x8e>
 		case 1:
-			m.twi.reg->twsr &= ~TWI_PRESCALER_MASK;
-    144a:	e0 91 1d 02 	lds	r30, 0x021D	; 0x80021d <m+0x26>
-    144e:	f0 91 1e 02 	lds	r31, 0x021E	; 0x80021e <m+0x27>
+			twimega328.twi.reg->twsr &= ~TWI_PRESCALER_MASK;
+    144a:	e0 91 d7 02 	lds	r30, 0x02D7	; 0x8002d7 <twimega328+0x26>
+    144e:	f0 91 d8 02 	lds	r31, 0x02D8	; 0x8002d8 <twimega328+0x27>
     1452:	81 81       	ldd	r24, Z+1	; 0x01
     1454:	8c 7f       	andi	r24, 0xFC	; 252
     1456:	81 83       	std	Z+1, r24	; 0x01
 		break;
     1458:	20 c0       	rjmp	.+64     	; 0x149a <TWI_init+0x9e>
 		case 4:
-			m.twi.reg->twsr |= (1 << TWPS0);
-    145a:	e0 91 1d 02 	lds	r30, 0x021D	; 0x80021d <m+0x26>
-    145e:	f0 91 1e 02 	lds	r31, 0x021E	; 0x80021e <m+0x27>
+			twimega328.twi.reg->twsr |= (1 << TWPS0);
+    145a:	e0 91 d7 02 	lds	r30, 0x02D7	; 0x8002d7 <twimega328+0x26>
+    145e:	f0 91 d8 02 	lds	r31, 0x02D8	; 0x8002d8 <twimega328+0x27>
     1462:	81 81       	ldd	r24, Z+1	; 0x01
     1464:	81 60       	ori	r24, 0x01	; 1
     1466:	81 83       	std	Z+1, r24	; 0x01
 		break;
     1468:	18 c0       	rjmp	.+48     	; 0x149a <TWI_init+0x9e>
 		case 16:
-			m.twi.reg->twsr |= (2 << TWPS0);
-    146a:	e0 91 1d 02 	lds	r30, 0x021D	; 0x80021d <m+0x26>
-    146e:	f0 91 1e 02 	lds	r31, 0x021E	; 0x80021e <m+0x27>
+			twimega328.twi.reg->twsr |= (2 << TWPS0);
+    146a:	e0 91 d7 02 	lds	r30, 0x02D7	; 0x8002d7 <twimega328+0x26>
+    146e:	f0 91 d8 02 	lds	r31, 0x02D8	; 0x8002d8 <twimega328+0x27>
     1472:	81 81       	ldd	r24, Z+1	; 0x01
     1474:	82 60       	ori	r24, 0x02	; 2
     1476:	81 83       	std	Z+1, r24	; 0x01
 		break;
     1478:	10 c0       	rjmp	.+32     	; 0x149a <TWI_init+0x9e>
 		case 64:
-			m.twi.reg->twsr |= (3 << TWPS0);
-    147a:	e0 91 1d 02 	lds	r30, 0x021D	; 0x80021d <m+0x26>
-    147e:	f0 91 1e 02 	lds	r31, 0x021E	; 0x80021e <m+0x27>
+			twimega328.twi.reg->twsr |= (3 << TWPS0);
+    147a:	e0 91 d7 02 	lds	r30, 0x02D7	; 0x8002d7 <twimega328+0x26>
+    147e:	f0 91 d8 02 	lds	r31, 0x02D8	; 0x8002d8 <twimega328+0x27>
     1482:	81 81       	ldd	r24, Z+1	; 0x01
     1484:	83 60       	ori	r24, 0x03	; 3
     1486:	81 83       	std	Z+1, r24	; 0x01
@@ -3601,25 +3601,25 @@ void TWI_init(uint8_t device_id, uint8_t prescaler)
     1488:	08 c0       	rjmp	.+16     	; 0x149a <TWI_init+0x9e>
 		default:
 			prescaler = 1;
-			m.twi.reg->twsr &= ~TWI_PRESCALER_MASK;
-    148a:	e0 91 1d 02 	lds	r30, 0x021D	; 0x80021d <m+0x26>
-    148e:	f0 91 1e 02 	lds	r31, 0x021E	; 0x80021e <m+0x27>
+			twimega328.twi.reg->twsr &= ~TWI_PRESCALER_MASK;
+    148a:	e0 91 d7 02 	lds	r30, 0x02D7	; 0x8002d7 <twimega328+0x26>
+    148e:	f0 91 d8 02 	lds	r31, 0x02D8	; 0x8002d8 <twimega328+0x27>
     1492:	81 81       	ldd	r24, Z+1	; 0x01
     1494:	8c 7f       	andi	r24, 0xFC	; 252
     1496:	81 83       	std	Z+1, r24	; 0x01
 		break;
 		case 64:
-			m.twi.reg->twsr |= (3 << TWPS0);
+			twimega328.twi.reg->twsr |= (3 << TWPS0);
 		break;
 		default:
 			prescaler = 1;
     1498:	61 e0       	ldi	r22, 0x01	; 1
-			m.twi.reg->twsr &= ~TWI_PRESCALER_MASK;
+			twimega328.twi.reg->twsr &= ~TWI_PRESCALER_MASK;
 		break;
 	}
-	m.twi.reg->twbr = ((F_CPU / TWI_SCL_CLOCK) - 16) / (2 * prescaler);
-    149a:	c0 91 1d 02 	lds	r28, 0x021D	; 0x80021d <m+0x26>
-    149e:	d0 91 1e 02 	lds	r29, 0x021E	; 0x80021e <m+0x27>
+	twimega328.twi.reg->twbr = ((F_CPU / TWI_SCL_CLOCK) - 16) / (2 * prescaler);
+    149a:	c0 91 d7 02 	lds	r28, 0x02D7	; 0x8002d7 <twimega328+0x26>
+    149e:	d0 91 d8 02 	lds	r29, 0x02D8	; 0x8002d8 <twimega328+0x27>
     14a2:	26 2f       	mov	r18, r22
     14a4:	30 e0       	ldi	r19, 0x00	; 0
     14a6:	22 0f       	add	r18, r18
@@ -3635,9 +3635,9 @@ void TWI_init(uint8_t device_id, uint8_t prescaler)
     14ba:	0e 94 77 1e 	call	0x3cee	; 0x3cee <__udivmodsi4>
     14be:	28 83       	st	Y, r18
 	// Standard Config begin
-	//m.twi->twsr = 0x00; //set presca1er bits to zero
-	//m.twi->twbr = 0x46; //SCL frequency is 50K for 16Mhz
-	//m.twi->twcr = 0x04; //enab1e TWI module
+	//twimega328.twi->twsr = 0x00; //set presca1er bits to zero
+	//twimega328.twi->twbr = 0x46; //SCL frequency is 50K for 16Mhz
+	//twimega328.twi->twcr = 0x04; //enab1e TWI module
 	// Standard Config end
 }
     14c0:	df 91       	pop	r29
@@ -3675,25 +3675,25 @@ TWI TWIenable(uint8_t atmega_ID,  uint8_t prescaler)
 	uint8_t tSREG;
 	TWI ic;
 	//inic file var
-	m = ATMEGA328enable();
+	twimega328 = ATMEGA328enable();
     14ee:	ce 01       	movw	r24, r28
     14f0:	01 96       	adiw	r24, 0x01	; 1
     14f2:	0e 94 20 04 	call	0x840	; 0x840 <ATMEGA328enable>
     14f6:	8e e3       	ldi	r24, 0x3E	; 62
     14f8:	fe 01       	movw	r30, r28
     14fa:	31 96       	adiw	r30, 0x01	; 1
-    14fc:	a7 ef       	ldi	r26, 0xF7	; 247
-    14fe:	b1 e0       	ldi	r27, 0x01	; 1
+    14fc:	a1 eb       	ldi	r26, 0xB1	; 177
+    14fe:	b2 e0       	ldi	r27, 0x02	; 2
     1500:	01 90       	ld	r0, Z+
     1502:	0d 92       	st	X+, r0
     1504:	8a 95       	dec	r24
     1506:	e1 f7       	brne	.-8      	; 0x1500 <TWIenable+0x3a>
 	//inic local var
-	tSREG = m.cpu.reg->sreg;
+	tSREG = twimega328.cpu.reg->sreg;
     1508:	0f 2e       	mov	r0, r31
-    150a:	f7 ef       	ldi	r31, 0xF7	; 247
+    150a:	f1 eb       	ldi	r31, 0xB1	; 177
     150c:	cf 2e       	mov	r12, r31
-    150e:	f1 e0       	ldi	r31, 0x01	; 1
+    150e:	f2 e0       	ldi	r31, 0x02	; 2
     1510:	df 2e       	mov	r13, r31
     1512:	f0 2d       	mov	r31, r0
     1514:	d6 01       	movw	r26, r12
@@ -3702,7 +3702,7 @@ TWI TWIenable(uint8_t atmega_ID,  uint8_t prescaler)
     151a:	fc 91       	ld	r31, X
     151c:	19 97       	sbiw	r26, 0x09	; 9
     151e:	f1 a0       	ldd	r15, Z+33	; 0x21
-	m.cpu.reg->sreg &= ~(1<<GLOBAL_INTERRUPT_ENABLE);
+	twimega328.cpu.reg->sreg &= ~(1<<GLOBAL_INTERRUPT_ENABLE);
     1520:	8f 2d       	mov	r24, r15
     1522:	8f 77       	andi	r24, 0x7F	; 127
     1524:	81 a3       	std	Z+33, r24	; 0x21
@@ -3715,7 +3715,7 @@ TWI TWIenable(uint8_t atmega_ID,  uint8_t prescaler)
     1526:	6b 2d       	mov	r22, r11
     1528:	8e 2d       	mov	r24, r14
     152a:	0e 94 fe 09 	call	0x13fc	; 0x13fc <TWI_init>
-	m.cpu.reg->sreg = tSREG;
+	twimega328.cpu.reg->sreg = tSREG;
     152e:	d6 01       	movw	r26, r12
     1530:	18 96       	adiw	r26, 0x08	; 8
     1532:	ed 91       	ld	r30, X+
@@ -3774,9 +3774,9 @@ TWI TWIenable(uint8_t atmega_ID,  uint8_t prescaler)
 void TWI_wait_twint( uint16_t nticks ) // hardware triggered
 {
 	unsigned int i;
-	for(i = 0; !( m.twi.reg->twcr & (1 << TWINT)); i++ ){ // wait for acknowledgment confirmation bit.
-    158e:	e0 91 1d 02 	lds	r30, 0x021D	; 0x80021d <m+0x26>
-    1592:	f0 91 1e 02 	lds	r31, 0x021E	; 0x80021e <m+0x27>
+	for(i = 0; !( twimega328.twi.reg->twcr & (1 << TWINT)); i++ ){ // wait for acknowledgment confirmation bit.
+    158e:	e0 91 d7 02 	lds	r30, 0x02D7	; 0x8002d7 <twimega328+0x26>
+    1592:	f0 91 d8 02 	lds	r31, 0x02D8	; 0x8002d8 <twimega328+0x27>
     1596:	24 81       	ldd	r18, Z+4	; 0x04
     1598:	22 23       	and	r18, r18
     159a:	44 f0       	brlt	.+16     	; 0x15ac <TWI_wait_twint+0x1e>
@@ -3791,7 +3791,7 @@ void TWI_wait_twint( uint16_t nticks ) // hardware triggered
 void TWI_wait_twint( uint16_t nticks ) // hardware triggered
 {
 	unsigned int i;
-	for(i = 0; !( m.twi.reg->twcr & (1 << TWINT)); i++ ){ // wait for acknowledgment confirmation bit.
+	for(i = 0; !( twimega328.twi.reg->twcr & (1 << TWINT)); i++ ){ // wait for acknowledgment confirmation bit.
     15a6:	2f 5f       	subi	r18, 0xFF	; 255
     15a8:	3f 4f       	sbci	r19, 0xFF	; 255
     15aa:	fa cf       	rjmp	.-12     	; 0x15a0 <TWI_wait_twint+0x12>
@@ -3803,9 +3803,9 @@ void TWI_wait_twint( uint16_t nticks ) // hardware triggered
 void TWI_start(void) // $08
 {
 	uint8_t cmd = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);
-	m.twi.reg->twcr = cmd;
-    15ae:	e0 91 1d 02 	lds	r30, 0x021D	; 0x80021d <m+0x26>
-    15b2:	f0 91 1e 02 	lds	r31, 0x021E	; 0x80021e <m+0x27>
+	twimega328.twi.reg->twcr = cmd;
+    15ae:	e0 91 d7 02 	lds	r30, 0x02D7	; 0x8002d7 <twimega328+0x26>
+    15b2:	f0 91 d8 02 	lds	r31, 0x02D8	; 0x8002d8 <twimega328+0x27>
     15b6:	84 ea       	ldi	r24, 0xA4	; 164
     15b8:	84 83       	std	Z+4, r24	; 0x04
 	
@@ -3842,16 +3842,16 @@ void TWI_connect( uint8_t address, uint8_t rw )
 	else
 		cmd = (address << 1) | (0 << 0);
     15da:	88 0f       	add	r24, r24
-	m.twi.reg->twdr = cmd;
-    15dc:	e7 ef       	ldi	r30, 0xF7	; 247
-    15de:	f1 e0       	ldi	r31, 0x01	; 1
+	twimega328.twi.reg->twdr = cmd;
+    15dc:	e1 eb       	ldi	r30, 0xB1	; 177
+    15de:	f2 e0       	ldi	r31, 0x02	; 2
     15e0:	a6 a1       	ldd	r26, Z+38	; 0x26
     15e2:	b7 a1       	ldd	r27, Z+39	; 0x27
     15e4:	13 96       	adiw	r26, 0x03	; 3
     15e6:	8c 93       	st	X, r24
 	
 	cmd = (1 << TWINT) | (1 << TWEN);
-	m.twi.reg->twcr = cmd;
+	twimega328.twi.reg->twcr = cmd;
     15e8:	06 a0       	ldd	r0, Z+38	; 0x26
     15ea:	f7 a1       	ldd	r31, Z+39	; 0x27
     15ec:	e0 2d       	mov	r30, r0
@@ -3884,16 +3884,16 @@ void TWI_connect( uint8_t address, uint8_t rw )
 void TWI_master_write( uint8_t var_twiData_u8 )
 {
 	uint8_t cmd = var_twiData_u8;
-	m.twi.reg->twdr = cmd;
-    160c:	e7 ef       	ldi	r30, 0xF7	; 247
-    160e:	f1 e0       	ldi	r31, 0x01	; 1
+	twimega328.twi.reg->twdr = cmd;
+    160c:	e1 eb       	ldi	r30, 0xB1	; 177
+    160e:	f2 e0       	ldi	r31, 0x02	; 2
     1610:	a6 a1       	ldd	r26, Z+38	; 0x26
     1612:	b7 a1       	ldd	r27, Z+39	; 0x27
     1614:	13 96       	adiw	r26, 0x03	; 3
     1616:	8c 93       	st	X, r24
 	
 	cmd = (1 << TWINT) | (1 << TWEN);
-	m.twi.reg->twcr = cmd;
+	twimega328.twi.reg->twcr = cmd;
     1618:	06 a0       	ldd	r0, Z+38	; 0x26
     161a:	f7 a1       	ldd	r31, Z+39	; 0x27
     161c:	e0 2d       	mov	r30, r0
@@ -3939,9 +3939,9 @@ uint8_t TWI_master_read( uint8_t ack_nack )
 	if( ack_nack )
 		cmd |= ( 1 << TWEA );
 	cmd |= ( 1 << TWINT ) | ( 1 << TWEN );
-	m.twi.reg->twcr = cmd;
-    1642:	e0 91 1d 02 	lds	r30, 0x021D	; 0x80021d <m+0x26>
-    1646:	f0 91 1e 02 	lds	r31, 0x021E	; 0x80021e <m+0x27>
+	twimega328.twi.reg->twcr = cmd;
+    1642:	e0 91 d7 02 	lds	r30, 0x02D7	; 0x8002d7 <twimega328+0x26>
+    1646:	f0 91 d8 02 	lds	r31, 0x02D8	; 0x8002d8 <twimega328+0x27>
     164a:	84 68       	ori	r24, 0x84	; 132
     164c:	84 83       	std	Z+4, r24	; 0x04
 	
@@ -3962,9 +3962,9 @@ uint8_t TWI_master_read( uint8_t ack_nack )
 		break;
 	}
 	
-	cmd = m.twi.reg->twdr;
-    1662:	e0 91 1d 02 	lds	r30, 0x021D	; 0x80021d <m+0x26>
-    1666:	f0 91 1e 02 	lds	r31, 0x021E	; 0x80021e <m+0x27>
+	cmd = twimega328.twi.reg->twdr;
+    1662:	e0 91 d7 02 	lds	r30, 0x02D7	; 0x8002d7 <twimega328+0x26>
+    1666:	f0 91 d8 02 	lds	r31, 0x02D8	; 0x8002d8 <twimega328+0x27>
 	return cmd;
 }
     166a:	83 81       	ldd	r24, Z+3	; 0x03
@@ -3977,9 +3977,9 @@ uint8_t TWI_master_read( uint8_t ack_nack )
 UARTvar* uart_gets(void)
 {
 	return rxbuff.raw(&rxbuff);
-    166e:	e0 91 ba 02 	lds	r30, 0x02BA	; 0x8002ba <rxbuff+0x8>
-    1672:	f0 91 bb 02 	lds	r31, 0x02BB	; 0x8002bb <rxbuff+0x9>
-    1676:	82 eb       	ldi	r24, 0xB2	; 178
+    166e:	e0 91 f8 02 	lds	r30, 0x02F8	; 0x8002f8 <rxbuff+0x8>
+    1672:	f0 91 f9 02 	lds	r31, 0x02F9	; 0x8002f9 <rxbuff+0x9>
+    1676:	80 ef       	ldi	r24, 0xF0	; 240
     1678:	92 e0       	ldi	r25, 0x02	; 2
     167a:	09 95       	icall
 }
@@ -3989,9 +3989,9 @@ UARTvar* uart_gets(void)
 void uart_rxflush(void)
 {
 	rxbuff.flush(&rxbuff);
-    167e:	e0 91 bc 02 	lds	r30, 0x02BC	; 0x8002bc <rxbuff+0xa>
-    1682:	f0 91 bd 02 	lds	r31, 0x02BD	; 0x8002bd <rxbuff+0xb>
-    1686:	82 eb       	ldi	r24, 0xB2	; 178
+    167e:	e0 91 fa 02 	lds	r30, 0x02FA	; 0x8002fa <rxbuff+0xa>
+    1682:	f0 91 fb 02 	lds	r31, 0x02FB	; 0x8002fb <rxbuff+0xb>
+    1686:	80 ef       	ldi	r24, 0xF0	; 240
     1688:	92 e0       	ldi	r25, 0x02	; 2
     168a:	09 95       	icall
     168c:	08 95       	ret
@@ -4003,9 +4003,9 @@ UARTvar uart_read(void)
 {
 	UARTvar c;
 	c = UART_Rx;
-    168e:	80 91 be 02 	lds	r24, 0x02BE	; 0x8002be <UART_Rx>
+    168e:	80 91 3a 03 	lds	r24, 0x033A	; 0x80033a <UART_Rx>
 	UART_Rx = 0;
-    1692:	10 92 be 02 	sts	0x02BE, r1	; 0x8002be <UART_Rx>
+    1692:	10 92 3a 03 	sts	0x033A, r1	; 0x80033a <UART_Rx>
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
@@ -4037,14 +4037,14 @@ UARTvar uart_getch(void)
 }
 void uart_write(UARTvar data)
 {
-	m.usart.reg->udr0 = data;
-    16aa:	e7 ef       	ldi	r30, 0xF7	; 247
-    16ac:	f1 e0       	ldi	r31, 0x01	; 1
+	uartmega328.usart.reg->udr0 = data;
+    16aa:	ec ef       	ldi	r30, 0xFC	; 252
+    16ac:	f2 e0       	ldi	r31, 0x02	; 2
     16ae:	a2 a5       	ldd	r26, Z+42	; 0x2a
     16b0:	b3 a5       	ldd	r27, Z+43	; 0x2b
     16b2:	16 96       	adiw	r26, 0x06	; 6
     16b4:	8c 93       	st	X, r24
-	m.usart.reg->ucsr0b |= _BV(UDRIE0);
+	uartmega328.usart.reg->ucsr0b |= _BV(UDRIE0);
     16b6:	02 a4       	ldd	r0, Z+42	; 0x2a
     16b8:	f3 a5       	ldd	r31, Z+43	; 0x2b
     16ba:	e0 2d       	mov	r30, r0
@@ -4081,7 +4081,7 @@ void uart_puts(UARTvar* s)
     16de:	88 23       	and	r24, r24
     16e0:	31 f0       	breq	.+12     	; 0x16ee <uart_puts+0x18>
     16e2:	21 96       	adiw	r28, 0x01	; 1
-	m.usart.reg->ucsr0b |= _BV(UDRIE0);
+	uartmega328.usart.reg->ucsr0b |= _BV(UDRIE0);
 	_delay_ms(1);
 }
 void uart_putch(UARTvar c)
@@ -4142,31 +4142,31 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
     172c:	29 01       	movw	r4, r18
     172e:	38 01       	movw	r6, r16
 	uint8_t tSREG;
-	tSREG = m.cpu.reg->sreg;
-    1730:	e0 91 ff 01 	lds	r30, 0x01FF	; 0x8001ff <m+0x8>
-    1734:	f0 91 00 02 	lds	r31, 0x0200	; 0x800200 <m+0x9>
+	tSREG = uartmega328.cpu.reg->sreg;
+    1730:	e0 91 04 03 	lds	r30, 0x0304	; 0x800304 <uartmega328+0x8>
+    1734:	f0 91 05 03 	lds	r31, 0x0305	; 0x800305 <uartmega328+0x9>
     1738:	31 a0       	ldd	r3, Z+33	; 0x21
-	m.cpu.reg->sreg &= ~(1 << GLOBAL_INTERRUPT_ENABLE);
+	uartmega328.cpu.reg->sreg &= ~(1 << GLOBAL_INTERRUPT_ENABLE);
     173a:	83 2d       	mov	r24, r3
     173c:	8f 77       	andi	r24, 0x7F	; 127
     173e:	81 a3       	std	Z+33, r24	; 0x21
 	UART uart;
-	m = ATMEGA328enable();
+	uartmega328 = ATMEGA328enable();
     1740:	ce 01       	movw	r24, r28
     1742:	01 96       	adiw	r24, 0x01	; 1
     1744:	0e 94 20 04 	call	0x840	; 0x840 <ATMEGA328enable>
     1748:	8e e3       	ldi	r24, 0x3E	; 62
     174a:	fe 01       	movw	r30, r28
     174c:	31 96       	adiw	r30, 0x01	; 1
-    174e:	a7 ef       	ldi	r26, 0xF7	; 247
-    1750:	b1 e0       	ldi	r27, 0x01	; 1
+    174e:	ac ef       	ldi	r26, 0xFC	; 252
+    1750:	b2 e0       	ldi	r27, 0x02	; 2
     1752:	01 90       	ld	r0, Z+
     1754:	0d 92       	st	X+, r0
     1756:	8a 95       	dec	r24
     1758:	e1 f7       	brne	.-8      	; 0x1752 <UARTenable+0x5e>
 	rxbuff = BUFFenable(UART_RX_BUFFER_SIZE, UART_RxBuf);
-    175a:	4f eb       	ldi	r20, 0xBF	; 191
-    175c:	52 e0       	ldi	r21, 0x02	; 2
+    175a:	4b e3       	ldi	r20, 0x3B	; 59
+    175c:	53 e0       	ldi	r21, 0x03	; 3
     175e:	60 e1       	ldi	r22, 0x10	; 16
     1760:	ce 01       	movw	r24, r28
     1762:	01 96       	adiw	r24, 0x01	; 1
@@ -4174,7 +4174,7 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
     1768:	8c e0       	ldi	r24, 0x0C	; 12
     176a:	fe 01       	movw	r30, r28
     176c:	31 96       	adiw	r30, 0x01	; 1
-    176e:	a2 eb       	ldi	r26, 0xB2	; 178
+    176e:	a0 ef       	ldi	r26, 0xF0	; 240
     1770:	b2 e0       	ldi	r27, 0x02	; 2
     1772:	01 90       	ld	r0, Z+
     1774:	0d 92       	st	X+, r0
@@ -4189,9 +4189,9 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
     177a:	bb 20       	and	r11, r11
     177c:	4c f4       	brge	.+18     	; 0x1790 <UARTenable+0x9c>
 	{
-   		m.usart.reg->ucsr0a = (1 << U2X0);  //Enable 2x speed 
-    177e:	e0 91 21 02 	lds	r30, 0x0221	; 0x800221 <m+0x2a>
-    1782:	f0 91 22 02 	lds	r31, 0x0222	; 0x800222 <m+0x2b>
+   		uartmega328.usart.reg->ucsr0a = (1 << U2X0);  //Enable 2x speed 
+    177e:	e0 91 26 03 	lds	r30, 0x0326	; 0x800326 <uartmega328+0x2a>
+    1782:	f0 91 27 03 	lds	r31, 0x0327	; 0x800327 <uartmega328+0x2b>
     1786:	82 e0       	ldi	r24, 0x02	; 2
     1788:	80 83       	st	Z, r24
    		baudrate &= ~0x8000;
@@ -4200,9 +4200,9 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
     178e:	01 c0       	rjmp	.+2      	; 0x1792 <UARTenable+0x9e>
     1790:	c5 01       	movw	r24, r10
    	}
-	m.usart.reg->ubrr0 =  m.writehlbyte(baudrate);
-    1792:	07 ef       	ldi	r16, 0xF7	; 247
-    1794:	11 e0       	ldi	r17, 0x01	; 1
+	uartmega328.usart.reg->ubrr0 =  uartmega328.writehlbyte(baudrate);
+    1792:	0c ef       	ldi	r16, 0xFC	; 252
+    1794:	12 e0       	ldi	r17, 0x02	; 2
     1796:	d8 01       	movw	r26, r16
     1798:	9a 96       	adiw	r26, 0x2a	; 42
     179a:	8d 90       	ld	r8, X+
@@ -4217,7 +4217,7 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
     17ac:	95 83       	std	Z+5, r25	; 0x05
     17ae:	84 83       	std	Z+4, r24	; 0x04
 	// Enable USART receiver and transmitter and receive complete interrupt
-	m.usart.reg->ucsr0b = _BV(RXCIE0) | (1 << RXEN0) | (1 << TXEN0);
+	uartmega328.usart.reg->ucsr0b = _BV(RXCIE0) | (1 << RXEN0) | (1 << TXEN0);
     17b0:	d8 01       	movw	r26, r16
     17b2:	9a 96       	adiw	r26, 0x2a	; 42
     17b4:	ed 91       	ld	r30, X+
@@ -4225,7 +4225,7 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
     17b8:	9b 97       	sbiw	r26, 0x2b	; 43
     17ba:	88 e9       	ldi	r24, 0x98	; 152
     17bc:	81 83       	std	Z+1, r24	; 0x01
-		m.usart.reg->ucsr0c = (1 << URSEL0) | (3 << UCSZ00);
+		uartmega328.usart.reg->ucsr0c = (1 << URSEL0) | (3 << UCSZ00);
 		uart.FDbits = 8;
 		uart.Stopbits = 1;
 		uart.Parity = 0;
@@ -4257,9 +4257,9 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
     17ec:	09 f0       	breq	.+2      	; 0x17f0 <UARTenable+0xfc>
     17ee:	6f c0       	rjmp	.+222    	; 0x18ce <UARTenable+0x1da>
 			case 9:
-				m.usart.reg->ucsr0b |= (1 << UCSZ02);
-    17f0:	e7 ef       	ldi	r30, 0xF7	; 247
-    17f2:	f1 e0       	ldi	r31, 0x01	; 1
+				uartmega328.usart.reg->ucsr0b |= (1 << UCSZ02);
+    17f0:	ec ef       	ldi	r30, 0xFC	; 252
+    17f2:	f2 e0       	ldi	r31, 0x02	; 2
     17f4:	a2 a5       	ldd	r26, Z+42	; 0x2a
     17f6:	b3 a5       	ldd	r27, Z+43	; 0x2b
     17f8:	11 96       	adiw	r26, 0x01	; 1
@@ -4268,7 +4268,7 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
     17fe:	84 60       	ori	r24, 0x04	; 4
     1800:	11 96       	adiw	r26, 0x01	; 1
     1802:	8c 93       	st	X, r24
-				m.usart.reg->ucsr0c |= (3 << UCSZ00);
+				uartmega328.usart.reg->ucsr0c |= (3 << UCSZ00);
     1804:	02 a4       	ldd	r0, Z+42	; 0x2a
     1806:	f3 a5       	ldd	r31, Z+43	; 0x2b
     1808:	e0 2d       	mov	r30, r0
@@ -4281,9 +4281,9 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
 			break;
     1814:	6e c0       	rjmp	.+220    	; 0x18f2 <UARTenable+0x1fe>
 			case 8:
-				m.usart.reg->ucsr0b &= ~(1 << UCSZ02);
-    1816:	e7 ef       	ldi	r30, 0xF7	; 247
-    1818:	f1 e0       	ldi	r31, 0x01	; 1
+				uartmega328.usart.reg->ucsr0b &= ~(1 << UCSZ02);
+    1816:	ec ef       	ldi	r30, 0xFC	; 252
+    1818:	f2 e0       	ldi	r31, 0x02	; 2
     181a:	a2 a5       	ldd	r26, Z+42	; 0x2a
     181c:	b3 a5       	ldd	r27, Z+43	; 0x2b
     181e:	11 96       	adiw	r26, 0x01	; 1
@@ -4292,7 +4292,7 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
     1824:	8b 7f       	andi	r24, 0xFB	; 251
     1826:	11 96       	adiw	r26, 0x01	; 1
     1828:	8c 93       	st	X, r24
-				m.usart.reg->ucsr0c |= (3 << UCSZ00);
+				uartmega328.usart.reg->ucsr0c |= (3 << UCSZ00);
     182a:	02 a4       	ldd	r0, Z+42	; 0x2a
     182c:	f3 a5       	ldd	r31, Z+43	; 0x2b
     182e:	e0 2d       	mov	r30, r0
@@ -4305,9 +4305,9 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
 			break;
     183a:	5b c0       	rjmp	.+182    	; 0x18f2 <UARTenable+0x1fe>
 			case 7:
-				m.usart.reg->ucsr0b &= ~(1 << UCSZ02);
-    183c:	e7 ef       	ldi	r30, 0xF7	; 247
-    183e:	f1 e0       	ldi	r31, 0x01	; 1
+				uartmega328.usart.reg->ucsr0b &= ~(1 << UCSZ02);
+    183c:	ec ef       	ldi	r30, 0xFC	; 252
+    183e:	f2 e0       	ldi	r31, 0x02	; 2
     1840:	a2 a5       	ldd	r26, Z+42	; 0x2a
     1842:	b3 a5       	ldd	r27, Z+43	; 0x2b
     1844:	11 96       	adiw	r26, 0x01	; 1
@@ -4316,7 +4316,7 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
     184a:	8b 7f       	andi	r24, 0xFB	; 251
     184c:	11 96       	adiw	r26, 0x01	; 1
     184e:	8c 93       	st	X, r24
-				m.usart.reg->ucsr0c |= (1 << UCSZ01);
+				uartmega328.usart.reg->ucsr0c |= (1 << UCSZ01);
     1850:	a2 a5       	ldd	r26, Z+42	; 0x2a
     1852:	b3 a5       	ldd	r27, Z+43	; 0x2b
     1854:	12 96       	adiw	r26, 0x02	; 2
@@ -4325,7 +4325,7 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
     185a:	84 60       	ori	r24, 0x04	; 4
     185c:	12 96       	adiw	r26, 0x02	; 2
     185e:	8c 93       	st	X, r24
-				m.usart.reg->ucsr0c &= ~(1 << UCSZ00);
+				uartmega328.usart.reg->ucsr0c &= ~(1 << UCSZ00);
     1860:	02 a4       	ldd	r0, Z+42	; 0x2a
     1862:	f3 a5       	ldd	r31, Z+43	; 0x2b
     1864:	e0 2d       	mov	r30, r0
@@ -4338,9 +4338,9 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
 			break;
     1870:	40 c0       	rjmp	.+128    	; 0x18f2 <UARTenable+0x1fe>
 			case 6:	
-				m.usart.reg->ucsr0b &= ~(1 << UCSZ02);
-    1872:	e7 ef       	ldi	r30, 0xF7	; 247
-    1874:	f1 e0       	ldi	r31, 0x01	; 1
+				uartmega328.usart.reg->ucsr0b &= ~(1 << UCSZ02);
+    1872:	ec ef       	ldi	r30, 0xFC	; 252
+    1874:	f2 e0       	ldi	r31, 0x02	; 2
     1876:	a2 a5       	ldd	r26, Z+42	; 0x2a
     1878:	b3 a5       	ldd	r27, Z+43	; 0x2b
     187a:	11 96       	adiw	r26, 0x01	; 1
@@ -4349,7 +4349,7 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
     1880:	8b 7f       	andi	r24, 0xFB	; 251
     1882:	11 96       	adiw	r26, 0x01	; 1
     1884:	8c 93       	st	X, r24
-				m.usart.reg->ucsr0c &= ~(1 << UCSZ01);
+				uartmega328.usart.reg->ucsr0c &= ~(1 << UCSZ01);
     1886:	a2 a5       	ldd	r26, Z+42	; 0x2a
     1888:	b3 a5       	ldd	r27, Z+43	; 0x2b
     188a:	12 96       	adiw	r26, 0x02	; 2
@@ -4358,7 +4358,7 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
     1890:	8b 7f       	andi	r24, 0xFB	; 251
     1892:	12 96       	adiw	r26, 0x02	; 2
     1894:	8c 93       	st	X, r24
-				m.usart.reg->ucsr0c |= (1 << UCSZ00);
+				uartmega328.usart.reg->ucsr0c |= (1 << UCSZ00);
     1896:	02 a4       	ldd	r0, Z+42	; 0x2a
     1898:	f3 a5       	ldd	r31, Z+43	; 0x2b
     189a:	e0 2d       	mov	r30, r0
@@ -4371,9 +4371,9 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
 			break;
     18a6:	25 c0       	rjmp	.+74     	; 0x18f2 <UARTenable+0x1fe>
 			case 5:	
-				m.usart.reg->ucsr0b &= ~(1 << UCSZ02);
-    18a8:	e7 ef       	ldi	r30, 0xF7	; 247
-    18aa:	f1 e0       	ldi	r31, 0x01	; 1
+				uartmega328.usart.reg->ucsr0b &= ~(1 << UCSZ02);
+    18a8:	ec ef       	ldi	r30, 0xFC	; 252
+    18aa:	f2 e0       	ldi	r31, 0x02	; 2
     18ac:	a2 a5       	ldd	r26, Z+42	; 0x2a
     18ae:	b3 a5       	ldd	r27, Z+43	; 0x2b
     18b0:	11 96       	adiw	r26, 0x01	; 1
@@ -4382,7 +4382,7 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
     18b6:	8b 7f       	andi	r24, 0xFB	; 251
     18b8:	11 96       	adiw	r26, 0x01	; 1
     18ba:	8c 93       	st	X, r24
-				m.usart.reg->ucsr0c &= ~(3 << UCSZ00);
+				uartmega328.usart.reg->ucsr0c &= ~(3 << UCSZ00);
     18bc:	02 a4       	ldd	r0, Z+42	; 0x2a
     18be:	f3 a5       	ldd	r31, Z+43	; 0x2b
     18c0:	e0 2d       	mov	r30, r0
@@ -4395,9 +4395,9 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
 			break;
     18cc:	12 c0       	rjmp	.+36     	; 0x18f2 <UARTenable+0x1fe>
 			default:
-				m.usart.reg->ucsr0b &= ~(1 << UCSZ02);
-    18ce:	e7 ef       	ldi	r30, 0xF7	; 247
-    18d0:	f1 e0       	ldi	r31, 0x01	; 1
+				uartmega328.usart.reg->ucsr0b &= ~(1 << UCSZ02);
+    18ce:	ec ef       	ldi	r30, 0xFC	; 252
+    18d0:	f2 e0       	ldi	r31, 0x02	; 2
     18d2:	a2 a5       	ldd	r26, Z+42	; 0x2a
     18d4:	b3 a5       	ldd	r27, Z+43	; 0x2b
     18d6:	11 96       	adiw	r26, 0x01	; 1
@@ -4406,7 +4406,7 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
     18dc:	8b 7f       	andi	r24, 0xFB	; 251
     18de:	11 96       	adiw	r26, 0x01	; 1
     18e0:	8c 93       	st	X, r24
-				m.usart.reg->ucsr0c |= (3 << UCSZ00);
+				uartmega328.usart.reg->ucsr0c |= (3 << UCSZ00);
     18e2:	02 a4       	ldd	r0, Z+42	; 0x2a
     18e4:	f3 a5       	ldd	r31, Z+43	; 0x2b
     18e6:	e0 2d       	mov	r30, r0
@@ -4429,9 +4429,9 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
     1900:	59 f0       	breq	.+22     	; 0x1918 <UARTenable+0x224>
     1902:	14 c0       	rjmp	.+40     	; 0x192c <UARTenable+0x238>
 			case 1:
-				m.usart.reg->ucsr0c &= ~(1 << USBS0);
-    1904:	e0 91 21 02 	lds	r30, 0x0221	; 0x800221 <m+0x2a>
-    1908:	f0 91 22 02 	lds	r31, 0x0222	; 0x800222 <m+0x2b>
+				uartmega328.usart.reg->ucsr0c &= ~(1 << USBS0);
+    1904:	e0 91 26 03 	lds	r30, 0x0326	; 0x800326 <uartmega328+0x2a>
+    1908:	f0 91 27 03 	lds	r31, 0x0327	; 0x800327 <uartmega328+0x2b>
     190c:	82 81       	ldd	r24, Z+2	; 0x02
     190e:	87 7f       	andi	r24, 0xF7	; 247
     1910:	82 83       	std	Z+2, r24	; 0x02
@@ -4441,9 +4441,9 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
 			break;
     1916:	13 c0       	rjmp	.+38     	; 0x193e <UARTenable+0x24a>
 			case 2:
-				m.usart.reg->ucsr0c |= (1 << USBS0);
-    1918:	e0 91 21 02 	lds	r30, 0x0221	; 0x800221 <m+0x2a>
-    191c:	f0 91 22 02 	lds	r31, 0x0222	; 0x800222 <m+0x2b>
+				uartmega328.usart.reg->ucsr0c |= (1 << USBS0);
+    1918:	e0 91 26 03 	lds	r30, 0x0326	; 0x800326 <uartmega328+0x2a>
+    191c:	f0 91 27 03 	lds	r31, 0x0327	; 0x800327 <uartmega328+0x2b>
     1920:	82 81       	ldd	r24, Z+2	; 0x02
     1922:	88 60       	ori	r24, 0x08	; 8
     1924:	82 83       	std	Z+2, r24	; 0x02
@@ -4453,9 +4453,9 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
 			break;	
     192a:	09 c0       	rjmp	.+18     	; 0x193e <UARTenable+0x24a>
 			default:
-				m.usart.reg->ucsr0c &= ~(1 << USBS0);
-    192c:	e0 91 21 02 	lds	r30, 0x0221	; 0x800221 <m+0x2a>
-    1930:	f0 91 22 02 	lds	r31, 0x0222	; 0x800222 <m+0x2b>
+				uartmega328.usart.reg->ucsr0c &= ~(1 << USBS0);
+    192c:	e0 91 26 03 	lds	r30, 0x0326	; 0x800326 <uartmega328+0x2a>
+    1930:	f0 91 27 03 	lds	r31, 0x0327	; 0x800327 <uartmega328+0x2b>
     1934:	82 81       	ldd	r24, Z+2	; 0x02
     1936:	87 7f       	andi	r24, 0xF7	; 247
     1938:	82 83       	std	Z+2, r24	; 0x02
@@ -4476,9 +4476,9 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
     194e:	67 28       	or	r6, r7
     1950:	39 f5       	brne	.+78     	; 0x19a0 <UARTenable+0x2ac>
 			case 0:
-				m.usart.reg->ucsr0c &= ~(3 << UPM00);
-    1952:	e0 91 21 02 	lds	r30, 0x0221	; 0x800221 <m+0x2a>
-    1956:	f0 91 22 02 	lds	r31, 0x0222	; 0x800222 <m+0x2b>
+				uartmega328.usart.reg->ucsr0c &= ~(3 << UPM00);
+    1952:	e0 91 26 03 	lds	r30, 0x0326	; 0x800326 <uartmega328+0x2a>
+    1956:	f0 91 27 03 	lds	r31, 0x0327	; 0x800327 <uartmega328+0x2b>
     195a:	82 81       	ldd	r24, Z+2	; 0x02
     195c:	8f 7c       	andi	r24, 0xCF	; 207
     195e:	82 83       	std	Z+2, r24	; 0x02
@@ -4488,9 +4488,9 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
 			break;
     1964:	26 c0       	rjmp	.+76     	; 0x19b2 <UARTenable+0x2be>
 			case 2:
-				m.usart.reg->ucsr0c |= (1 << UPM01);
-    1966:	e7 ef       	ldi	r30, 0xF7	; 247
-    1968:	f1 e0       	ldi	r31, 0x01	; 1
+				uartmega328.usart.reg->ucsr0c |= (1 << UPM01);
+    1966:	ec ef       	ldi	r30, 0xFC	; 252
+    1968:	f2 e0       	ldi	r31, 0x02	; 2
     196a:	a2 a5       	ldd	r26, Z+42	; 0x2a
     196c:	b3 a5       	ldd	r27, Z+43	; 0x2b
     196e:	12 96       	adiw	r26, 0x02	; 2
@@ -4499,7 +4499,7 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
     1974:	80 62       	ori	r24, 0x20	; 32
     1976:	12 96       	adiw	r26, 0x02	; 2
     1978:	8c 93       	st	X, r24
-				m.usart.reg->ucsr0c &= ~(1 << UPM00);
+				uartmega328.usart.reg->ucsr0c &= ~(1 << UPM00);
     197a:	02 a4       	ldd	r0, Z+42	; 0x2a
     197c:	f3 a5       	ldd	r31, Z+43	; 0x2b
     197e:	e0 2d       	mov	r30, r0
@@ -4512,21 +4512,21 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
 			break;
     198a:	13 c0       	rjmp	.+38     	; 0x19b2 <UARTenable+0x2be>
 			case 3:
-				m.usart.reg->ucsr0c |= (3 << UPM00);
-    198c:	e0 91 21 02 	lds	r30, 0x0221	; 0x800221 <m+0x2a>
-    1990:	f0 91 22 02 	lds	r31, 0x0222	; 0x800222 <m+0x2b>
+				uartmega328.usart.reg->ucsr0c |= (3 << UPM00);
+    198c:	e0 91 26 03 	lds	r30, 0x0326	; 0x800326 <uartmega328+0x2a>
+    1990:	f0 91 27 03 	lds	r31, 0x0327	; 0x800327 <uartmega328+0x2b>
     1994:	82 81       	ldd	r24, Z+2	; 0x02
     1996:	80 63       	ori	r24, 0x30	; 48
     1998:	82 83       	std	Z+2, r24	; 0x02
 				uart.Parity=3;
     199a:	23 e0       	ldi	r18, 0x03	; 3
     199c:	30 e0       	ldi	r19, 0x00	; 0
-			break;	
+			break;
     199e:	09 c0       	rjmp	.+18     	; 0x19b2 <UARTenable+0x2be>
 			default:
-				m.usart.reg->ucsr0c &= ~(3 << UPM00);
-    19a0:	e0 91 21 02 	lds	r30, 0x0221	; 0x800221 <m+0x2a>
-    19a4:	f0 91 22 02 	lds	r31, 0x0222	; 0x800222 <m+0x2b>
+				uartmega328.usart.reg->ucsr0c &= ~(3 << UPM00);
+    19a0:	e0 91 26 03 	lds	r30, 0x0326	; 0x800326 <uartmega328+0x2a>
+    19a4:	f0 91 27 03 	lds	r31, 0x0327	; 0x800327 <uartmega328+0x2b>
     19a8:	82 81       	ldd	r24, Z+2	; 0x02
     19aa:	8f 7c       	andi	r24, 0xCF	; 207
     19ac:	82 83       	std	Z+2, r24	; 0x02
@@ -4536,10 +4536,10 @@ UART UARTenable(unsigned int baudrate, unsigned int FDbits, unsigned int Stopbit
 			break;
 		}
 	#endif
-	m.cpu.reg->sreg = tSREG;
-	m.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
-    19b2:	e0 91 ff 01 	lds	r30, 0x01FF	; 0x8001ff <m+0x8>
-    19b6:	f0 91 00 02 	lds	r31, 0x0200	; 0x800200 <m+0x9>
+	uartmega328.cpu.reg->sreg = tSREG;
+	uartmega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
+    19b2:	e0 91 04 03 	lds	r30, 0x0304	; 0x800304 <uartmega328+0x8>
+    19b6:	f0 91 05 03 	lds	r31, 0x0305	; 0x800305 <uartmega328+0x9>
     19ba:	83 2d       	mov	r24, r3
     19bc:	80 68       	ori	r24, 0x80	; 128
     19be:	81 a3       	std	Z+33, r24	; 0x21
@@ -4635,24 +4635,24 @@ ISR(UART_RX_COMPLETE)
 	unsigned char bit9;
     unsigned char usr;
 	
-	usr  = m.usart.reg->ucsr0a;
-    1a5e:	e0 91 21 02 	lds	r30, 0x0221	; 0x800221 <m+0x2a>
-    1a62:	f0 91 22 02 	lds	r31, 0x0222	; 0x800222 <m+0x2b>
-    bit9 = m.usart.reg->ucsr0b;
+	usr  = uartmega328.usart.reg->ucsr0a;
+    1a5e:	e0 91 26 03 	lds	r30, 0x0326	; 0x800326 <uartmega328+0x2a>
+    1a62:	f0 91 27 03 	lds	r31, 0x0327	; 0x800327 <uartmega328+0x2b>
+    bit9 = uartmega328.usart.reg->ucsr0b;
     bit9 = 0x01 & (bit9 >> 1);
 	
     UART_LastRxError = (usr & (_BV(FE0) | _BV(DOR0)));
     1a66:	80 81       	ld	r24, Z
     1a68:	88 71       	andi	r24, 0x18	; 24
-    1a6a:	80 93 b1 02 	sts	0x02B1, r24	; 0x8002b1 <UART_LastRxError>
+    1a6a:	80 93 ef 02 	sts	0x02EF, r24	; 0x8002ef <UART_LastRxError>
 	
-	UART_Rx = m.usart.reg->udr0;
+	UART_Rx = uartmega328.usart.reg->udr0;
     1a6e:	66 81       	ldd	r22, Z+6	; 0x06
-    1a70:	60 93 be 02 	sts	0x02BE, r22	; 0x8002be <UART_Rx>
+    1a70:	60 93 3a 03 	sts	0x033A, r22	; 0x80033a <UART_Rx>
 	rxbuff.push(&rxbuff, UART_Rx);
-    1a74:	e0 91 b8 02 	lds	r30, 0x02B8	; 0x8002b8 <rxbuff+0x6>
-    1a78:	f0 91 b9 02 	lds	r31, 0x02B9	; 0x8002b9 <rxbuff+0x7>
-    1a7c:	82 eb       	ldi	r24, 0xB2	; 178
+    1a74:	e0 91 f6 02 	lds	r30, 0x02F6	; 0x8002f6 <rxbuff+0x6>
+    1a78:	f0 91 f7 02 	lds	r31, 0x02F7	; 0x8002f7 <rxbuff+0x7>
+    1a7c:	80 ef       	ldi	r24, 0xF0	; 240
     1a7e:	92 e0       	ldi	r25, 0x02	; 2
     1a80:	09 95       	icall
 }
@@ -4686,9 +4686,9 @@ ISR(UART_UDR_EMPTY)
     1aae:	8f 93       	push	r24
     1ab0:	ef 93       	push	r30
     1ab2:	ff 93       	push	r31
-	m.usart.reg->ucsr0b &= ~_BV( UDRIE0 );
-    1ab4:	e0 91 21 02 	lds	r30, 0x0221	; 0x800221 <m+0x2a>
-    1ab8:	f0 91 22 02 	lds	r31, 0x0222	; 0x800222 <m+0x2b>
+	uartmega328.usart.reg->ucsr0b &= ~_BV( UDRIE0 );
+    1ab4:	e0 91 26 03 	lds	r30, 0x0326	; 0x800326 <uartmega328+0x2a>
+    1ab8:	f0 91 27 03 	lds	r31, 0x0327	; 0x800327 <uartmega328+0x2b>
     1abc:	81 81       	ldd	r24, Z+1	; 0x01
     1abe:	8f 7d       	andi	r24, 0xDF	; 223
     1ac0:	81 83       	std	Z+1, r24	; 0x01
@@ -6632,15 +6632,15 @@ char* FUNCftoa(double num, char* res, uint8_t afterpoint)
 void LCD0_strobe(uint16_t num)
 {
 	*lcd0cmd_PORT &= ~(1 << EN);
-    287a:	e0 91 d0 02 	lds	r30, 0x02D0	; 0x8002d0 <lcd0cmd_PORT>
-    287e:	f0 91 d1 02 	lds	r31, 0x02D1	; 0x8002d1 <lcd0cmd_PORT+0x1>
+    287a:	e0 91 4c 03 	lds	r30, 0x034C	; 0x80034c <lcd0cmd_PORT>
+    287e:	f0 91 4d 03 	lds	r31, 0x034D	; 0x80034d <lcd0cmd_PORT+0x1>
     2882:	80 81       	ld	r24, Z
     2884:	8b 7f       	andi	r24, 0xFB	; 251
     2886:	80 83       	st	Z, r24
 	LCD_ticks(num);
 	*lcd0cmd_PORT |= (1 << EN);
-    2888:	e0 91 d0 02 	lds	r30, 0x02D0	; 0x8002d0 <lcd0cmd_PORT>
-    288c:	f0 91 d1 02 	lds	r31, 0x02D1	; 0x8002d1 <lcd0cmd_PORT+0x1>
+    2888:	e0 91 4c 03 	lds	r30, 0x034C	; 0x80034c <lcd0cmd_PORT>
+    288c:	f0 91 4d 03 	lds	r31, 0x034D	; 0x80034d <lcd0cmd_PORT+0x1>
     2890:	80 81       	ld	r24, Z
     2892:	84 60       	ori	r24, 0x04	; 4
     2894:	80 83       	st	Z, r24
@@ -6659,14 +6659,14 @@ void LCD0_write(char c, unsigned short D_I)
     289e:	c8 2f       	mov	r28, r24
     28a0:	8b 01       	movw	r16, r22
 	*lcd0cmd_PORT &= ~(1 << RW); // lcd as input
-    28a2:	e0 91 d0 02 	lds	r30, 0x02D0	; 0x8002d0 <lcd0cmd_PORT>
-    28a6:	f0 91 d1 02 	lds	r31, 0x02D1	; 0x8002d1 <lcd0cmd_PORT+0x1>
+    28a2:	e0 91 4c 03 	lds	r30, 0x034C	; 0x80034c <lcd0cmd_PORT>
+    28a6:	f0 91 4d 03 	lds	r31, 0x034D	; 0x80034d <lcd0cmd_PORT+0x1>
     28aa:	80 81       	ld	r24, Z
     28ac:	8d 7f       	andi	r24, 0xFD	; 253
     28ae:	80 83       	st	Z, r24
 	*lcd0data_DDR |= (1 << DB4) | (1 << DB5) | (1 << DB6) | (1 << DB7); // mcu as output
-    28b0:	e0 91 d9 02 	lds	r30, 0x02D9	; 0x8002d9 <lcd0data_DDR>
-    28b4:	f0 91 da 02 	lds	r31, 0x02DA	; 0x8002da <lcd0data_DDR+0x1>
+    28b0:	e0 91 55 03 	lds	r30, 0x0355	; 0x800355 <lcd0data_DDR>
+    28b4:	f0 91 56 03 	lds	r31, 0x0356	; 0x800356 <lcd0data_DDR+0x1>
     28b8:	80 81       	ld	r24, Z
     28ba:	8f 60       	ori	r24, 0x0F	; 15
     28bc:	80 83       	st	Z, r24
@@ -6674,14 +6674,14 @@ void LCD0_write(char c, unsigned short D_I)
 	if(D_I) *lcd0cmd_PORT |= (1 << RS); else *lcd0cmd_PORT &= ~(1 << RS);
     28be:	67 2b       	or	r22, r23
     28c0:	41 f0       	breq	.+16     	; 0x28d2 <LCD0_write+0x3a>
-    28c2:	e0 91 d0 02 	lds	r30, 0x02D0	; 0x8002d0 <lcd0cmd_PORT>
-    28c6:	f0 91 d1 02 	lds	r31, 0x02D1	; 0x8002d1 <lcd0cmd_PORT+0x1>
+    28c2:	e0 91 4c 03 	lds	r30, 0x034C	; 0x80034c <lcd0cmd_PORT>
+    28c6:	f0 91 4d 03 	lds	r31, 0x034D	; 0x80034d <lcd0cmd_PORT+0x1>
     28ca:	80 81       	ld	r24, Z
     28cc:	81 60       	ori	r24, 0x01	; 1
     28ce:	80 83       	st	Z, r24
     28d0:	07 c0       	rjmp	.+14     	; 0x28e0 <LCD0_write+0x48>
-    28d2:	e0 91 d0 02 	lds	r30, 0x02D0	; 0x8002d0 <lcd0cmd_PORT>
-    28d6:	f0 91 d1 02 	lds	r31, 0x02D1	; 0x8002d1 <lcd0cmd_PORT+0x1>
+    28d2:	e0 91 4c 03 	lds	r30, 0x034C	; 0x80034c <lcd0cmd_PORT>
+    28d6:	f0 91 4d 03 	lds	r31, 0x034D	; 0x80034d <lcd0cmd_PORT+0x1>
     28da:	80 81       	ld	r24, Z
     28dc:	8e 7f       	andi	r24, 0xFE	; 254
     28de:	80 83       	st	Z, r24
@@ -6693,56 +6693,56 @@ void LCD0_write(char c, unsigned short D_I)
 	if(c & 0x80) *lcd0data_PORT |= 1 << DB7; else *lcd0data_PORT &= ~(1 << DB7); LCD_ticks(BIT_N_TICKS);
     28e8:	cc 23       	and	r28, r28
     28ea:	44 f4       	brge	.+16     	; 0x28fc <LCD0_write+0x64>
-    28ec:	e0 91 db 02 	lds	r30, 0x02DB	; 0x8002db <lcd0data_PORT>
-    28f0:	f0 91 dc 02 	lds	r31, 0x02DC	; 0x8002dc <lcd0data_PORT+0x1>
+    28ec:	e0 91 57 03 	lds	r30, 0x0357	; 0x800357 <lcd0data_PORT>
+    28f0:	f0 91 58 03 	lds	r31, 0x0358	; 0x800358 <lcd0data_PORT+0x1>
     28f4:	80 81       	ld	r24, Z
     28f6:	88 60       	ori	r24, 0x08	; 8
     28f8:	80 83       	st	Z, r24
     28fa:	07 c0       	rjmp	.+14     	; 0x290a <LCD0_write+0x72>
-    28fc:	e0 91 db 02 	lds	r30, 0x02DB	; 0x8002db <lcd0data_PORT>
-    2900:	f0 91 dc 02 	lds	r31, 0x02DC	; 0x8002dc <lcd0data_PORT+0x1>
+    28fc:	e0 91 57 03 	lds	r30, 0x0357	; 0x800357 <lcd0data_PORT>
+    2900:	f0 91 58 03 	lds	r31, 0x0358	; 0x800358 <lcd0data_PORT+0x1>
     2904:	80 81       	ld	r24, Z
     2906:	87 7f       	andi	r24, 0xF7	; 247
     2908:	80 83       	st	Z, r24
 	if(c & 0x40) *lcd0data_PORT |= 1 << DB6; else *lcd0data_PORT &= ~(1 << DB6); LCD_ticks(BIT_N_TICKS);
     290a:	c6 ff       	sbrs	r28, 6
     290c:	08 c0       	rjmp	.+16     	; 0x291e <LCD0_write+0x86>
-    290e:	e0 91 db 02 	lds	r30, 0x02DB	; 0x8002db <lcd0data_PORT>
-    2912:	f0 91 dc 02 	lds	r31, 0x02DC	; 0x8002dc <lcd0data_PORT+0x1>
+    290e:	e0 91 57 03 	lds	r30, 0x0357	; 0x800357 <lcd0data_PORT>
+    2912:	f0 91 58 03 	lds	r31, 0x0358	; 0x800358 <lcd0data_PORT+0x1>
     2916:	80 81       	ld	r24, Z
     2918:	84 60       	ori	r24, 0x04	; 4
     291a:	80 83       	st	Z, r24
     291c:	07 c0       	rjmp	.+14     	; 0x292c <LCD0_write+0x94>
-    291e:	e0 91 db 02 	lds	r30, 0x02DB	; 0x8002db <lcd0data_PORT>
-    2922:	f0 91 dc 02 	lds	r31, 0x02DC	; 0x8002dc <lcd0data_PORT+0x1>
+    291e:	e0 91 57 03 	lds	r30, 0x0357	; 0x800357 <lcd0data_PORT>
+    2922:	f0 91 58 03 	lds	r31, 0x0358	; 0x800358 <lcd0data_PORT+0x1>
     2926:	80 81       	ld	r24, Z
     2928:	8b 7f       	andi	r24, 0xFB	; 251
     292a:	80 83       	st	Z, r24
 	if(c & 0x20) *lcd0data_PORT |= 1 << DB5; else *lcd0data_PORT &= ~(1 << DB5); LCD_ticks(BIT_N_TICKS);
     292c:	c5 ff       	sbrs	r28, 5
     292e:	08 c0       	rjmp	.+16     	; 0x2940 <LCD0_write+0xa8>
-    2930:	e0 91 db 02 	lds	r30, 0x02DB	; 0x8002db <lcd0data_PORT>
-    2934:	f0 91 dc 02 	lds	r31, 0x02DC	; 0x8002dc <lcd0data_PORT+0x1>
+    2930:	e0 91 57 03 	lds	r30, 0x0357	; 0x800357 <lcd0data_PORT>
+    2934:	f0 91 58 03 	lds	r31, 0x0358	; 0x800358 <lcd0data_PORT+0x1>
     2938:	80 81       	ld	r24, Z
     293a:	82 60       	ori	r24, 0x02	; 2
     293c:	80 83       	st	Z, r24
     293e:	07 c0       	rjmp	.+14     	; 0x294e <LCD0_write+0xb6>
-    2940:	e0 91 db 02 	lds	r30, 0x02DB	; 0x8002db <lcd0data_PORT>
-    2944:	f0 91 dc 02 	lds	r31, 0x02DC	; 0x8002dc <lcd0data_PORT+0x1>
+    2940:	e0 91 57 03 	lds	r30, 0x0357	; 0x800357 <lcd0data_PORT>
+    2944:	f0 91 58 03 	lds	r31, 0x0358	; 0x800358 <lcd0data_PORT+0x1>
     2948:	80 81       	ld	r24, Z
     294a:	8d 7f       	andi	r24, 0xFD	; 253
     294c:	80 83       	st	Z, r24
 	if(c & 0x10) *lcd0data_PORT |= 1 << DB4; else *lcd0data_PORT &= ~(1 << DB4); LCD_ticks(BIT_N_TICKS);
     294e:	c4 ff       	sbrs	r28, 4
     2950:	08 c0       	rjmp	.+16     	; 0x2962 <LCD0_write+0xca>
-    2952:	e0 91 db 02 	lds	r30, 0x02DB	; 0x8002db <lcd0data_PORT>
-    2956:	f0 91 dc 02 	lds	r31, 0x02DC	; 0x8002dc <lcd0data_PORT+0x1>
+    2952:	e0 91 57 03 	lds	r30, 0x0357	; 0x800357 <lcd0data_PORT>
+    2956:	f0 91 58 03 	lds	r31, 0x0358	; 0x800358 <lcd0data_PORT+0x1>
     295a:	80 81       	ld	r24, Z
     295c:	81 60       	ori	r24, 0x01	; 1
     295e:	80 83       	st	Z, r24
     2960:	07 c0       	rjmp	.+14     	; 0x2970 <LCD0_write+0xd8>
-    2962:	e0 91 db 02 	lds	r30, 0x02DB	; 0x8002db <lcd0data_PORT>
-    2966:	f0 91 dc 02 	lds	r31, 0x02DC	; 0x8002dc <lcd0data_PORT+0x1>
+    2962:	e0 91 57 03 	lds	r30, 0x0357	; 0x800357 <lcd0data_PORT>
+    2966:	f0 91 58 03 	lds	r31, 0x0358	; 0x800358 <lcd0data_PORT+0x1>
     296a:	80 81       	ld	r24, Z
     296c:	8e 7f       	andi	r24, 0xFE	; 254
     296e:	80 83       	st	Z, r24
@@ -6750,14 +6750,14 @@ void LCD0_write(char c, unsigned short D_I)
 	if(D_I) *lcd0cmd_PORT |= (1 << RS); else *lcd0cmd_PORT &= ~(1 << RS);
     2970:	01 2b       	or	r16, r17
     2972:	41 f0       	breq	.+16     	; 0x2984 <LCD0_write+0xec>
-    2974:	e0 91 d0 02 	lds	r30, 0x02D0	; 0x8002d0 <lcd0cmd_PORT>
-    2978:	f0 91 d1 02 	lds	r31, 0x02D1	; 0x8002d1 <lcd0cmd_PORT+0x1>
+    2974:	e0 91 4c 03 	lds	r30, 0x034C	; 0x80034c <lcd0cmd_PORT>
+    2978:	f0 91 4d 03 	lds	r31, 0x034D	; 0x80034d <lcd0cmd_PORT+0x1>
     297c:	80 81       	ld	r24, Z
     297e:	81 60       	ori	r24, 0x01	; 1
     2980:	80 83       	st	Z, r24
     2982:	07 c0       	rjmp	.+14     	; 0x2992 <LCD0_write+0xfa>
-    2984:	e0 91 d0 02 	lds	r30, 0x02D0	; 0x8002d0 <lcd0cmd_PORT>
-    2988:	f0 91 d1 02 	lds	r31, 0x02D1	; 0x8002d1 <lcd0cmd_PORT+0x1>
+    2984:	e0 91 4c 03 	lds	r30, 0x034C	; 0x80034c <lcd0cmd_PORT>
+    2988:	f0 91 4d 03 	lds	r31, 0x034D	; 0x80034d <lcd0cmd_PORT+0x1>
     298c:	80 81       	ld	r24, Z
     298e:	8e 7f       	andi	r24, 0xFE	; 254
     2990:	80 83       	st	Z, r24
@@ -6769,63 +6769,63 @@ void LCD0_write(char c, unsigned short D_I)
 	if(c & 0x08) *lcd0data_PORT |= 1 << DB7; else *lcd0data_PORT &= ~(1 << DB7); LCD_ticks(BIT_N_TICKS);
     299a:	c3 ff       	sbrs	r28, 3
     299c:	08 c0       	rjmp	.+16     	; 0x29ae <LCD0_write+0x116>
-    299e:	e0 91 db 02 	lds	r30, 0x02DB	; 0x8002db <lcd0data_PORT>
-    29a2:	f0 91 dc 02 	lds	r31, 0x02DC	; 0x8002dc <lcd0data_PORT+0x1>
+    299e:	e0 91 57 03 	lds	r30, 0x0357	; 0x800357 <lcd0data_PORT>
+    29a2:	f0 91 58 03 	lds	r31, 0x0358	; 0x800358 <lcd0data_PORT+0x1>
     29a6:	80 81       	ld	r24, Z
     29a8:	88 60       	ori	r24, 0x08	; 8
     29aa:	80 83       	st	Z, r24
     29ac:	07 c0       	rjmp	.+14     	; 0x29bc <LCD0_write+0x124>
-    29ae:	e0 91 db 02 	lds	r30, 0x02DB	; 0x8002db <lcd0data_PORT>
-    29b2:	f0 91 dc 02 	lds	r31, 0x02DC	; 0x8002dc <lcd0data_PORT+0x1>
+    29ae:	e0 91 57 03 	lds	r30, 0x0357	; 0x800357 <lcd0data_PORT>
+    29b2:	f0 91 58 03 	lds	r31, 0x0358	; 0x800358 <lcd0data_PORT+0x1>
     29b6:	80 81       	ld	r24, Z
     29b8:	87 7f       	andi	r24, 0xF7	; 247
     29ba:	80 83       	st	Z, r24
 	if(c & 0x04) *lcd0data_PORT |= 1 << DB6; else *lcd0data_PORT &= ~(1 << DB6); LCD_ticks(BIT_N_TICKS);
     29bc:	c2 ff       	sbrs	r28, 2
     29be:	08 c0       	rjmp	.+16     	; 0x29d0 <LCD0_write+0x138>
-    29c0:	e0 91 db 02 	lds	r30, 0x02DB	; 0x8002db <lcd0data_PORT>
-    29c4:	f0 91 dc 02 	lds	r31, 0x02DC	; 0x8002dc <lcd0data_PORT+0x1>
+    29c0:	e0 91 57 03 	lds	r30, 0x0357	; 0x800357 <lcd0data_PORT>
+    29c4:	f0 91 58 03 	lds	r31, 0x0358	; 0x800358 <lcd0data_PORT+0x1>
     29c8:	80 81       	ld	r24, Z
     29ca:	84 60       	ori	r24, 0x04	; 4
     29cc:	80 83       	st	Z, r24
     29ce:	07 c0       	rjmp	.+14     	; 0x29de <LCD0_write+0x146>
-    29d0:	e0 91 db 02 	lds	r30, 0x02DB	; 0x8002db <lcd0data_PORT>
-    29d4:	f0 91 dc 02 	lds	r31, 0x02DC	; 0x8002dc <lcd0data_PORT+0x1>
+    29d0:	e0 91 57 03 	lds	r30, 0x0357	; 0x800357 <lcd0data_PORT>
+    29d4:	f0 91 58 03 	lds	r31, 0x0358	; 0x800358 <lcd0data_PORT+0x1>
     29d8:	80 81       	ld	r24, Z
     29da:	8b 7f       	andi	r24, 0xFB	; 251
     29dc:	80 83       	st	Z, r24
 	if(c & 0x02) *lcd0data_PORT |= 1 << DB5; else *lcd0data_PORT &= ~(1 << DB5); LCD_ticks(BIT_N_TICKS);
     29de:	c1 ff       	sbrs	r28, 1
     29e0:	08 c0       	rjmp	.+16     	; 0x29f2 <LCD0_write+0x15a>
-    29e2:	e0 91 db 02 	lds	r30, 0x02DB	; 0x8002db <lcd0data_PORT>
-    29e6:	f0 91 dc 02 	lds	r31, 0x02DC	; 0x8002dc <lcd0data_PORT+0x1>
+    29e2:	e0 91 57 03 	lds	r30, 0x0357	; 0x800357 <lcd0data_PORT>
+    29e6:	f0 91 58 03 	lds	r31, 0x0358	; 0x800358 <lcd0data_PORT+0x1>
     29ea:	80 81       	ld	r24, Z
     29ec:	82 60       	ori	r24, 0x02	; 2
     29ee:	80 83       	st	Z, r24
     29f0:	07 c0       	rjmp	.+14     	; 0x2a00 <LCD0_write+0x168>
-    29f2:	e0 91 db 02 	lds	r30, 0x02DB	; 0x8002db <lcd0data_PORT>
-    29f6:	f0 91 dc 02 	lds	r31, 0x02DC	; 0x8002dc <lcd0data_PORT+0x1>
+    29f2:	e0 91 57 03 	lds	r30, 0x0357	; 0x800357 <lcd0data_PORT>
+    29f6:	f0 91 58 03 	lds	r31, 0x0358	; 0x800358 <lcd0data_PORT+0x1>
     29fa:	80 81       	ld	r24, Z
     29fc:	8d 7f       	andi	r24, 0xFD	; 253
     29fe:	80 83       	st	Z, r24
 	if(c & 0x01) *lcd0data_PORT |= 1 << DB4; else *lcd0data_PORT &= ~(1 << DB4); LCD_ticks(BIT_N_TICKS);
     2a00:	c0 ff       	sbrs	r28, 0
     2a02:	08 c0       	rjmp	.+16     	; 0x2a14 <LCD0_write+0x17c>
-    2a04:	e0 91 db 02 	lds	r30, 0x02DB	; 0x8002db <lcd0data_PORT>
-    2a08:	f0 91 dc 02 	lds	r31, 0x02DC	; 0x8002dc <lcd0data_PORT+0x1>
+    2a04:	e0 91 57 03 	lds	r30, 0x0357	; 0x800357 <lcd0data_PORT>
+    2a08:	f0 91 58 03 	lds	r31, 0x0358	; 0x800358 <lcd0data_PORT+0x1>
     2a0c:	80 81       	ld	r24, Z
     2a0e:	81 60       	ori	r24, 0x01	; 1
     2a10:	80 83       	st	Z, r24
     2a12:	07 c0       	rjmp	.+14     	; 0x2a22 <LCD0_write+0x18a>
-    2a14:	e0 91 db 02 	lds	r30, 0x02DB	; 0x8002db <lcd0data_PORT>
-    2a18:	f0 91 dc 02 	lds	r31, 0x02DC	; 0x8002dc <lcd0data_PORT+0x1>
+    2a14:	e0 91 57 03 	lds	r30, 0x0357	; 0x800357 <lcd0data_PORT>
+    2a18:	f0 91 58 03 	lds	r31, 0x0358	; 0x800358 <lcd0data_PORT+0x1>
     2a1c:	80 81       	ld	r24, Z
     2a1e:	8e 7f       	andi	r24, 0xFE	; 254
     2a20:	80 83       	st	Z, r24
 	
 	*lcd0cmd_PORT &= ~(1 << EN); LCD_ticks(LCD_N_TICKS);
-    2a22:	e0 91 d0 02 	lds	r30, 0x02D0	; 0x8002d0 <lcd0cmd_PORT>
-    2a26:	f0 91 d1 02 	lds	r31, 0x02D1	; 0x8002d1 <lcd0cmd_PORT+0x1>
+    2a22:	e0 91 4c 03 	lds	r30, 0x034C	; 0x80034c <lcd0cmd_PORT>
+    2a26:	f0 91 4d 03 	lds	r31, 0x034D	; 0x80034d <lcd0cmd_PORT+0x1>
     2a2a:	80 81       	ld	r24, Z
     2a2c:	8b 7f       	andi	r24, 0xFB	; 251
     2a2e:	80 83       	st	Z, r24
@@ -6867,20 +6867,20 @@ char LCD0_read(unsigned short D_I)
     2a56:	8c 01       	movw	r16, r24
 	char c = 0x00;
 	*lcd0data_DDR &= ~((1 << DB4) | (1 << DB5) | (1 << DB6) | (1 << DB7)); // mcu as input
-    2a58:	e0 91 d9 02 	lds	r30, 0x02D9	; 0x8002d9 <lcd0data_DDR>
-    2a5c:	f0 91 da 02 	lds	r31, 0x02DA	; 0x8002da <lcd0data_DDR+0x1>
+    2a58:	e0 91 55 03 	lds	r30, 0x0355	; 0x800355 <lcd0data_DDR>
+    2a5c:	f0 91 56 03 	lds	r31, 0x0356	; 0x800356 <lcd0data_DDR+0x1>
     2a60:	80 81       	ld	r24, Z
     2a62:	80 7f       	andi	r24, 0xF0	; 240
     2a64:	80 83       	st	Z, r24
 	*lcd0data_PORT |= (1 << DB4) | (1 << DB5) | (1 << DB6) | (1 << DB7); // pull up resistors
-    2a66:	e0 91 db 02 	lds	r30, 0x02DB	; 0x8002db <lcd0data_PORT>
-    2a6a:	f0 91 dc 02 	lds	r31, 0x02DC	; 0x8002dc <lcd0data_PORT+0x1>
+    2a66:	e0 91 57 03 	lds	r30, 0x0357	; 0x800357 <lcd0data_PORT>
+    2a6a:	f0 91 58 03 	lds	r31, 0x0358	; 0x800358 <lcd0data_PORT+0x1>
     2a6e:	80 81       	ld	r24, Z
     2a70:	8f 60       	ori	r24, 0x0F	; 15
     2a72:	80 83       	st	Z, r24
 	*lcd0cmd_PORT |= (1 << RW); // lcd as output
-    2a74:	e0 91 d0 02 	lds	r30, 0x02D0	; 0x8002d0 <lcd0cmd_PORT>
-    2a78:	f0 91 d1 02 	lds	r31, 0x02D1	; 0x8002d1 <lcd0cmd_PORT+0x1>
+    2a74:	e0 91 4c 03 	lds	r30, 0x034C	; 0x80034c <lcd0cmd_PORT>
+    2a78:	f0 91 4d 03 	lds	r31, 0x034D	; 0x80034d <lcd0cmd_PORT+0x1>
     2a7c:	80 81       	ld	r24, Z
     2a7e:	82 60       	ori	r24, 0x02	; 2
     2a80:	80 83       	st	Z, r24
@@ -6889,14 +6889,14 @@ char LCD0_read(unsigned short D_I)
     2a82:	01 15       	cp	r16, r1
     2a84:	11 05       	cpc	r17, r1
     2a86:	41 f0       	breq	.+16     	; 0x2a98 <LCD0_read+0x48>
-    2a88:	e0 91 d0 02 	lds	r30, 0x02D0	; 0x8002d0 <lcd0cmd_PORT>
-    2a8c:	f0 91 d1 02 	lds	r31, 0x02D1	; 0x8002d1 <lcd0cmd_PORT+0x1>
+    2a88:	e0 91 4c 03 	lds	r30, 0x034C	; 0x80034c <lcd0cmd_PORT>
+    2a8c:	f0 91 4d 03 	lds	r31, 0x034D	; 0x80034d <lcd0cmd_PORT+0x1>
     2a90:	80 81       	ld	r24, Z
     2a92:	81 60       	ori	r24, 0x01	; 1
     2a94:	80 83       	st	Z, r24
     2a96:	07 c0       	rjmp	.+14     	; 0x2aa6 <LCD0_read+0x56>
-    2a98:	e0 91 d0 02 	lds	r30, 0x02D0	; 0x8002d0 <lcd0cmd_PORT>
-    2a9c:	f0 91 d1 02 	lds	r31, 0x02D1	; 0x8002d1 <lcd0cmd_PORT+0x1>
+    2a98:	e0 91 4c 03 	lds	r30, 0x034C	; 0x80034c <lcd0cmd_PORT>
+    2a9c:	f0 91 4d 03 	lds	r31, 0x034D	; 0x80034d <lcd0cmd_PORT+0x1>
     2aa0:	80 81       	ld	r24, Z
     2aa2:	8e 7f       	andi	r24, 0xFE	; 254
     2aa4:	80 83       	st	Z, r24
@@ -6906,8 +6906,8 @@ char LCD0_read(unsigned short D_I)
     2aaa:	0e 94 3d 14 	call	0x287a	; 0x287a <LCD0_strobe>
 	
 	if(*lcd0data_PIN & (1 << DB7)) c |= 1 << 7; else c &= ~(1 << 7); LCD_ticks(BIT_N_TICKS);
-    2aae:	e0 91 d4 02 	lds	r30, 0x02D4	; 0x8002d4 <lcd0data_PIN>
-    2ab2:	f0 91 d5 02 	lds	r31, 0x02D5	; 0x8002d5 <lcd0data_PIN+0x1>
+    2aae:	e0 91 50 03 	lds	r30, 0x0350	; 0x800350 <lcd0data_PIN>
+    2ab2:	f0 91 51 03 	lds	r31, 0x0351	; 0x800351 <lcd0data_PIN+0x1>
     2ab6:	80 81       	ld	r24, Z
     2ab8:	83 fd       	sbrc	r24, 3
     2aba:	02 c0       	rjmp	.+4      	; 0x2ac0 <LCD0_read+0x70>
@@ -6939,14 +6939,14 @@ char LCD0_read(unsigned short D_I)
 	if(D_I) *lcd0cmd_PORT |= (1 << RS); else *lcd0cmd_PORT &= ~(1 << RS);
     2ae6:	01 2b       	or	r16, r17
     2ae8:	41 f0       	breq	.+16     	; 0x2afa <LCD0_read+0xaa>
-    2aea:	e0 91 d0 02 	lds	r30, 0x02D0	; 0x8002d0 <lcd0cmd_PORT>
-    2aee:	f0 91 d1 02 	lds	r31, 0x02D1	; 0x8002d1 <lcd0cmd_PORT+0x1>
+    2aea:	e0 91 4c 03 	lds	r30, 0x034C	; 0x80034c <lcd0cmd_PORT>
+    2aee:	f0 91 4d 03 	lds	r31, 0x034D	; 0x80034d <lcd0cmd_PORT+0x1>
     2af2:	80 81       	ld	r24, Z
     2af4:	81 60       	ori	r24, 0x01	; 1
     2af6:	80 83       	st	Z, r24
     2af8:	07 c0       	rjmp	.+14     	; 0x2b08 <LCD0_read+0xb8>
-    2afa:	e0 91 d0 02 	lds	r30, 0x02D0	; 0x8002d0 <lcd0cmd_PORT>
-    2afe:	f0 91 d1 02 	lds	r31, 0x02D1	; 0x8002d1 <lcd0cmd_PORT+0x1>
+    2afa:	e0 91 4c 03 	lds	r30, 0x034C	; 0x80034c <lcd0cmd_PORT>
+    2afe:	f0 91 4d 03 	lds	r31, 0x034D	; 0x80034d <lcd0cmd_PORT+0x1>
     2b02:	80 81       	ld	r24, Z
     2b04:	8e 7f       	andi	r24, 0xFE	; 254
     2b06:	80 83       	st	Z, r24
@@ -6956,8 +6956,8 @@ char LCD0_read(unsigned short D_I)
     2b0c:	0e 94 3d 14 	call	0x287a	; 0x287a <LCD0_strobe>
 	
 	if(*lcd0data_PIN & (1 << DB7)) c |= 1 << 3; else c &= ~(1 << 3); LCD_ticks(BIT_N_TICKS);
-    2b10:	e0 91 d4 02 	lds	r30, 0x02D4	; 0x8002d4 <lcd0data_PIN>
-    2b14:	f0 91 d5 02 	lds	r31, 0x02D5	; 0x8002d5 <lcd0data_PIN+0x1>
+    2b10:	e0 91 50 03 	lds	r30, 0x0350	; 0x800350 <lcd0data_PIN>
+    2b14:	f0 91 51 03 	lds	r31, 0x0351	; 0x800351 <lcd0data_PIN+0x1>
     2b18:	80 81       	ld	r24, Z
     2b1a:	83 ff       	sbrs	r24, 3
     2b1c:	03 c0       	rjmp	.+6      	; 0x2b24 <LCD0_read+0xd4>
@@ -6989,8 +6989,8 @@ char LCD0_read(unsigned short D_I)
     2b4a:	8e 7f       	andi	r24, 0xFE	; 254
 	
 	*lcd0cmd_PORT &= ~(1 << EN); LCD_ticks(LCD_N_TICKS);
-    2b4c:	e0 91 d0 02 	lds	r30, 0x02D0	; 0x8002d0 <lcd0cmd_PORT>
-    2b50:	f0 91 d1 02 	lds	r31, 0x02D1	; 0x8002d1 <lcd0cmd_PORT+0x1>
+    2b4c:	e0 91 4c 03 	lds	r30, 0x034C	; 0x80034c <lcd0cmd_PORT>
+    2b50:	f0 91 4d 03 	lds	r31, 0x034D	; 0x80034d <lcd0cmd_PORT+0x1>
     2b54:	90 81       	ld	r25, Z
     2b56:	9b 7f       	andi	r25, 0xFB	; 251
     2b58:	90 83       	st	Z, r25
@@ -7281,14 +7281,14 @@ void LCD0_inic(void)
 {
 	// LCD INIC
 	*lcd0cmd_DDR |= (1 << RS) | (1 << RW) | (1 << EN) | (0 << NC);
-    2c7a:	e0 91 d2 02 	lds	r30, 0x02D2	; 0x8002d2 <lcd0cmd_DDR>
-    2c7e:	f0 91 d3 02 	lds	r31, 0x02D3	; 0x8002d3 <lcd0cmd_DDR+0x1>
+    2c7a:	e0 91 4e 03 	lds	r30, 0x034E	; 0x80034e <lcd0cmd_DDR>
+    2c7e:	f0 91 4f 03 	lds	r31, 0x034F	; 0x80034f <lcd0cmd_DDR+0x1>
     2c82:	80 81       	ld	r24, Z
     2c84:	87 60       	ori	r24, 0x07	; 7
     2c86:	80 83       	st	Z, r24
 	*lcd0cmd_PORT |= (1 << NC);
-    2c88:	e0 91 d0 02 	lds	r30, 0x02D0	; 0x8002d0 <lcd0cmd_PORT>
-    2c8c:	f0 91 d1 02 	lds	r31, 0x02D1	; 0x8002d1 <lcd0cmd_PORT+0x1>
+    2c88:	e0 91 4c 03 	lds	r30, 0x034C	; 0x80034c <lcd0cmd_PORT>
+    2c8c:	f0 91 4d 03 	lds	r31, 0x034D	; 0x80034d <lcd0cmd_PORT+0x1>
     2c90:	80 81       	ld	r24, Z
     2c92:	88 60       	ori	r24, 0x08	; 8
     2c94:	80 83       	st	Z, r24
@@ -7452,46 +7452,46 @@ LCD0 LCD0enable(volatile uint8_t *cmdddr, volatile uint8_t *cmdpin, volatile uin
 	LCD0 lcd0;
 	// import parameters
 	lcd0cmd_DDR = cmdddr;
-    2d8c:	70 93 d3 02 	sts	0x02D3, r23	; 0x8002d3 <lcd0cmd_DDR+0x1>
-    2d90:	60 93 d2 02 	sts	0x02D2, r22	; 0x8002d2 <lcd0cmd_DDR>
+    2d8c:	70 93 4f 03 	sts	0x034F, r23	; 0x80034f <lcd0cmd_DDR+0x1>
+    2d90:	60 93 4e 03 	sts	0x034E, r22	; 0x80034e <lcd0cmd_DDR>
 	lcd0cmd_PIN = cmdpin;
-    2d94:	50 93 d8 02 	sts	0x02D8, r21	; 0x8002d8 <lcd0cmd_PIN+0x1>
-    2d98:	40 93 d7 02 	sts	0x02D7, r20	; 0x8002d7 <lcd0cmd_PIN>
+    2d94:	50 93 54 03 	sts	0x0354, r21	; 0x800354 <lcd0cmd_PIN+0x1>
+    2d98:	40 93 53 03 	sts	0x0353, r20	; 0x800353 <lcd0cmd_PIN>
 	lcd0cmd_PORT = cmdport;
-    2d9c:	30 93 d1 02 	sts	0x02D1, r19	; 0x8002d1 <lcd0cmd_PORT+0x1>
-    2da0:	20 93 d0 02 	sts	0x02D0, r18	; 0x8002d0 <lcd0cmd_PORT>
+    2d9c:	30 93 4d 03 	sts	0x034D, r19	; 0x80034d <lcd0cmd_PORT+0x1>
+    2da0:	20 93 4c 03 	sts	0x034C, r18	; 0x80034c <lcd0cmd_PORT>
 	lcd0data_DDR = dataddr;
-    2da4:	10 93 da 02 	sts	0x02DA, r17	; 0x8002da <lcd0data_DDR+0x1>
-    2da8:	00 93 d9 02 	sts	0x02D9, r16	; 0x8002d9 <lcd0data_DDR>
+    2da4:	10 93 56 03 	sts	0x0356, r17	; 0x800356 <lcd0data_DDR+0x1>
+    2da8:	00 93 55 03 	sts	0x0355, r16	; 0x800355 <lcd0data_DDR>
 	lcd0data_PIN = datapin;
-    2dac:	f0 92 d5 02 	sts	0x02D5, r15	; 0x8002d5 <lcd0data_PIN+0x1>
-    2db0:	e0 92 d4 02 	sts	0x02D4, r14	; 0x8002d4 <lcd0data_PIN>
+    2dac:	f0 92 51 03 	sts	0x0351, r15	; 0x800351 <lcd0data_PIN+0x1>
+    2db0:	e0 92 50 03 	sts	0x0350, r14	; 0x800350 <lcd0data_PIN>
 	lcd0data_PORT = dataport;
-    2db4:	d0 92 dc 02 	sts	0x02DC, r13	; 0x8002dc <lcd0data_PORT+0x1>
-    2db8:	c0 92 db 02 	sts	0x02DB, r12	; 0x8002db <lcd0data_PORT>
+    2db4:	d0 92 58 03 	sts	0x0358, r13	; 0x800358 <lcd0data_PORT+0x1>
+    2db8:	c0 92 57 03 	sts	0x0357, r12	; 0x800357 <lcd0data_PORT>
 	// initialize variables
 	*lcd0cmd_DDR = 0x00;
     2dbc:	fb 01       	movw	r30, r22
     2dbe:	10 82       	st	Z, r1
 	*lcd0cmd_PORT = 0xFF;
-    2dc0:	e0 91 d0 02 	lds	r30, 0x02D0	; 0x8002d0 <lcd0cmd_PORT>
-    2dc4:	f0 91 d1 02 	lds	r31, 0x02D1	; 0x8002d1 <lcd0cmd_PORT+0x1>
+    2dc0:	e0 91 4c 03 	lds	r30, 0x034C	; 0x80034c <lcd0cmd_PORT>
+    2dc4:	f0 91 4d 03 	lds	r31, 0x034D	; 0x80034d <lcd0cmd_PORT+0x1>
     2dc8:	8f ef       	ldi	r24, 0xFF	; 255
     2dca:	80 83       	st	Z, r24
 	*lcd0data_DDR = 0x00;
-    2dcc:	e0 91 d9 02 	lds	r30, 0x02D9	; 0x8002d9 <lcd0data_DDR>
-    2dd0:	f0 91 da 02 	lds	r31, 0x02DA	; 0x8002da <lcd0data_DDR+0x1>
+    2dcc:	e0 91 55 03 	lds	r30, 0x0355	; 0x800355 <lcd0data_DDR>
+    2dd0:	f0 91 56 03 	lds	r31, 0x0356	; 0x800356 <lcd0data_DDR+0x1>
     2dd4:	10 82       	st	Z, r1
 	*lcd0data_PORT = 0xFF;
-    2dd6:	e0 91 db 02 	lds	r30, 0x02DB	; 0x8002db <lcd0data_PORT>
-    2dda:	f0 91 dc 02 	lds	r31, 0x02DC	; 0x8002dc <lcd0data_PORT+0x1>
+    2dd6:	e0 91 57 03 	lds	r30, 0x0357	; 0x800357 <lcd0data_PORT>
+    2dda:	f0 91 58 03 	lds	r31, 0x0358	; 0x800358 <lcd0data_PORT+0x1>
     2dde:	80 83       	st	Z, r24
 	lcd0_detect = *lcd0cmd_PIN & (1 << NC);
-    2de0:	e0 91 d7 02 	lds	r30, 0x02D7	; 0x8002d7 <lcd0cmd_PIN>
-    2de4:	f0 91 d8 02 	lds	r31, 0x02D8	; 0x8002d8 <lcd0cmd_PIN+0x1>
+    2de0:	e0 91 53 03 	lds	r30, 0x0353	; 0x800353 <lcd0cmd_PIN>
+    2de4:	f0 91 54 03 	lds	r31, 0x0354	; 0x800354 <lcd0cmd_PIN+0x1>
     2de8:	80 81       	ld	r24, Z
     2dea:	88 70       	andi	r24, 0x08	; 8
-    2dec:	80 93 d6 02 	sts	0x02D6, r24	; 0x8002d6 <lcd0_detect>
+    2dec:	80 93 52 03 	sts	0x0352, r24	; 0x800352 <lcd0_detect>
 	lcd0.hspace = LCD0_hspace;
 	lcd0.clear = LCD0_clear;
 	lcd0.gotoxy = LCD0_gotoxy;
@@ -7569,12 +7569,12 @@ void LCD0_reboot(void)
 	uint8_t i;
 	uint8_t tmp;
 	tmp = *lcd0cmd_PIN & (1 << NC);
-    2e62:	e0 91 d7 02 	lds	r30, 0x02D7	; 0x8002d7 <lcd0cmd_PIN>
-    2e66:	f0 91 d8 02 	lds	r31, 0x02D8	; 0x8002d8 <lcd0cmd_PIN+0x1>
+    2e62:	e0 91 53 03 	lds	r30, 0x0353	; 0x800353 <lcd0cmd_PIN>
+    2e66:	f0 91 54 03 	lds	r31, 0x0354	; 0x800354 <lcd0cmd_PIN+0x1>
     2e6a:	c0 81       	ld	r28, Z
     2e6c:	c8 70       	andi	r28, 0x08	; 8
 	i = tmp ^ lcd0_detect;
-    2e6e:	80 91 d6 02 	lds	r24, 0x02D6	; 0x8002d6 <lcd0_detect>
+    2e6e:	80 91 52 03 	lds	r24, 0x0352	; 0x800352 <lcd0_detect>
     2e72:	8c 27       	eor	r24, r28
 	i &= tmp;
 	if(i)
@@ -7583,7 +7583,7 @@ void LCD0_reboot(void)
 		LCD0_inic();
     2e78:	0e 94 3d 16 	call	0x2c7a	; 0x2c7a <LCD0_inic>
 	lcd0_detect = tmp;
-    2e7c:	c0 93 d6 02 	sts	0x02D6, r28	; 0x8002d6 <lcd0_detect>
+    2e7c:	c0 93 52 03 	sts	0x0352, r28	; 0x800352 <lcd0_detect>
 }
     2e80:	cf 91       	pop	r28
     2e82:	08 95       	ret
@@ -7617,11 +7617,11 @@ char LCDline1[18];
 /*** File Header ***/
 void PORTINIT(void);
 void interrupt1(void){d++;}
-    2e9a:	80 91 ad 03 	lds	r24, 0x03AD	; 0x8003ad <d>
-    2e9e:	90 91 ae 03 	lds	r25, 0x03AE	; 0x8003ae <d+0x1>
+    2e9a:	80 91 29 04 	lds	r24, 0x0429	; 0x800429 <d>
+    2e9e:	90 91 2a 04 	lds	r25, 0x042A	; 0x80042a <d+0x1>
     2ea2:	01 96       	adiw	r24, 0x01	; 1
-    2ea4:	90 93 ae 03 	sts	0x03AE, r25	; 0x8003ae <d+0x1>
-    2ea8:	80 93 ad 03 	sts	0x03AD, r24	; 0x8003ad <d>
+    2ea4:	90 93 2a 04 	sts	0x042A, r25	; 0x80042a <d+0x1>
+    2ea8:	80 93 29 04 	sts	0x0429, r24	; 0x800429 <d>
     2eac:	08 95       	ret
 
 00002eae <PORTINIT>:
@@ -7631,8 +7631,8 @@ void interrupt1(void){d++;}
 void PORTINIT(void)
 {
 	m.portb.reg->ddr = 0x00;
-    2eae:	e7 ef       	ldi	r30, 0xF7	; 247
-    2eb0:	f1 e0       	ldi	r31, 0x01	; 1
+    2eae:	e3 e6       	ldi	r30, 0x63	; 99
+    2eb0:	f4 e0       	ldi	r31, 0x04	; 4
     2eb2:	a2 89       	ldd	r26, Z+18	; 0x12
     2eb4:	b3 89       	ldd	r27, Z+19	; 0x13
     2eb6:	11 96       	adiw	r26, 0x01	; 1
@@ -7679,50 +7679,50 @@ int main(void)
 	//timer0_ovf = interrupt1;
 	
 	LCD.pos.l00 = LCDline0;
-    2ef0:	e7 ed       	ldi	r30, 0xD7	; 215
-    2ef2:	f3 e0       	ldi	r31, 0x03	; 3
-    2ef4:	88 e6       	ldi	r24, 0x68	; 104
+    2ef0:	e3 e5       	ldi	r30, 0x53	; 83
+    2ef2:	f4 e0       	ldi	r31, 0x04	; 4
+    2ef4:	84 ee       	ldi	r24, 0xE4	; 228
     2ef6:	93 e0       	ldi	r25, 0x03	; 3
     2ef8:	91 83       	std	Z+1, r25	; 0x01
     2efa:	80 83       	st	Z, r24
 	LCD.pos.l10 = LCDline1;	
-    2efc:	8f ea       	ldi	r24, 0xAF	; 175
-    2efe:	93 e0       	ldi	r25, 0x03	; 3
+    2efc:	8b e2       	ldi	r24, 0x2B	; 43
+    2efe:	94 e0       	ldi	r25, 0x04	; 4
     2f00:	91 87       	std	Z+9, r25	; 0x09
     2f02:	80 87       	std	Z+8, r24	; 0x08
 	LCD.pos.l01 = LCDline0 + 4;
-    2f04:	8c e6       	ldi	r24, 0x6C	; 108
+    2f04:	88 ee       	ldi	r24, 0xE8	; 232
     2f06:	93 e0       	ldi	r25, 0x03	; 3
     2f08:	93 83       	std	Z+3, r25	; 0x03
     2f0a:	82 83       	std	Z+2, r24	; 0x02
 	LCD.pos.l11 = LCDline1 + 4;
-    2f0c:	83 eb       	ldi	r24, 0xB3	; 179
-    2f0e:	93 e0       	ldi	r25, 0x03	; 3
+    2f0c:	8f e2       	ldi	r24, 0x2F	; 47
+    2f0e:	94 e0       	ldi	r25, 0x04	; 4
     2f10:	93 87       	std	Z+11, r25	; 0x0b
     2f12:	82 87       	std	Z+10, r24	; 0x0a
 	LCD.pos.l02 = LCDline0 + 8;
-    2f14:	80 e7       	ldi	r24, 0x70	; 112
+    2f14:	8c ee       	ldi	r24, 0xEC	; 236
     2f16:	93 e0       	ldi	r25, 0x03	; 3
     2f18:	95 83       	std	Z+5, r25	; 0x05
     2f1a:	84 83       	std	Z+4, r24	; 0x04
 	LCD.pos.l12 = LCDline1 + 8;
-    2f1c:	87 eb       	ldi	r24, 0xB7	; 183
-    2f1e:	93 e0       	ldi	r25, 0x03	; 3
+    2f1c:	83 e3       	ldi	r24, 0x33	; 51
+    2f1e:	94 e0       	ldi	r25, 0x04	; 4
     2f20:	95 87       	std	Z+13, r25	; 0x0d
     2f22:	84 87       	std	Z+12, r24	; 0x0c
 	LCD.pos.l03 = LCDline0 + 12;
-    2f24:	84 e7       	ldi	r24, 0x74	; 116
+    2f24:	80 ef       	ldi	r24, 0xF0	; 240
     2f26:	93 e0       	ldi	r25, 0x03	; 3
     2f28:	97 83       	std	Z+7, r25	; 0x07
     2f2a:	86 83       	std	Z+6, r24	; 0x06
 	LCD.pos.l13 = LCDline1 + 12;
-    2f2c:	8b eb       	ldi	r24, 0xBB	; 187
-    2f2e:	93 e0       	ldi	r25, 0x03	; 3
+    2f2c:	87 e3       	ldi	r24, 0x37	; 55
+    2f2e:	94 e0       	ldi	r25, 0x04	; 4
     2f30:	97 87       	std	Z+15, r25	; 0x0f
     2f32:	86 87       	std	Z+14, r24	; 0x0e
-    2f34:	e8 e6       	ldi	r30, 0x68	; 104
+    2f34:	e4 ee       	ldi	r30, 0xE4	; 228
     2f36:	f3 e0       	ldi	r31, 0x03	; 3
-    2f38:	2a e7       	ldi	r18, 0x7A	; 122
+    2f38:	26 ef       	ldi	r18, 0xF6	; 246
     2f3a:	33 e0       	ldi	r19, 0x03	; 3
 	for(i=0; i<18; LCDline0[i]=' ', i++);
     2f3c:	80 e2       	ldi	r24, 0x20	; 32
@@ -7730,10 +7730,10 @@ int main(void)
     2f40:	e2 17       	cp	r30, r18
     2f42:	f3 07       	cpc	r31, r19
     2f44:	e1 f7       	brne	.-8      	; 0x2f3e <main+0x68>
-    2f46:	ef ea       	ldi	r30, 0xAF	; 175
-    2f48:	f3 e0       	ldi	r31, 0x03	; 3
-    2f4a:	21 ec       	ldi	r18, 0xC1	; 193
-    2f4c:	33 e0       	ldi	r19, 0x03	; 3
+    2f46:	eb e2       	ldi	r30, 0x2B	; 43
+    2f48:	f4 e0       	ldi	r31, 0x04	; 4
+    2f4a:	2d e3       	ldi	r18, 0x3D	; 61
+    2f4c:	34 e0       	ldi	r19, 0x04	; 4
 	for(i=0; i<18; LCDline1[i]=' ', i++);
     2f4e:	80 e2       	ldi	r24, 0x20	; 32
     2f50:	81 93       	st	Z+, r24
@@ -7741,17 +7741,17 @@ int main(void)
     2f54:	f3 07       	cpc	r31, r19
     2f56:	e1 f7       	brne	.-8      	; 0x2f50 <main+0x7a>
     2f58:	82 e1       	ldi	r24, 0x12	; 18
-    2f5a:	80 93 9c 03 	sts	0x039C, r24	; 0x80039c <i>
+    2f5a:	80 93 18 04 	sts	0x0418, r24	; 0x800418 <i>
 	LCDline0[16] = '\n';
-    2f5e:	a8 e6       	ldi	r26, 0x68	; 104
+    2f5e:	a4 ee       	ldi	r26, 0xE4	; 228
     2f60:	b3 e0       	ldi	r27, 0x03	; 3
     2f62:	8a e0       	ldi	r24, 0x0A	; 10
     2f64:	50 96       	adiw	r26, 0x10	; 16
     2f66:	8c 93       	st	X, r24
     2f68:	50 97       	sbiw	r26, 0x10	; 16
 	LCDline1[16] = '\n';
-    2f6a:	ef ea       	ldi	r30, 0xAF	; 175
-    2f6c:	f3 e0       	ldi	r31, 0x03	; 3
+    2f6a:	eb e2       	ldi	r30, 0x2B	; 43
+    2f6c:	f4 e0       	ldi	r31, 0x04	; 4
     2f6e:	80 8b       	std	Z+16, r24	; 0x10
 	LCDline0[17] = '\0';
     2f70:	51 96       	adiw	r26, 0x11	; 17
@@ -7766,8 +7766,8 @@ int main(void)
     2f7e:	8e e3       	ldi	r24, 0x3E	; 62
     2f80:	fe 01       	movw	r30, r28
     2f82:	31 96       	adiw	r30, 0x01	; 1
-    2f84:	a7 ef       	ldi	r26, 0xF7	; 247
-    2f86:	b1 e0       	ldi	r27, 0x01	; 1
+    2f84:	a3 e6       	ldi	r26, 0x63	; 99
+    2f86:	b4 e0       	ldi	r27, 0x04	; 4
     2f88:	01 90       	ld	r0, Z+
     2f8a:	0d 92       	st	X+, r0
     2f8c:	8a 95       	dec	r24
@@ -7779,8 +7779,8 @@ int main(void)
     2f98:	8a e4       	ldi	r24, 0x4A	; 74
     2f9a:	fe 01       	movw	r30, r28
     2f9c:	ff 96       	adiw	r30, 0x3f	; 63
-    2f9e:	a7 ee       	ldi	r26, 0xE7	; 231
-    2fa0:	b2 e0       	ldi	r27, 0x02	; 2
+    2f9e:	a3 e6       	ldi	r26, 0x63	; 99
+    2fa0:	b3 e0       	ldi	r27, 0x03	; 3
     2fa2:	01 90       	ld	r0, Z+
     2fa4:	0d 92       	st	X+, r0
     2fa6:	8a 95       	dec	r24
@@ -7810,7 +7810,7 @@ int main(void)
     2fd6:	86 e1       	ldi	r24, 0x16	; 22
     2fd8:	fe 01       	movw	r30, r28
     2fda:	31 96       	adiw	r30, 0x01	; 1
-    2fdc:	a2 e5       	ldi	r26, 0x52	; 82
+    2fdc:	ae ec       	ldi	r26, 0xCE	; 206
     2fde:	b3 e0       	ldi	r27, 0x03	; 3
     2fe0:	01 90       	ld	r0, Z+
     2fe2:	0d 92       	st	X+, r0
@@ -7827,9 +7827,9 @@ int main(void)
     2ff4:	90 e0       	ldi	r25, 0x00	; 0
     2ff6:	0e 94 59 01 	call	0x2b2	; 0x2b2 <HC595enable>
     2ffa:	0f 2e       	mov	r0, r31
-    2ffc:	f6 e8       	ldi	r31, 0x86	; 134
+    2ffc:	f2 e0       	ldi	r31, 0x02	; 2
     2ffe:	ef 2e       	mov	r14, r31
-    3000:	f3 e0       	ldi	r31, 0x03	; 3
+    3000:	f4 e0       	ldi	r31, 0x04	; 4
     3002:	ff 2e       	mov	r15, r31
     3004:	f0 2d       	mov	r31, r0
     3006:	d7 01       	movw	r26, r14
@@ -7858,9 +7858,9 @@ int main(void)
 	// UART 51 para 9600, 12 para 38400 at 8Mhz
 	uart = m.usart.enable(12,8,1,NONE);
     3032:	0f 2e       	mov	r0, r31
-    3034:	f7 ef       	ldi	r31, 0xF7	; 247
+    3034:	f3 e6       	ldi	r31, 0x63	; 99
     3036:	cf 2e       	mov	r12, r31
-    3038:	f1 e0       	ldi	r31, 0x01	; 1
+    3038:	f4 e0       	ldi	r31, 0x04	; 4
     303a:	df 2e       	mov	r13, r31
     303c:	f0 2d       	mov	r31, r0
     303e:	d6 01       	movw	r26, r12
@@ -7882,8 +7882,8 @@ int main(void)
     305e:	86 e1       	ldi	r24, 0x16	; 22
     3060:	fe 01       	movw	r30, r28
     3062:	31 96       	adiw	r30, 0x01	; 1
-    3064:	a1 ec       	ldi	r26, 0xC1	; 193
-    3066:	b3 e0       	ldi	r27, 0x03	; 3
+    3064:	ad e3       	ldi	r26, 0x3D	; 61
+    3066:	b4 e0       	ldi	r27, 0x04	; 4
     3068:	01 90       	ld	r0, Z+
     306a:	0d 92       	st	X+, r0
     306c:	8a 95       	dec	r24
@@ -7902,7 +7902,7 @@ int main(void)
     3084:	8c e0       	ldi	r24, 0x0C	; 12
     3086:	fe 01       	movw	r30, r28
     3088:	31 96       	adiw	r30, 0x01	; 1
-    308a:	aa e7       	ldi	r26, 0x7A	; 122
+    308a:	a6 ef       	ldi	r26, 0xF6	; 246
     308c:	b3 e0       	ldi	r27, 0x03	; 3
     308e:	01 90       	ld	r0, Z+
     3090:	0d 92       	st	X+, r0
@@ -7915,16 +7915,16 @@ int main(void)
     309e:	8e e0       	ldi	r24, 0x0E	; 14
     30a0:	fe 01       	movw	r30, r28
     30a2:	31 96       	adiw	r30, 0x01	; 1
-    30a4:	ae e8       	ldi	r26, 0x8E	; 142
-    30a6:	b3 e0       	ldi	r27, 0x03	; 3
+    30a4:	aa e0       	ldi	r26, 0x0A	; 10
+    30a6:	b4 e0       	ldi	r27, 0x04	; 4
     30a8:	01 90       	ld	r0, Z+
     30aa:	0d 92       	st	X+, r0
     30ac:	8a 95       	dec	r24
     30ae:	e1 f7       	brne	.-8      	; 0x30a8 <main+0x1d2>
 	
 	tc0.start(~0);
-    30b0:	e0 91 82 03 	lds	r30, 0x0382	; 0x800382 <tc0+0x8>
-    30b4:	f0 91 83 03 	lds	r31, 0x0383	; 0x800383 <tc0+0x9>
+    30b0:	e0 91 fe 03 	lds	r30, 0x03FE	; 0x8003fe <tc0+0x8>
+    30b4:	f0 91 ff 03 	lds	r31, 0x03FF	; 0x8003ff <tc0+0x9>
     30b8:	8f ef       	ldi	r24, 0xFF	; 255
     30ba:	9f ef       	ldi	r25, 0xFF	; 255
     30bc:	09 95       	icall
@@ -7932,8 +7932,8 @@ int main(void)
 	uint8_t input;	
 	uint8_t output = 0xFF;
 	d = 0;
-    30be:	10 92 ae 03 	sts	0x03AE, r1	; 0x8003ae <d+0x1>
-    30c2:	10 92 ad 03 	sts	0x03AD, r1	; 0x8003ad <d>
+    30be:	10 92 2a 04 	sts	0x042A, r1	; 0x80042a <d+0x1>
+    30c2:	10 92 29 04 	sts	0x0429, r1	; 0x800429 <d>
 	
 	sh.byte(output);
     30c6:	d7 01       	movw	r26, r14
@@ -7944,10 +7944,10 @@ int main(void)
     30d0:	8f ef       	ldi	r24, 0xFF	; 255
     30d2:	09 95       	icall
 	func.strtovec(LCD.pos.l10, "off");
-    30d4:	07 ed       	ldi	r16, 0xD7	; 215
-    30d6:	13 e0       	ldi	r17, 0x03	; 3
+    30d4:	03 e5       	ldi	r16, 0x53	; 83
+    30d6:	14 e0       	ldi	r17, 0x04	; 4
     30d8:	0f 2e       	mov	r0, r31
-    30da:	ff e2       	ldi	r31, 0x2F	; 47
+    30da:	fb ea       	ldi	r31, 0xAB	; 171
     30dc:	ef 2e       	mov	r14, r31
     30de:	f3 e0       	ldi	r31, 0x03	; 3
     30e0:	ff 2e       	mov	r15, r31
@@ -8013,7 +8013,7 @@ int main(void)
 		// lcd reboot
 		lcd.reboot();
     313e:	0f 2e       	mov	r0, r31
-    3140:	f2 e5       	ldi	r31, 0x52	; 82
+    3140:	fe ec       	ldi	r31, 0xCE	; 206
     3142:	4f 2e       	mov	r4, r31
     3144:	f3 e0       	ldi	r31, 0x03	; 3
     3146:	5f 2e       	mov	r5, r31
@@ -8022,18 +8022,18 @@ int main(void)
 		input = ( PINC & 0xF0 ) | ( PINB >> 4 );
 		button.update(&button, input);
     314a:	0f 2e       	mov	r0, r31
-    314c:	fe e8       	ldi	r31, 0x8E	; 142
+    314c:	fa e0       	ldi	r31, 0x0A	; 10
     314e:	af 2e       	mov	r10, r31
-    3150:	f3 e0       	ldi	r31, 0x03	; 3
+    3150:	f4 e0       	ldi	r31, 0x04	; 4
     3152:	bf 2e       	mov	r11, r31
     3154:	f0 2d       	mov	r31, r0
 		
 		// uart capture
 		uartreceive = uart.gets(); // UART1
     3156:	0f 2e       	mov	r0, r31
-    3158:	f1 ec       	ldi	r31, 0xC1	; 193
+    3158:	fd e3       	ldi	r31, 0x3D	; 61
     315a:	8f 2e       	mov	r8, r31
-    315c:	f3 e0       	ldi	r31, 0x03	; 3
+    315c:	f4 e0       	ldi	r31, 0x04	; 4
     315e:	9f 2e       	mov	r9, r31
     3160:	f0 2d       	mov	r31, r0
 		
@@ -8043,9 +8043,9 @@ int main(void)
 		// procedures
 		sh.byte(output);
     3162:	0f 2e       	mov	r0, r31
-    3164:	f6 e8       	ldi	r31, 0x86	; 134
+    3164:	f2 e0       	ldi	r31, 0x02	; 2
     3166:	6f 2e       	mov	r6, r31
-    3168:	f3 e0       	ldi	r31, 0x03	; 3
+    3168:	f4 e0       	ldi	r31, 0x04	; 4
     316a:	7f 2e       	mov	r7, r31
     316c:	f0 2d       	mov	r31, r0
 			if(output & 1){
@@ -8055,9 +8055,9 @@ int main(void)
 				output|=1;
 				func.strtovec(LCD.pos.l10, "off");
     316e:	0f 2e       	mov	r0, r31
-    3170:	f7 ed       	ldi	r31, 0xD7	; 215
+    3170:	f3 e5       	ldi	r31, 0x53	; 83
     3172:	cf 2e       	mov	r12, r31
-    3174:	f3 e0       	ldi	r31, 0x03	; 3
+    3174:	f4 e0       	ldi	r31, 0x04	; 4
     3176:	df 2e       	mov	r13, r31
     3178:	f0 2d       	mov	r31, r0
 	// Replace with your application code
@@ -8101,8 +8101,8 @@ int main(void)
     31b0:	80 93 ee 01 	sts	0x01EE, r24	; 0x8001ee <uartreceive>
 		strcpy(uartrcv, uartreceive);
     31b4:	bc 01       	movw	r22, r24
-    31b6:	8d e9       	ldi	r24, 0x9D	; 157
-    31b8:	93 e0       	ldi	r25, 0x03	; 3
+    31b6:	89 e1       	ldi	r24, 0x19	; 25
+    31b8:	94 e0       	ldi	r25, 0x04	; 4
     31ba:	0e 94 e1 1e 	call	0x3dc2	; 0x3dc2 <strcpy>
 		
 		if(uart.getch() == '.'){ uart.rxflush(); }
@@ -8124,8 +8124,8 @@ int main(void)
 		else{strcpy( uartmsg, uartreceive ); }
     31dc:	60 91 ee 01 	lds	r22, 0x01EE	; 0x8001ee <uartreceive>
     31e0:	70 91 ef 01 	lds	r23, 0x01EF	; 0x8001ef <uartreceive+0x1>
-    31e4:	87 ee       	ldi	r24, 0xE7	; 231
-    31e6:	93 e0       	ldi	r25, 0x03	; 3
+    31e4:	81 ea       	ldi	r24, 0xA1	; 161
+    31e6:	94 e0       	ldi	r25, 0x04	; 4
     31e8:	0e 94 e1 1e 	call	0x3dc2	; 0x3dc2 <strcpy>
 		
 		// procedures
@@ -8163,8 +8163,8 @@ int main(void)
     3222:	fc 91       	ld	r31, X
     3224:	1d 97       	sbiw	r26, 0x0d	; 13
     3226:	60 e1       	ldi	r22, 0x10	; 16
-    3228:	87 ee       	ldi	r24, 0xE7	; 231
-    322a:	93 e0       	ldi	r25, 0x03	; 3
+    3228:	81 ea       	ldi	r24, 0xA1	; 161
+    322a:	94 e0       	ldi	r25, 0x04	; 4
     322c:	09 95       	icall
 		//for(i=192;i<208;lcd.putch(i),i++);
 		//for(i=208;i<224;lcd.putch(i),i++);
@@ -8189,8 +8189,8 @@ int main(void)
     3248:	fc 91       	ld	r31, X
     324a:	1d 97       	sbiw	r26, 0x0d	; 13
     324c:	60 e1       	ldi	r22, 0x10	; 16
-    324e:	8f ea       	ldi	r24, 0xAF	; 175
-    3250:	93 e0       	ldi	r25, 0x03	; 3
+    324e:	8b e2       	ldi	r24, 0x2B	; 43
+    3250:	94 e0       	ldi	r25, 0x04	; 4
     3252:	09 95       	icall
 		
 		
@@ -8198,8 +8198,8 @@ int main(void)
 		if(!strcmp(uartrcv, "led 1.") || (button.HL & 1)){
     3254:	64 e0       	ldi	r22, 0x04	; 4
     3256:	71 e0       	ldi	r23, 0x01	; 1
-    3258:	8d e9       	ldi	r24, 0x9D	; 157
-    325a:	93 e0       	ldi	r25, 0x03	; 3
+    3258:	89 e1       	ldi	r24, 0x19	; 25
+    325a:	94 e0       	ldi	r25, 0x04	; 4
     325c:	0e 94 d8 1e 	call	0x3db0	; 0x3db0 <strcmp>
     3260:	89 2b       	or	r24, r25
     3262:	21 f0       	breq	.+8      	; 0x326c <main+0x396>
@@ -8245,8 +8245,8 @@ int main(void)
 		if(!strcmp(uartrcv, "led 1 off.")){
     32a2:	6f e0       	ldi	r22, 0x0F	; 15
     32a4:	71 e0       	ldi	r23, 0x01	; 1
-    32a6:	8d e9       	ldi	r24, 0x9D	; 157
-    32a8:	93 e0       	ldi	r25, 0x03	; 3
+    32a6:	89 e1       	ldi	r24, 0x19	; 25
+    32a8:	94 e0       	ldi	r25, 0x04	; 4
     32aa:	0e 94 d8 1e 	call	0x3db0	; 0x3db0 <strcmp>
     32ae:	89 2b       	or	r24, r25
     32b0:	61 f4       	brne	.+24     	; 0x32ca <main+0x3f4>
@@ -8270,8 +8270,8 @@ int main(void)
 		if(!strcmp(uartrcv, "led 2.") || (button.HL & 2)){
     32ca:	6a e1       	ldi	r22, 0x1A	; 26
     32cc:	71 e0       	ldi	r23, 0x01	; 1
-    32ce:	8d e9       	ldi	r24, 0x9D	; 157
-    32d0:	93 e0       	ldi	r25, 0x03	; 3
+    32ce:	89 e1       	ldi	r24, 0x19	; 25
+    32d0:	94 e0       	ldi	r25, 0x04	; 4
     32d2:	0e 94 d8 1e 	call	0x3db0	; 0x3db0 <strcmp>
     32d6:	89 2b       	or	r24, r25
     32d8:	21 f0       	breq	.+8      	; 0x32e2 <main+0x40c>
@@ -8317,8 +8317,8 @@ int main(void)
 		if(!strcmp(uartrcv, "led 2 off.")){
     3318:	61 e2       	ldi	r22, 0x21	; 33
     331a:	71 e0       	ldi	r23, 0x01	; 1
-    331c:	8d e9       	ldi	r24, 0x9D	; 157
-    331e:	93 e0       	ldi	r25, 0x03	; 3
+    331c:	89 e1       	ldi	r24, 0x19	; 25
+    331e:	94 e0       	ldi	r25, 0x04	; 4
     3320:	0e 94 d8 1e 	call	0x3db0	; 0x3db0 <strcmp>
     3324:	89 2b       	or	r24, r25
     3326:	61 f4       	brne	.+24     	; 0x3340 <main+0x46a>
@@ -8342,8 +8342,8 @@ int main(void)
 		if(!strcmp(uartrcv, "led 3.") || (button.HL & 4)){
     3340:	6c e2       	ldi	r22, 0x2C	; 44
     3342:	71 e0       	ldi	r23, 0x01	; 1
-    3344:	8d e9       	ldi	r24, 0x9D	; 157
-    3346:	93 e0       	ldi	r25, 0x03	; 3
+    3344:	89 e1       	ldi	r24, 0x19	; 25
+    3346:	94 e0       	ldi	r25, 0x04	; 4
     3348:	0e 94 d8 1e 	call	0x3db0	; 0x3db0 <strcmp>
     334c:	89 2b       	or	r24, r25
     334e:	21 f0       	breq	.+8      	; 0x3358 <main+0x482>
@@ -8389,8 +8389,8 @@ int main(void)
 		if(!strcmp(uartrcv, "led 3 off.")){
     338e:	63 e3       	ldi	r22, 0x33	; 51
     3390:	71 e0       	ldi	r23, 0x01	; 1
-    3392:	8d e9       	ldi	r24, 0x9D	; 157
-    3394:	93 e0       	ldi	r25, 0x03	; 3
+    3392:	89 e1       	ldi	r24, 0x19	; 25
+    3394:	94 e0       	ldi	r25, 0x04	; 4
     3396:	0e 94 d8 1e 	call	0x3db0	; 0x3db0 <strcmp>
     339a:	89 2b       	or	r24, r25
     339c:	61 f4       	brne	.+24     	; 0x33b6 <main+0x4e0>
@@ -8414,8 +8414,8 @@ int main(void)
 		if(!strcmp(uartrcv, "led 4.") || (button.HL & 8)){
     33b6:	6e e3       	ldi	r22, 0x3E	; 62
     33b8:	71 e0       	ldi	r23, 0x01	; 1
-    33ba:	8d e9       	ldi	r24, 0x9D	; 157
-    33bc:	93 e0       	ldi	r25, 0x03	; 3
+    33ba:	89 e1       	ldi	r24, 0x19	; 25
+    33bc:	94 e0       	ldi	r25, 0x04	; 4
     33be:	0e 94 d8 1e 	call	0x3db0	; 0x3db0 <strcmp>
     33c2:	89 2b       	or	r24, r25
     33c4:	21 f0       	breq	.+8      	; 0x33ce <main+0x4f8>
@@ -8461,8 +8461,8 @@ int main(void)
 		if(!strcmp(uartrcv, "led 4 off.")){
     3404:	65 e4       	ldi	r22, 0x45	; 69
     3406:	71 e0       	ldi	r23, 0x01	; 1
-    3408:	8d e9       	ldi	r24, 0x9D	; 157
-    340a:	93 e0       	ldi	r25, 0x03	; 3
+    3408:	89 e1       	ldi	r24, 0x19	; 25
+    340a:	94 e0       	ldi	r25, 0x04	; 4
     340c:	0e 94 d8 1e 	call	0x3db0	; 0x3db0 <strcmp>
     3410:	89 2b       	or	r24, r25
     3412:	61 f4       	brne	.+24     	; 0x342c <main+0x556>
@@ -8486,8 +8486,8 @@ int main(void)
 		if(!strcmp(uartrcv, "all off.")){
     342c:	60 e5       	ldi	r22, 0x50	; 80
     342e:	71 e0       	ldi	r23, 0x01	; 1
-    3430:	8d e9       	ldi	r24, 0x9D	; 157
-    3432:	93 e0       	ldi	r25, 0x03	; 3
+    3430:	89 e1       	ldi	r24, 0x19	; 25
+    3432:	94 e0       	ldi	r25, 0x04	; 4
     3434:	0e 94 d8 1e 	call	0x3db0	; 0x3db0 <strcmp>
     3438:	89 2b       	or	r24, r25
     343a:	69 f5       	brne	.+90     	; 0x3496 <main+0x5c0>
@@ -8555,8 +8555,8 @@ int main(void)
 		if(!strcmp(uartrcv, "status.")){
     3496:	69 e5       	ldi	r22, 0x59	; 89
     3498:	71 e0       	ldi	r23, 0x01	; 1
-    349a:	8d e9       	ldi	r24, 0x9D	; 157
-    349c:	93 e0       	ldi	r25, 0x03	; 3
+    349a:	89 e1       	ldi	r24, 0x19	; 25
+    349c:	94 e0       	ldi	r25, 0x04	; 4
     349e:	0e 94 d8 1e 	call	0x3db0	; 0x3db0 <strcmp>
     34a2:	89 2b       	or	r24, r25
     34a4:	09 f0       	breq	.+2      	; 0x34a8 <main+0x5d2>
@@ -8567,8 +8567,8 @@ int main(void)
     34ac:	ed 91       	ld	r30, X+
     34ae:	fc 91       	ld	r31, X
     34b0:	55 97       	sbiw	r26, 0x15	; 21
-    34b2:	8f ea       	ldi	r24, 0xAF	; 175
-    34b4:	93 e0       	ldi	r25, 0x03	; 3
+    34b2:	8b e2       	ldi	r24, 0x2B	; 43
+    34b4:	94 e0       	ldi	r25, 0x04	; 4
     34b6:	09 95       	icall
     34b8:	60 ce       	rjmp	.-832    	; 0x317a <main+0x2a4>
 
