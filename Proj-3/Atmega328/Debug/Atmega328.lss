@@ -8339,7 +8339,7 @@ int main(void)
 		}
 		
 		//LED 3
-		if(!strcmp(uartrcv, "led 3.") || (button.HL & 4)){
+		if(!strcmp(uartrcv, "led 3.") || (button.HL & 16)){
     3340:	6c e2       	ldi	r22, 0x2C	; 44
     3342:	71 e0       	ldi	r23, 0x01	; 1
     3344:	89 e1       	ldi	r24, 0x19	; 25
@@ -8349,7 +8349,7 @@ int main(void)
     334e:	21 f0       	breq	.+8      	; 0x3358 <main+0x482>
     3350:	f5 01       	movw	r30, r10
     3352:	84 81       	ldd	r24, Z+4	; 0x04
-    3354:	82 ff       	sbrs	r24, 2
+    3354:	84 ff       	sbrs	r24, 4
     3356:	1b c0       	rjmp	.+54     	; 0x338e <main+0x4b8>
 			if(output & 4){
     3358:	12 ff       	sbrs	r17, 2
@@ -8411,7 +8411,7 @@ int main(void)
 		}
 		
 		//LED 4
-		if(!strcmp(uartrcv, "led 4.") || (button.HL & 8)){
+		if(!strcmp(uartrcv, "led 4.") || (button.HL & 32)){
     33b6:	6e e3       	ldi	r22, 0x3E	; 62
     33b8:	71 e0       	ldi	r23, 0x01	; 1
     33ba:	89 e1       	ldi	r24, 0x19	; 25
@@ -8421,7 +8421,7 @@ int main(void)
     33c4:	21 f0       	breq	.+8      	; 0x33ce <main+0x4f8>
     33c6:	f5 01       	movw	r30, r10
     33c8:	84 81       	ldd	r24, Z+4	; 0x04
-    33ca:	83 ff       	sbrs	r24, 3
+    33ca:	85 ff       	sbrs	r24, 5
     33cc:	1b c0       	rjmp	.+54     	; 0x3404 <main+0x52e>
 			if(output & 8){
     33ce:	13 ff       	sbrs	r17, 3

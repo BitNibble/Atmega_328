@@ -212,7 +212,7 @@ int main(void)
 		}
 		
 		//LED 3
-		if(!strcmp(uartrcv, "led 3.") || (button.HL & 4)){
+		if(!strcmp(uartrcv, "led 3.") || (button.HL & 16)){
 			if(output & 4){
 				output&=~4;
 				func.strtovec(LCD.pos.l12, "on ");
@@ -227,7 +227,7 @@ int main(void)
 		}
 		
 		//LED 4
-		if(!strcmp(uartrcv, "led 4.") || (button.HL & 8)){
+		if(!strcmp(uartrcv, "led 4.") || (button.HL & 32)){
 			if(output & 8){
 				output&=~8;
 				func.strtovec(LCD.pos.l13, "on ");
