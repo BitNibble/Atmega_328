@@ -15,6 +15,9 @@ Comment:
 #include <inttypes.h>
 
 /*** Global Constant & Macro ***/
+#ifndef F_CPU
+	#define F_CPU 8000000UL
+#endif
 // ASIGN PORT PINS TO LCD (can be setup in any way)
 // CMD
 #define RS 0
