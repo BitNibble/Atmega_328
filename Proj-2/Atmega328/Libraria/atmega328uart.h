@@ -15,6 +15,9 @@ Comment:
 #include <inttypes.h>
 
 /*** Global Constant & Macro ***/
+#ifndef F_CPU
+	#define F_CPU 8000000UL
+#endif
 #ifndef GLOBAL_INTERRUPT_ENABLE
 	#define GLOBAL_INTERRUPT_ENABLE 7
 #endif
