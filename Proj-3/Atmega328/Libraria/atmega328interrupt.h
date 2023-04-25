@@ -1,9 +1,9 @@
 /************************************************************************
 	Atmega 328 Interrupt
 Author: Sergio Manuel Santos <sergio.salazar.santos@gmail.com>
-Hardware: ATmega128 at 16 Mhz
+Hardware: ATmega328
 License: GNU General Public License 
-Date: 24042023
+Date: 25042023
 Comment:
 
 ************************************************************************/
