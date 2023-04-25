@@ -13,8 +13,6 @@ Comment:
 
 /*** Compiler ***/
 
-/*** Working Frequency ***/
-
 /*** Global Library ***/
 #include <inttypes.h>
 

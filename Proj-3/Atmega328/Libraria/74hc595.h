@@ -13,11 +13,6 @@ Comment:
 
 /*** Compiler ***/
 
-/*** Working Frequency ***/
-#ifndef F_CPU
-	#define F_CPU 8000000UL
-#endif
-
 /*** Global Library ***/
 #include <inttypes.h>
 

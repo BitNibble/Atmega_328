@@ -11,13 +11,6 @@ Comment:
 #ifndef _ZNPID_H_
 	#define _ZNPID_H_
 
-/*** Compiler ***/
-
-/*** Working Frequency ***/
-#ifndef F_CPU
-	#define F_CPU 16000000UL
-#endif
-
 /*** Global Library ***/
 #include <inttypes.h>
 

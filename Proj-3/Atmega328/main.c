@@ -32,7 +32,13 @@ Comment:
 	
 	Stable
  ********************************************************************/
+/*** Frequency ***/
 #define F_CPU 8000000UL
+
+/*** Compiler ***/
+#if (__GNUC__ * 100 + __GNUC_MINOR__) < 304
+#error "This library requires AVR-GCC 3.4 or later, update to newer AVR-GCC compiler !"
+#endif
 
 /*** File library ***/
 #include "atmega328mapping.h"

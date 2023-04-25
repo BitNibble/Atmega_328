@@ -10,13 +10,6 @@ Comment:
 #ifndef _CLOCK_H_
 	#define _CLOCK_H_
 
-/*** Compiler ***/
-#if (__GNUC__ * 100 + __GNUC_MINOR__) < 304
-	#error "This library requires AVR-GCC 3.4 or later, update to newer AVR-GCC compiler !"
-#endif
-
-/*** Working Frequency ***/
-
 /*** Global Library ***/
 #include <inttypes.h>
 

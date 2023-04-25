@@ -11,10 +11,6 @@ Comment:
 #ifndef _BUFFER_H_
 	#define _BUFFER_H_
 
-/*** Compiler ***/
-
-/*** Working Frequency ***/
-
 /*** Global Library ***/
 #include <inttypes.h>
 

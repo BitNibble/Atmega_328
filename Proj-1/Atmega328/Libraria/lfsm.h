@@ -11,10 +11,6 @@ Comment:
 #ifndef _LFSM_H_
 	#define _LFSM_H_
 
-/*** Compiler ***/
-
-/*** Working Frequency ***/
-
 /*** Global Library ***/
 #include "atmegaeeprom.h"
 #include <inttypes.h>

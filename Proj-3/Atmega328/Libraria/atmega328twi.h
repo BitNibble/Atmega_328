@@ -12,9 +12,6 @@ Comment:
 	#define _ATMEGA328TWI_H_
 
 /*** Working Frequency ***/
-#ifndef F_CPU
-	#define F_CPU 8000000UL
-#endif
 #ifndef TWI_SCL_CLOCK
 	#define TWI_SCL_CLOCK 100000UL
 #endif

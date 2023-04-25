@@ -15,9 +15,6 @@ COMMENT:
 #include <inttypes.h>
 
 /*** Global Constant & Macro ***/
-#ifndef F_CPU
-	#define F_CPU 16000000UL
-#endif
 #define MM74C923_DATA_OUT_A 7 //ic pin 19 LSB
 #define MM74C923_DATA_OUT_B 6 //ic pin 18
 #define MM74C923_DATA_OUT_C 5 //ic pin 17
