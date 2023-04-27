@@ -14,6 +14,24 @@ Comment:
 /*** Global Library ***/
 #include <inttypes.h>
 
+/*** Global Constant & Macro ***/
+#define Atmega328GPWR_Address 0x0000
+#define Atmega328AnalogComparator_Address 0x0050
+#define Atmega328AnalogToDigitalConverter_Address 0x0078
+#define Atmega328CPURegister_Address 0x003E
+#define Atmega328Eeprom_Address 0x003F
+#define Atmega328ExternalInterrupts_Address 0x003B
+#define Atmega328PORTB_Address 0x0023
+#define Atmega328PORTC_Address 0x0026
+#define Atmega328PORTD_Address 0x0029
+#define Atmega328SerialPeripherialInterface_Address 0x004C
+#define Atmega328TimerCounter1_Address 0x0036
+#define Atmega328TimerCounter0_Address 0x0035
+#define Atmega328TimerCounter2_Address 0x0037
+#define Atmega328TwoWireSerialInterface_Address 0x00B8
+#define Atmega328Usart_Address 0x00C0
+#define Atmega328WatchdogTimer_Address 0x0060
+
 /*** Global Variable ***/
 // Low Byte High Byte
 typedef struct {
@@ -53,14 +71,14 @@ typedef struct {
 	HighLowByte X;
 	HighLowByte Y;
 	HighLowByte Z;
-}Atmega328GPWR_TypeDef;
+} Atmega328GPWR_TypeDef;
 
 // Analog Comparator (AC)
 typedef struct {
 	uint8_t acsr; // 0x50
 	uint8_t fill[46]; // (0x7F - 0x50) - 1
 	uint8_t didr1; // 0x7F
-}Atmega328AnalogComparator_TypeDef;
+} Atmega328AnalogComparator_TypeDef;
 
 // Analog to Digital Converter (ADC)
 typedef struct {
@@ -121,21 +139,21 @@ typedef struct {
 	uint8_t pin; // 0x23
 	uint8_t ddr; // 0x24
 	uint8_t port; //0x25
-}Atmega328PORTB_TypeDef;
+} Atmega328PORTB_TypeDef;
 
 // I/O Port (PORTC)
 typedef struct {
 	uint8_t pin; // 0x26
 	uint8_t ddr; // 0x27
 	uint8_t port; // 0x28
-}Atmega328PORTC_TypeDef;
+} Atmega328PORTC_TypeDef;
 
 // I/O Port (PORTD)
 typedef struct {
 	uint8_t pin; // 0x29
 	uint8_t ddr; // 0x2A
 	uint8_t port; // 0x2B
-}Atmega328PORTD_TypeDef;
+} Atmega328PORTD_TypeDef;
 
 // Serial Peripheral Interface (SPI)
 typedef struct {

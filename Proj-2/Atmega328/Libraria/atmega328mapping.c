@@ -12,24 +12,8 @@ Comment:
 #include "atmega328mapping.h"
 
 /*** File Define & Macro ***/
-#define GPWRaddr 0x0000
-#define AnalogComparator 0x0050
-#define AnalogToDigitalConverter 0x0078
-#define CPURegister 0x003E
-#define Eeprom 0x003F
-#define ExternalInterrupts 0x003B
-#define PORTBaddr 0x0023
-#define PORTCaddr 0x0026
-#define PORTDaddr 0x0029
-#define SerialPeripherialInterface 0x004C
-#define TimerCounter1 0x0036
-#define TimerCounter0 0X0035
-#define TimerCounter2 0x0037
-#define TwoWireSerialInterface 0x00B8
-#define Usart 0x00C0
-#define WatchdogTimer 0x0060
 // STATIC RAM
-#define InterruptVectors 0x0100
+#define Atmega328InterruptVectors_Address 0x0100
 
 /***File Variable***/
 ATMEGA328 ret;
@@ -45,63 +29,63 @@ uint16_t SwapByte(uint16_t num);
 ATMEGA328 ATMEGA328enable(void){
 	// Assign
 	// GPWR
-	ret.gpwr.reg = (Atmega328GPWR_TypeDef*) GPWRaddr;
+	ret.gpwr.reg = (Atmega328GPWR_TypeDef*) Atmega328GPWR_Address;
 	// AC
-	ret.ac.reg = (Atmega328AnalogComparator_TypeDef*) AnalogComparator;
+	ret.ac.reg = (Atmega328AnalogComparator_TypeDef*) Atmega328AnalogComparator_Address;
 	// ADC
-	ret.adc.reg = (Atmega328AnalogToDigitalConverter_TypeDef*) AnalogToDigitalConverter;
+	ret.adc.reg = (Atmega328AnalogToDigitalConverter_TypeDef*) Atmega328AnalogToDigitalConverter_Address;
 	#if defined(_ATMEGA328ANALOG_H_)
 		ret.adc.enable = ANALOGenable;
 	#endif
-	ret.cpu.reg = (Atmega328CPURegister_TypeDef*) CPURegister;
+	ret.cpu.reg = (Atmega328CPURegister_TypeDef*) Atmega328CPURegister_Address;
 	// EEPROM
-	ret.eeprom.reg = (Atmega328Eeprom_TypeDef*) Eeprom;
+	ret.eeprom.reg = (Atmega328Eeprom_TypeDef*) Atmega328Eeprom_Address;
 	#if defined(_EEPROM_H_)
 		ret.eeprom.enable = EEPROMenable;
 	#endif
 	// EXINT
-	ret.exint.reg = (Atmega328ExternalInterrupts_TypeDef*) ExternalInterrupts;
+	ret.exint.reg = (Atmega328ExternalInterrupts_TypeDef*) Atmega328ExternalInterrupts_Address;
 	#if defined(_ATMEGA328INTERRUPT_H_)
 		ret.exint.enable = INTERRUPTenable;
 	#endif
-	ret.portb.reg = (Atmega328PORTB_TypeDef*) PORTBaddr;
-	ret.portc.reg = (Atmega328PORTC_TypeDef*) PORTCaddr;
-	ret.portd.reg = (Atmega328PORTD_TypeDef*) PORTDaddr;
+	ret.portb.reg = (Atmega328PORTB_TypeDef*) Atmega328PORTB_Address;
+	ret.portc.reg = (Atmega328PORTC_TypeDef*) Atmega328PORTC_Address;
+	ret.portd.reg = (Atmega328PORTD_TypeDef*) Atmega328PORTD_Address;
 	// SPI
-	ret.spi.reg = (Atmega328SerialPeripherialInterface_TypeDef*) SerialPeripherialInterface;
+	ret.spi.reg = (Atmega328SerialPeripherialInterface_TypeDef*) Atmega328SerialPeripherialInterface_Address;
 	#if defined(_ATMEGA328SPI_H_)
 		ret.spi.enable = SPIenable;
 	#endif
 	// TC1
-	ret.tc1.reg = (Atmega328TimerCounter1_TypeDef*) TimerCounter1;
+	ret.tc1.reg = (Atmega328TimerCounter1_TypeDef*) Atmega328TimerCounter1_Address;
 	#if defined(_ATMEGA328TIMER_H_)
 		ret.tc1.enable = TIMER_COUNTER1enable;
 	#endif
 	// TC0
-	ret.tc0.reg = (Atmega328TimerCounter0_TypeDef*) TimerCounter0;
+	ret.tc0.reg = (Atmega328TimerCounter0_TypeDef*) Atmega328TimerCounter0_Address;
 	#if defined(_ATMEGA328TIMER_H_)
 		ret.tc0.enable = TIMER_COUNTER0enable;
 	#endif
 	// TC2
-	ret.tc2.reg = (Atmega328TimerCounter2_TypeDef*) TimerCounter2;
+	ret.tc2.reg = (Atmega328TimerCounter2_TypeDef*) Atmega328TimerCounter2_Address;
 	#if defined(_ATMEGA328TIMER_H_)
 		ret.tc2.enable = TIMER_COUNTER2enable;
 	#endif
 	// TWI
-	ret.twi.reg = (Atmega328TwoWireSerialInterface_TypeDef*) TwoWireSerialInterface;
+	ret.twi.reg = (Atmega328TwoWireSerialInterface_TypeDef*) Atmega328TwoWireSerialInterface_Address;
 	#if defined(_ATMEGA328TWI_H_)
 		ret.twi.enable = TWIenable;
 	#endif
 	// USART
-	ret.usart.reg = (Atmega328Usart_TypeDef*) Usart;
+	ret.usart.reg = (Atmega328Usart_TypeDef*) Atmega328Usart_Address;
 	#if defined(_ATMEGA328UART_H_)
 		ret.usart.enable = UARTenable;
 	#endif
 	// WDT
-	ret.wdt.reg = (Atmega328WatchdogTimer_TypeDef*) WatchdogTimer;
+	ret.wdt.reg = (Atmega328WatchdogTimer_TypeDef*) Atmega328WatchdogTimer_Address;
 	// Static RAM
 	// ISR
-	ret.isr.reg = (Atmega328InterruptVectors_TypeDef*) InterruptVectors;
+	ret.isr.reg = (Atmega328InterruptVectors_TypeDef*) Atmega328InterruptVectors_Address;
 	// func
 	ret.readhlbyte = ReadHLByte;
 	ret.readlhbyte = ReadLHByte;
