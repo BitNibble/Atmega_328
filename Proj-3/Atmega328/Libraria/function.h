@@ -24,13 +24,6 @@ Comment:
 /*** Global Constant & Macro ***/
 
 /*** Global Variable ***/
-// Low Byte High Byte
-typedef struct
-{
-	uint8_t H;
-	uint8_t L;
-} FUNCHighLowByte;
-
 typedef struct
 {
 	// PROTOTYPES VTABLE
@@ -64,10 +57,6 @@ typedef struct
 	char* (*print_binary)(unsigned int n_bits, unsigned int number);
 	char* (*ftoa)(double num, char* res, uint8_t afterpoint);
 	char* (*dectohex)(int32_t num);
-	uint16_t (*ReadHLByte)(FUNCHighLowByte reg);
-	uint16_t (*ReadLHByte)(FUNCHighLowByte reg);
-	FUNCHighLowByte (*WriteHLByte)(uint16_t val);
-	FUNCHighLowByte (*WriteLHByte)(uint16_t val);
 	uint16_t (*SwapByte)(uint16_t num);
 	char* (*print)( const char *format, ... );
 	void (*strtovec)(char* pos, const char* str);

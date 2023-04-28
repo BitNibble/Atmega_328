@@ -28,6 +28,7 @@ Comment:
 #else
  	#error "Not Atmega328"
 #endif
+
 /*** File Variable ***/
 ATMEGA328 analogmega328;
 static volatile int ADC_VALUE[MAX_CHANNEL];
@@ -135,6 +136,7 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
 	
 	return analog;
 }
+
 int ANALOG_read(int selection)
 // Returns selected Channel ADC_VALUE
 {

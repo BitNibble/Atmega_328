@@ -29,7 +29,6 @@ int StringLength (const char string[]);
 void Reverse(char s[]);
 uint8_t  bintobcd(uint8_t bin);
 uint8_t leap_year_check(uint16_t year);
-
 unsigned int FUNCmayia(unsigned int xi, unsigned int xf, uint8_t nbits);
 void FUNCswap(long *px, long *py);
 void FUNCcopy(char to[], char from[]);
@@ -60,10 +59,6 @@ void FUNCreverse(char* str, int len);
 uint8_t FUNCintinvstr(int32_t num, char* res, uint8_t n_digit);
 char* FUNCftoa(double num, char* res, uint8_t afterpoint);
 char* FUNCdectohex(int32_t num);
-uint16_t FUNCReadHLByte(FUNCHighLowByte reg);
-uint16_t FUNCReadLHByte(FUNCHighLowByte reg);
-FUNCHighLowByte FUNCWriteHLByte(uint16_t val);
-FUNCHighLowByte FUNCWriteLHByte(uint16_t val);
 uint16_t FUNCSwapByte(uint16_t num);
 char* FUNCprint(const char *format, ... );
 void FUNCstrtovec(char* pos, const char* str);
@@ -118,10 +113,6 @@ FUNC FUNCenable( void )
 	func.ftoa = FUNCftoa;
 	func.dectohex = FUNCdectohex;
 	// Low Byte High Byte
-	func.ReadHLByte = FUNCReadHLByte;
-	func.ReadLHByte = FUNCReadLHByte;
-	func.WriteHLByte = FUNCWriteHLByte;
-	func.WriteLHByte = FUNCWriteLHByte;
 	func.SwapByte = FUNCSwapByte;
 	func.print = FUNCprint;
 	func.strtovec = FUNCstrtovec;
@@ -351,6 +342,7 @@ char FUNCbcd2dec(char num)
 {
 	return ((num / 16 * 10) + (num % 16));
 }
+// resizestr
 char* FUNCresizestr(char *string, int size)
 {
 	int i;
@@ -366,6 +358,7 @@ char* FUNCresizestr(char *string, int size)
 	}
 	return FUNCstr;
 }
+// trimmer
 long FUNCtrimmer(long x, long in_min, long in_max, long out_min, long out_max)
 // same as arduino map function.
 {
@@ -389,14 +382,17 @@ void Reverse(char s[])
 		s[j] = c;
 	}
 }
+// bcd2bin
 unsigned char FUNCbcd2bin(unsigned char val)
 {
 	return (val & 0x0f) + (val >> 4) * 10;
 }
+// bin2bcd
 unsigned char FUNCbin2bcd(unsigned int val)
 {
 	return (unsigned char)(((val / 10) << 4) + val % 10);
 }
+// gcd1
 long FUNCgcd1(long a, long b)
 {
 	long r;
@@ -410,6 +406,7 @@ long FUNCgcd1(long a, long b)
 	}
 	return b;
 }
+// pincheck
 uint8_t FUNCpincheck(uint8_t port, uint8_t pin)
 {
 	uint8_t lh;
@@ -419,6 +416,7 @@ uint8_t FUNCpincheck(uint8_t port, uint8_t pin)
 		lh = 0;
 	return lh;
 }
+// printbinary
 char* FUNCprint_binary(unsigned int n_bits, unsigned int number)
 {
 	unsigned int i, c;
@@ -427,6 +425,7 @@ char* FUNCprint_binary(unsigned int n_bits, unsigned int number)
 	FUNCstr[c] = '\0';
 	return FUNCstr;
 }
+// leapyearcheck
 uint8_t leap_year_check(uint16_t year){
 	uint8_t i;
 	if (!(year % 400))
@@ -439,6 +438,7 @@ uint8_t leap_year_check(uint16_t year){
     	i = 0;
 	return i;
 }
+// bintobcd
 uint8_t bintobcd(uint8_t bin)
 {
 	return (uint8_t)((((bin) / 10) << 4) + ((bin) % 10));
@@ -495,36 +495,13 @@ char* FUNCdectohex(int32_t num)
 	Reverse(FUNCstr);
 	return FUNCstr;
 }
-
-uint16_t FUNCReadHLByte(FUNCHighLowByte reg)
-{
-	return (uint16_t)(reg.H << 8) | reg.L;
-}
-
-uint16_t FUNCReadLHByte(FUNCHighLowByte reg)
-{
-	return (uint16_t)(reg.L << 8) | reg.H;
-}
-
-FUNCHighLowByte FUNCWriteHLByte(uint16_t val)
-{
-	FUNCHighLowByte reg; reg.H = (uint8_t)(val >> 8); reg.L = (uint8_t)val;
-	return reg;
-}
-
-FUNCHighLowByte FUNCWriteLHByte(uint16_t val)
-{
-	FUNCHighLowByte reg; reg.L = (uint8_t)(val >> 8); reg.H = (uint8_t)val; 
-	return reg;
-}
-
+// swapbyte
 uint16_t FUNCSwapByte(uint16_t num)
 {
 	uint16_t tp;
 	tp = (uint16_t)(num << 8);
 	return (num >> 8) | tp;
 }
-
 // print
 char* FUNCprint( const char* format, ... )
 {
@@ -542,7 +519,7 @@ char* FUNCprint( const char* format, ... )
 	}else
 		return FUNCstr;
 }
-
+// strtovec
 void FUNCstrtovec(char* pos, const char* str){
 	int i;
 	for(i=0; str[i]; *(pos + i) = str[i], i++);

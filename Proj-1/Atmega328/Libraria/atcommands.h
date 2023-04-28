@@ -11,8 +11,6 @@ Comment:
 #ifndef _ATCOMMANDS_H_
 	#define _ATCOMMANDS_H_
 
-/*** Compiler ***/
-
 /*** Global Library ***/
 #include <inttypes.h>
 
@@ -24,6 +22,7 @@ Comment:
 char* BT05ATcmd(uint16_t num);
 char* HC42ATcmd(uint16_t num);
 char* HC05ATcmd(uint16_t num);
+char* ESP8266cmd(uint16_t num);
 
 #endif
 /***EOF***/

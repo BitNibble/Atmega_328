@@ -10,8 +10,6 @@ Comment:
 *************************************************************************/
 /*** File Library ***/
 #include "mm74c923.h"
-#include <avr/io.h>
-#include <util/delay.h>
 #include "explode.h"
 #include "function.h"
 

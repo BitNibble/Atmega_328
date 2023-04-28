@@ -11,8 +11,6 @@ Comment:
 #ifndef _ATCOMMANDS_H_
 	#define _ATCOMMANDS_H_
 
-/*** Compiler ***/
-
 /*** Global Library ***/
 #include <inttypes.h>
 

@@ -10,7 +10,6 @@ Comment:
 *************************************************************************/
 /*** File Library ***/
 #include "watch.h"
-#include <avr/io.h>
 
 /*** File Constant & Macro***/
 #define N_DELAY_MASK 0X0F
