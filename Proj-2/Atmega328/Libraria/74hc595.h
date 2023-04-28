@@ -11,8 +11,6 @@ Comment:
 #ifndef _74HC595_H_
 	#define _74HC595_H_
 
-/*** Compiler ***/
-
 /*** Global Library ***/
 #include <inttypes.h>
 
