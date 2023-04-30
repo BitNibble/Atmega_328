@@ -164,7 +164,7 @@ typedef struct {
 	Atmega328WatchdogTimer wdt;
 	Atmega328InterruptVectors isr;
 	
-	HighLowByte HLByte;
+	HighLowByte HLbyte;
 	uint16_t (*readhlbyte)(HighLowByte reg);
 	uint16_t (*readlhbyte)(HighLowByte reg);
 	HighLowByte (*writehlbyte)(uint16_t val);
