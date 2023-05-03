@@ -172,5 +172,6 @@ uint16_t SwapByte(uint16_t num)
 1º Sequence
 2º Scope
 3º Pointer and Variable
+4º Casting
 ******/
 

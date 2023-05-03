@@ -151,7 +151,6 @@ int main(void)
     for (window = 0, menu = 1; TRUE; ) // Looping
     {
 		if(!window){ // preamble
-			// lcd reboot
 			lcd.reboot();
 		
 			input = ( m.portc.reg->pin & 0xF0 ) | ( m.portb.reg->pin >> 4 );
@@ -343,7 +342,6 @@ ISR(TIMER0_OVF_vect)
 }
 
 /***EOF***/
-
 
 /******
 1º Sequence
