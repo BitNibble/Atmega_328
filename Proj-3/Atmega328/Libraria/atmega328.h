@@ -233,7 +233,7 @@ typedef struct {
 
 // Watchdog Timer (WDT)
 typedef struct {
-	uint8_t wdtcr; // 0x60
+	uint8_t wdtcsr; // 0x60
 } Atmega328WatchdogTimer_TypeDef;
 
 /*** STATIC RAM ***/
