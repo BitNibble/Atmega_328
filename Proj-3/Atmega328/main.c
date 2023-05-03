@@ -29,6 +29,7 @@ Comment:
 	-PB5 pin 19
 	-PC4 pin 27
 	-PC5 pin 28
+	-PD2 pin 4 -> used to toggle between menus
 	
 	Stable
  ********************************************************************/
@@ -68,6 +69,7 @@ UART uart;
 FUNC func;
 LCD0 lcd;
 EXPLODE button;
+EXPLODE disp;
 
 uint16_t d;
 uint8_t i;
@@ -130,6 +132,7 @@ int main(void)
 	uart = m.usart.enable(12,8,1,NONE);
 	tc0 = m.tc0.enable(1, 1);
 	button = EXPLODEenable();
+	disp = EXPLODEenable();
 	
 	tc0.start(~0);
 	
@@ -144,124 +147,164 @@ int main(void)
 	func.strtovec(LCD.pos.l13, "off");
 	
 	// Replace with your application code
-    while (TRUE)
+	uint8_t window, menu;
+    for (window = 0, menu = 1; TRUE; ) // Looping
     {
-		// preamble
-		// lcd reboot
-		lcd.reboot();
+		if(!window){ // preamble
+			// lcd reboot
+			lcd.reboot();
 		
-		input = ( PINC & 0xF0 ) | ( PINB >> 4 );
-		button.update(&button, input);
+			input = ( m.portc.reg->pin & 0xF0 ) | ( m.portb.reg->pin >> 4 );
+			button.update(&button, input);
 		
-		// uart capture
-		uartreceive = uart.gets(); // UART1
-		strcpy(uartrcv, uartreceive);
+			disp.update(&disp, m.portd.reg->pin);
+			
+			// uart capture
+			uartreceive = uart.gets(); // UART1
+			strcpy(uartrcv, uartreceive);
 		
-		if(uart.getch() == '.'){ uart.rxflush(); }
-		else{strcpy( uartmsg, uartreceive ); }
-		
-		// procedures
-		sh.byte(output);
-		
-		lcd.gotoxy(0,0);
-		lcd.putch(':'); lcd.string_size(uartmsg,16); //lcd.hspace(2); lcd.string_size(func.ui16toa(d), 6);
-		
-		// check character table of LCD 
-		//for(i=0;i<16;lcd.putch(i),i++);
-		//for(i=16;i<32;lcd.putch(i),i++);
-		//for(i=32;i<64;lcd.putch(i),i++);
-		//for(i=64;i<80;lcd.putch(i),i++);
-		//for(i=80;i<96;lcd.putch(i),i++);
-		//for(i=96;i<112;lcd.putch(i),i++);
-		//for(i=112;i<128;lcd.putch(i),i++);
-		//for(i=128;i<144;lcd.putch(i),i++);
-		//for(i=144;i<160;lcd.putch(i),i++);
-		//for(i=160;i<176;lcd.putch(i),i++);
-		//for(i=176;i<192;lcd.putch(i),i++);
-		//for(i=192;i<208;lcd.putch(i),i++);
-		//for(i=208;i<224;lcd.putch(i),i++);
-		//for(i=224;i<240;lcd.putch(i),i++);
-		//for(i=240;i<255;lcd.putch(i),i++); // 255 is a BLACK P.
-		
-		lcd.gotoxy(1,0);
-		lcd.string_size(LCDline1, 16);
-		
-		
-		//LED 1
-		if(!strcmp(uartrcv, "led 1.") || (button.HL & 1)){
-			if(output & 1){
-				output&=~1;
-				func.strtovec(LCD.pos.l10, "on ");
-			}else{
-				output|=1;
-				func.strtovec(LCD.pos.l10, "off");
+			if(uart.getch() == '.'){ uart.rxflush(); }
+			else{strcpy( uartmsg, uartreceive ); }
+			
+			window = 1; continue;
+		}
+		if(window == 1){ // procedures
+			
+			switch(menu){ // MENU
+				case 1: // Main Program Menu
+					if(disp.HL & (1 << 2)){menu = 2;}
+					lcd.gotoxy(0,0);
+					lcd.putch(':'); lcd.string_size(uartmsg,16);
+					lcd.gotoxy(1,0);
+					lcd.string_size(LCDline1, 16);		
+					break;
+				case 2: // Main Program Menu
+					if(disp.HL & (1 << 2)){menu = 3;}
+					lcd.gotoxy(0,0);
+					lcd.hspace(4); lcd.string_size("Welcome",7);
+					lcd.gotoxy(1,0);
+					lcd.string_size(LCDline1, 16);
+				break;
+				case 3: // Main Program Menu
+					if(disp.HL & (1 << 2)){menu = 4;}
+					lcd.gotoxy(0,0);
+					lcd.string_size("Testing, 1 2 3",16);
+					lcd.gotoxy(1,0);
+					lcd.string_size("Testing, 1 2 3",16);
+				break;
+				case 4: // Main Program Menu
+					if(disp.HL & (1 << 2)){menu = 1;}
+					lcd.gotoxy(0,0);
+					lcd.string_size("Testing, 1 2 3",16);
+					lcd.gotoxy(1,0);
+					lcd.hspace(2); lcd.string_size(func.ui16toa(d), 6);
+				break;
+				default:
+					break;
 			}
-		}
-		if(!strcmp(uartrcv, "led 1 off.")){
-				output|=1;
-				func.strtovec(LCD.pos.l10, "off");
-		}
+					
+					
+			sh.byte(output);
+			
+			//LED 1
+			if(!strcmp(uartrcv, "led 1.") || (button.HL & 1)){
+				if(output & 1){
+					output&=~1;
+					func.strtovec(LCD.pos.l10, "on ");
+				}else{
+					output|=1;
+					func.strtovec(LCD.pos.l10, "off");
+				}
+			}
+			if(!strcmp(uartrcv, "led 1 off.")){
+					output|=1;
+					func.strtovec(LCD.pos.l10, "off");
+			}
 		
-		//LED 2
-		if(!strcmp(uartrcv, "led 2.") || (button.HL & 2)){
-			if(output & 2){
-				output&=~2;
-				func.strtovec(LCD.pos.l11, "on ");
-			}else{
+			//LED 2
+			if(!strcmp(uartrcv, "led 2.") || (button.HL & 2)){
+				if(output & 2){
+					output&=~2;
+					func.strtovec(LCD.pos.l11, "on ");
+				}else{
+					output|=2;
+					func.strtovec(LCD.pos.l11, "off");
+				}
+			}
+			if(!strcmp(uartrcv, "led 2 off.")){
 				output|=2;
 				func.strtovec(LCD.pos.l11, "off");
 			}
-		}
-		if(!strcmp(uartrcv, "led 2 off.")){
-			output|=2;
-			func.strtovec(LCD.pos.l11, "off");
-		}
 		
-		//LED 3
-		if(!strcmp(uartrcv, "led 3.") || (button.HL & 16)){
-			if(output & 4){
-				output&=~4;
-				func.strtovec(LCD.pos.l12, "on ");
-			}else{
+			//LED 3
+			if(!strcmp(uartrcv, "led 3.") || (button.HL & 16)){
+				if(output & 4){
+					output&=~4;
+					func.strtovec(LCD.pos.l12, "on ");
+				}else{
+					output|=4;
+					func.strtovec(LCD.pos.l12, "off");
+				}
+			}
+			if(!strcmp(uartrcv, "led 3 off.")){
 				output|=4;
 				func.strtovec(LCD.pos.l12, "off");
 			}
-		}
-		if(!strcmp(uartrcv, "led 3 off.")){
-			output|=4;
-			func.strtovec(LCD.pos.l12, "off");
-		}
 		
-		//LED 4
-		if(!strcmp(uartrcv, "led 4.") || (button.HL & 32)){
-			if(output & 8){
-				output&=~8;
-				func.strtovec(LCD.pos.l13, "on ");
-			}else{
+			//LED 4
+			if(!strcmp(uartrcv, "led 4.") || (button.HL & 32)){
+				if(output & 8){
+					output&=~8;
+					func.strtovec(LCD.pos.l13, "on ");
+				}else{
+					output|=8;
+					func.strtovec(LCD.pos.l13, "off");
+				}
+			}
+			if(!strcmp(uartrcv, "led 4 off.")){
 				output|=8;
 				func.strtovec(LCD.pos.l13, "off");
 			}
-		}
-		if(!strcmp(uartrcv, "led 4 off.")){
-			output|=8;
-			func.strtovec(LCD.pos.l13, "off");
-		}
 		
-		//ALL OFF
-		if(!strcmp(uartrcv, "all off.")){
-			output = 0xFF;
-			func.strtovec(LCD.pos.l10, "off");
-			func.strtovec(LCD.pos.l11, "off");
-			func.strtovec(LCD.pos.l12, "off");
-			func.strtovec(LCD.pos.l13, "off");
+			//ALL OFF
+			if(!strcmp(uartrcv, "all off.")){
+				output = 0xFF;
+				func.strtovec(LCD.pos.l10, "off");
+				func.strtovec(LCD.pos.l11, "off");
+				func.strtovec(LCD.pos.l12, "off");
+				func.strtovec(LCD.pos.l13, "off");
+			}
+		
+			//STATUS FEEDBACK
+			if(!strcmp(uartrcv, "status.")){
+				uart.puts(LCDline1);
+			}
+		
+			window = 0; continue;
+		
 		}
+		if(window == 2){ // testing
+			
+			// check character table of LCD
+			//for(i=0;i<16;lcd.putch(i),i++);
+			//for(i=16;i<32;lcd.putch(i),i++);
+			//for(i=32;i<64;lcd.putch(i),i++);
+			//for(i=64;i<80;lcd.putch(i),i++);
+			//for(i=80;i<96;lcd.putch(i),i++);
+			//for(i=96;i<112;lcd.putch(i),i++);
+			//for(i=112;i<128;lcd.putch(i),i++);
+			//for(i=128;i<144;lcd.putch(i),i++);
+			//for(i=144;i<160;lcd.putch(i),i++);
+			//for(i=160;i<176;lcd.putch(i),i++);
+			//for(i=176;i<192;lcd.putch(i),i++);
+			//for(i=192;i<208;lcd.putch(i),i++);
+			//for(i=208;i<224;lcd.putch(i),i++);
+			//for(i=224;i<240;lcd.putch(i),i++);
+			//for(i=240;i<255;lcd.putch(i),i++); // 255 is a BLACK P.
 		
-		//STATUS FEEDBACK
-		if(!strcmp(uartrcv, "status.")){
-			uart.puts(LCDline1);
+			window = 0; continue;
+		
 		}
-		
-		
     }
 }
 
@@ -271,6 +314,8 @@ void PORTINIT(void)
 	m.portb.reg->port = 0xF0;
 	m.portc.reg->ddr = 0x00;
 	m.portc.reg->port = 0xF0;
+	m.portd.reg->ddr &= ~( 1 << 2 );
+	m.portd.reg->port |= ( 1 << 2 );
 }
 
 /*** File Interrupt ***/
