@@ -74,7 +74,7 @@ EXPLODE disp;
 double d;
 double e;
 uint8_t i;
-// uint8_t j;
+uint8_t j;
 
 char* uartreceive = NULL; // pointing to Rx Buffer raw
 char uartrcv[UART_RX_BUFFER_SIZE];
@@ -143,7 +143,7 @@ int main(void)
 	
 	uint8_t input;	
 	uint8_t output = 0xFF;
-	d = 0;
+	d = 0; j=1;
 	
 	sh.byte(output);
 	func.strtovec(LCD.pos.l10, "off");
@@ -351,8 +351,24 @@ ISR(TIMER1_COMPA_vect)
 {
 	//interrupt1();
 	//linear(&d,-0.2);
-	exponencial(&d,-1.002718);
-	e = 1024 + d;
+	exponencial(&d,1.2718);
+	switch(j){
+		case 1:
+			if(e > 1065){
+				d = 0; j = 2;
+			}else
+				e = 1066.95 - (1066.95 - d);
+			break;
+		case 2:
+			if(e < 1.2720){
+				d = 0; j = 1;
+			}else
+				e = 1066.95 - d;
+			break;
+		default:
+			break;
+	}
+	
 	//d=2.0 * 2;
 	/**
 	// Play around
