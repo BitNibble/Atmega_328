@@ -175,7 +175,7 @@ typedef struct {
 /*** Global Header ***/
 ATMEGA328 ATMEGA328enable(void);
 
-// Experiment
+// Experiment A
 //void (*timer2_compa)(void);
 //void (*timer2_compb)(void);
 //void (*timer2_ovf)(void);

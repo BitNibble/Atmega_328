@@ -34,7 +34,7 @@ Comment:
 
 /*** Global Variable ***/
 // Low Byte High Byte
-typedef struct {
+typedef struct { // little endian
 	uint8_t L; // Lower address
 	uint8_t H; // Higher address
 } HighLowByte;
