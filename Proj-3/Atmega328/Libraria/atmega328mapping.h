@@ -13,9 +13,9 @@ Comment:
 
 /*** Global Library ***/
 #include <avr/io.h>
-#include <stdlib.h>
 #include <avr/pgmspace.h>
 #include <avr/interrupt.h>
+#include <stdlib.h>
 #include <inttypes.h>
 // Comment out modules not being used
 // RAW IMAGE

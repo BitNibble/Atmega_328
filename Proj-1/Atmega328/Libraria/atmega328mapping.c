@@ -40,7 +40,7 @@ ATMEGA328 ATMEGA328enable(void){
 	ret.cpu.reg = (Atmega328CPURegister_TypeDef*) Atmega328CPURegister_Address;
 	// EEPROM
 	ret.eeprom.reg = (Atmega328Eeprom_TypeDef*) Atmega328Eeprom_Address;
-	#if defined(_EEPROM_H_)
+	#if defined(_ATMEGAEEPROM_H_)
 		ret.eeprom.enable = EEPROMenable;
 	#endif
 	// EXINT
@@ -106,7 +106,7 @@ uint16_t ReadLHByte(HighLowByte reg)
 	return (reg.L << 8) | reg.H;
 }
 
-HighLowByte WriteHLByte(uint16_t val)
+HighLowByte WriteHLByte(uint16_t val) // AVR normal little endian
 {
 	HighLowByte reg; reg.H = (val >> 8); reg.L = val;
 	return reg;
@@ -154,7 +154,7 @@ uint16_t SwapByte(uint16_t num)
 // ISR(TWI_vect){}
 // ISR(SPM_READY_vect){}
 
-// Experiment
+// Experiment A
 //ISR(TIMER2_COMPA_vect){if(timer2_compa)timer2_compa();}
 //ISR(TIMER2_COMPB_vect){if(timer2_compb)timer2_compb();}
 //ISR(TIMER2_OVF_vect){if(timer2_ovf)timer2_ovf();}
@@ -172,5 +172,6 @@ uint16_t SwapByte(uint16_t num)
 1º Sequence
 2º Scope
 3º Pointer and Variable
+4º Casting
 ******/
 
