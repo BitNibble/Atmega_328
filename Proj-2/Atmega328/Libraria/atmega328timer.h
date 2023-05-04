@@ -4,7 +4,7 @@ Author: Sergio Manuel Santos
 	<sergio.salazar.santos@gmail.com>
 License: GNU General Public License
 Hardware: Atmega328 by ETT ET-BASE
-Date: 24042023
+Date: 04052023
 Comment:
 	Very Stable
 *************************************************************************/
@@ -59,5 +59,20 @@ TIMER_COUNTER1 TIMER_COUNTER1enable(unsigned char wavegenmode, unsigned char int
 TIMER_COUNTER2 TIMER_COUNTER2enable(unsigned char wavegenmode, unsigned char interrupt);
 
 #endif
+
 /***EOF***/
+
+
+// ISR(TIMER2_COMPA_vect){}
+// ISR(TIMER2_COMPB_vect){}
+// ISR(TIMER2_OVF_vect){}
+// ISR(TIMER1_CAPT_vect){}
+// ISR(TIMER1_COMPA_vect){}
+// ISR(TIMER1_COMPB_vect){}
+// ISR(TIMER1_OVF_vect){}
+// ISR(TIMER0_COMPA_vect){}
+// ISR(TIMER0_COMPB_vect){}
+// ISR(TIMER0_OVF_vect){}
+
+
 

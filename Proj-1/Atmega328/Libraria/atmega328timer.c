@@ -4,7 +4,7 @@ Author: Sergio Manuel Santos
 	<sergio.salazar.santos@gmail.com>
 License: GNU General Public License
 Hardware: Atmega328 by ETT ET-BASE
-Date: 24042023
+Date: 04052023
 Comment:
 	Very Stable
 *************************************************************************/
@@ -78,7 +78,7 @@ TIMER_COUNTER0 TIMER_COUNTER0enable(unsigned char wavegenmode, unsigned char int
 			timermega328.tc0.reg->tccr0a |= (1 << WGM00) | (1 << WGM01);
 			timermega328.tc0.reg->tccr0b |= (1 << WGM02);
 		break;
-		default:
+		default: // Normal
 		break;
 	}
 	timermega328.tc0.reg->timsk0 &= ~((1 << OCIE0B) | (1 << OCIE0A) | (1 << TOIE0));
@@ -149,7 +149,7 @@ void TIMER_COUNTER0_start(unsigned int prescaler)
 			case 5: // External clock source on T0 pin. Clock on rising edge.
 				timermega328.tc0.reg->tccr0b |= (7 << CS00);
 			break;
-			default:
+			default: // clk T 0 S /1024 (From prescaler)
 				timermega328.tc0.reg->tccr0b |= (5 << CS00);
 			break;
 		}
@@ -169,19 +169,25 @@ void TIMER_COUNTER0_compoutmodeA(unsigned char compoutmode)
 		break;
 		case 1: // Reserved
 				// Toggle OC0 on compare match
+			timermega328.portd.reg->ddr |= (1 << 6);
 			timermega328.tc0.reg->tccr0a |= (1 << COM0A0);
+			
 		break;
-		case 2: // Clear OC0 on compare match when up-counting. Set OC0 on compare
+		case 2: // Clear OC0 on compare match when up-counting.
+				// Set OC0 on compare
 				// match when down counting.
 				// Clear OC0 on compare match
+			timermega328.portd.reg->ddr |= (1 << 6);
 			timermega328.tc0.reg->tccr0a |= (1 << COM0A1);
 		break;
-		case 3: // Set OC0 on compare match when up-counting. Clear OC0 on compare
+		case 3: // Set OC0 on compare match when up-counting.
+				// Clear OC0 on compare
 				// match when down counting.
 				// Set OC0 on compare match
+			timermega328.portd.reg->ddr |= (1 << 6);
 			timermega328.tc0.reg->tccr0a |= (1 << COM0A0) | (1 << COM0A1);
 		break;
-		default:
+		default: // Normal port operation, OC0 disconnected.
 		break;
 	}
 }
@@ -197,19 +203,24 @@ void TIMER_COUNTER0_compoutmodeB(unsigned char compoutmode)
 		break;
 		case 1: // Reserved
 				// Toggle OC0 on compare match
+			timermega328.portd.reg->ddr |= (1 << 5);
 			timermega328.tc0.reg->tccr0a |= (1 << COM0B0);
 		break;
-		case 2: // Clear OC0 on compare match when up-counting. Set OC0 on compare
+		case 2: // Clear OC0 on compare match when up-counting.
+				// Set OC0 on compare
 				// match when down counting.
 				// Clear OC0 on compare match
+			timermega328.portd.reg->ddr |= (1 << 5);
 			timermega328.tc0.reg->tccr0a |= (1 << COM0B1);
 		break;
-		case 3: // Set OC0 on compare match when up-counting. Clear OC0 on compare
+		case 3: // Set OC0 on compare match when up-counting.
+				// Clear OC0 on compare
 				// match when down counting.
 				// Set OC0 on compare match
+			timermega328.portd.reg->ddr |= (1 << 5);
 			timermega328.tc0.reg->tccr0a |= (1 << COM0B0) | (1 << COM0B1);
 		break;
-		default:
+		default: // Normal port operation, OC0 disconnected.
 		break;
 	}
 }
@@ -300,7 +311,7 @@ TIMER_COUNTER1 TIMER_COUNTER1enable(unsigned char wavegenmode, unsigned char int
 			timermega328.tc1.reg->tccr1a |= (1 << WGM11) | (1 << WGM10);
 			timermega328.tc1.reg->tccr1b |= (1 << WGM13) | (1 << WGM12);
 		break;
-		default:
+		default: // Normal
 		break;
 	}
 	timermega328.tc1.reg->tccr1a &= ~((3 << COM1A0) | (3 << COM1B0));
@@ -361,7 +372,8 @@ void TIMER_COUNTER1_start(unsigned int prescaler)
 //	External clock source on Tn pin. Clock on rising edge; default - clk T 0 S /1024 (From prescaler).
 {
 	if(timer1_state == 0){ // one shot
-		timermega328.tc1.reg->ocr1a = timermega328.writelhbyte(0xFFFF);
+		TIMER_COUNTER1_compareA(0xFFFF); // preset as max
+		TIMER_COUNTER1_compareB(0xFFFF); // preset as max
 		timermega328.tc1.reg->tccr1b &= ~(7 << CS10); // No clock source. (Timer/Counter stopped)
 		switch(prescaler){
 			case 1: // clkI/O/1 (No prescaler)
@@ -385,7 +397,7 @@ void TIMER_COUNTER1_start(unsigned int prescaler)
 			case 5: // External clock source on Tn pin. Clock on rising edge
 				timermega328.tc1.reg->tccr1b |= (7 << CS10);
 			break;
-			default:
+			default: // clkI/O/1024 (From prescaler)
 				timermega328.tc1.reg->tccr1b |= (5 << CS10);
 			break;
 		}
@@ -397,23 +409,28 @@ void TIMER_COUNTER1_compoutmodeA(unsigned char compoutmode)
 {
 	timermega328.tc1.reg->tccr1a &= ~(3 << COM1A0);
 	switch(compoutmode){ // see table 53, 54, 55 in data sheet for more information
-		case 0: // Normal port operation, OC0 disconnected.
+		case 0: // Normal port operation, OC1 disconnected.
 		break;
 		case 1: // Reserved
-				// Toggle OC0 on compare match
+				// Toggle OC1 on compare match
+			timermega328.portb.reg->ddr |= (1 << 1);
 			timermega328.tc1.reg->tccr1a |= (1 << COM1A0);
 		break;
-		case 2: // Clear OC0 on compare match when up-counting. Set OC0 on compare
+		case 2: // Clear OC1 on compare match when up-counting.
+				// Set OC1 on compare
 				// match when down counting.
-				// Clear OC0 on compare match
+				// Clear OC1 on compare match
+			timermega328.portb.reg->ddr |= (1 << 1);
 			timermega328.tc1.reg->tccr1a |= (1 << COM1A1);
 		break;
-		case 3: // Set OC0 on compare match when up-counting. Clear OC0 on compare
+		case 3: // Set OC1 on compare match when up-counting.
+				// Clear OC1 on compare
 				// match when down counting.
-				// Set OC0 on compare match
+				// Set OC1 on compare match
+			timermega328.portb.reg->ddr |= (1 << 1);
 			timermega328.tc1.reg->tccr1a |= (1 << COM1A0) | (1 << COM1A1);
 		break;
-		default:
+		default: // Normal port operation, OC1 disconnected.
 		break;
 	}
 }
@@ -421,39 +438,44 @@ void TIMER_COUNTER1_compoutmodeB(unsigned char compoutmode)
 {
 	timermega328.tc1.reg->tccr1a &= ~(3 << COM1B0);
 	switch(compoutmode){ // see table 53, 54, 55 in data sheet for more information
-		case 0: // Normal port operation, OC0 disconnected.
+		case 0: // Normal port operation, OC1 disconnected.
 		break;
 		case 1: // Reserved
-				// Toggle OC0 on compare match
+				// Toggle OC1 on compare match
+			timermega328.portb.reg->ddr |= (1 << 2);
 			timermega328.tc1.reg->tccr1a |= (1 << COM1B0);
 		break;
-		case 2: // Clear OC0 on compare match when up-counting. Set OC0 on compare
+		case 2: // Clear OC1 on compare match when up-counting.
+				// Set OC1 on compare
 				// match when down counting.
-				// Clear OC0 on compare match
+				// Clear OC1 on compare match
+			timermega328.portb.reg->ddr |= (1 << 2);
 			timermega328.tc1.reg->tccr1a |= (1 << COM1B1);
 		break;
-		case 3: // Set OC0 on compare match when up-counting. Clear OC0 on compare
+		case 3: // Set OC1 on compare match when up-counting.
+				// Clear OC1 on compare
 				// match when down counting.
-				// Set OC0 on compare match
+				// Set OC1 on compare match
+			timermega328.portb.reg->ddr |= (1 << 2);
 			timermega328.tc1.reg->tccr1a |= (1 << COM1B0) | (1 << COM1B1);
 		break;
-		default:
+		default: // Normal port operation, OC1 disconnected.
 		break;
 	}
 }
 void TIMER_COUNTER1_compareA(uint16_t compare)
 {
-	timermega328.tc1.reg->ocr1a = timermega328.writelhbyte(compare);
+	timermega328.tc1.reg->ocr1a = timermega328.writehlbyte(compare);
 }
 void TIMER_COUNTER1_compareB(uint16_t compare)
 {
-	timermega328.tc1.reg->ocr1b = timermega328.writelhbyte(compare);
+	timermega328.tc1.reg->ocr1b = timermega328.writehlbyte(compare);
 }
 void TIMER_COUNTER1_stop(void)
 // stops timer by setting prescaler to zero
 {
 	timermega328.tc1.reg->tccr1b &= ~(7 << CS10); // No clock source. (Timer/Counter stopped)
-	timermega328.tc1.reg->tcnt1 = timermega328.writelhbyte(0X0000);
+	timermega328.tc1.reg->tcnt1 = timermega328.writehlbyte(0X0000);
 	timer1_state = 0;
 }
 
@@ -488,7 +510,7 @@ TIMER_COUNTER2 TIMER_COUNTER2enable(unsigned char wavegenmode, unsigned char int
 			timermega328.tc2.reg->tccr2a |= (1 << WGM20) | (1 << WGM21);
 			timermega328.tc2.reg->tccr2b |= (1 << WGM22);
 		break;
-		default:
+		default: // Normal
 		break;
 	}
 	timermega328.tc2.reg->timsk2 &= ~((1 << OCIE2B) | (1 << OCIE2A) | (1 << TOIE2));
@@ -556,7 +578,7 @@ void TIMER_COUNTER2_start(unsigned int prescaler)
 			case 1024: // clkI/O/1024 (From prescaler)
 				timermega328.tc2.reg->tccr2b |= (7 << CS20);
 			break;
-			default:
+			default: // clkI/O/1024 (From prescaler)
 				timermega328.tc2.reg->tccr2b |= (7 << CS20);
 			break;
 		}
@@ -565,58 +587,68 @@ void TIMER_COUNTER2_start(unsigned int prescaler)
 	}	
 }
 void TIMER_COUNTER2_compoutmodeA(unsigned char compoutmode)
-//	compoutmode: Normal port operation, OC0 disconnected; Toggle OC0 on compare match; 
-//	Clear OC0 on compare match when up-counting. Set OC0 on compare match when downcounting. Clear OC0 on compare match;
-//	Set OC0 on compare match when up-counting. Clear OC0 on compare match when downcounting. Set OC0 on compare match ;
-//	default-Normal port operation, OC0 disconnected.
+//	compoutmode: Normal port operation, OC2 disconnected; Toggle OC2 on compare match; 
+//	Clear OC2 on compare match when up-counting. Set OC2 on compare match when downcounting. Clear OC2 on compare match;
+//	Set OC2 on compare match when up-counting. Clear OC2 on compare match when downcounting. Set OC2 on compare match ;
+//	default-Normal port operation, OC2 disconnected.
 {
 	timermega328.tc2.reg->tccr2a &= ~((1 << COM2A0) | (1 << COM2A1));
 	switch(compoutmode){ // see table 53, 54, 55 in data sheet for more information
-		case 0: // Normal port operation, OC0 disconnected.
+		case 0: // Normal port operation, OC2 disconnected.
 		break;
 		case 1: // Reserved
-				// Toggle OC0 on compare match
+				// Toggle OC2 on compare match
+			timermega328.portb.reg->ddr |= (1 << 3);
 			timermega328.tc2.reg->tccr2a |= (1 << COM2A0);
 		break;
-		case 2: // Clear OC0 on compare match when up-counting. Set OC0 on compare
+		case 2: // Clear OC2 on compare match when up-counting. 
+				// Set OC2 on compare
 				// match when down counting.
-				// Clear OC0 on compare match
+				// Clear OC2 on compare match
+			timermega328.portb.reg->ddr |= (1 << 3);
 			timermega328.tc2.reg->tccr2a |= (1 << COM2A1);
 		break;
-		case 3: // Set OC0 on compare match when up-counting. Clear OC0 on compare
+		case 3: // Set OC2 on compare match when up-counting.
+				// Clear OC2 on compare
 				// match when down counting.
-				// Set OC0 on compare match
+				// Set OC2 on compare match
+			timermega328.portb.reg->ddr |= (1 << 3);
 			timermega328.tc2.reg->tccr2a |= (1 << COM2A0) | (1 << COM2A1);
 		break;
-		default:
+		default: // Normal port operation, OC2 disconnected.
 		break;
 	}
 }
 void TIMER_COUNTER2_compoutmodeB(unsigned char compoutmode)
-//	compoutmode: Normal port operation, OC0 disconnected; Toggle OC0 on compare match; 
-//	Clear OC0 on compare match when up-counting. Set OC0 on compare match when downcounting. Clear OC0 on compare match;
-//	Set OC0 on compare match when up-counting. Clear OC0 on compare match when downcounting. Set OC0 on compare match ;
-//	default-Normal port operation, OC0 disconnected.
+//	compoutmode: Normal port operation, OC2 disconnected; Toggle OC2 on compare match; 
+//	Clear OC2 on compare match when up-counting. Set OC2 on compare match when downcounting. Clear OC2 on compare match;
+//	Set OC2 on compare match when up-counting. Clear OC2 on compare match when downcounting. Set OC2 on compare match ;
+//	default-Normal port operation, OC2 disconnected.
 {
 	timermega328.tc2.reg->tccr2a &= ~((1 << COM2B0) | (1 << COM2B1));
 	switch(compoutmode){ // see table 53, 54, 55 in data sheet for more information
-		case 0: // Normal port operation, OC0 disconnected.
+		case 0: // Normal port operation, OC2 disconnected.
 		break;
 		case 1: // Reserved
-				// Toggle OC0 on compare match
+				// Toggle OC2 on compare match
+			timermega328.portd.reg->ddr |= (1 << 3);
 			timermega328.tc2.reg->tccr2a |= (1 << COM2B0);
 		break;
-		case 2: // Clear OC0 on compare match when up-counting. Set OC0 on compare
+		case 2: // Clear OC2 on compare match when up-counting.
+				// Set OC2 on compare
 				// match when down counting.
-				// Clear OC0 on compare match
+				// Clear OC2 on compare match
+			timermega328.portd.reg->ddr |= (1 << 3);
 			timermega328.tc2.reg->tccr2a |= (1 << COM2B1);
 		break;
-		case 3: // Set OC0 on compare match when up-counting. Clear OC0 on compare
+		case 3: // Set OC2 on compare match when up-counting.
+				// Clear OC2 on compare
 				// match when down counting.
-				// Set OC0 on compare match
+				// Set OC2 on compare match
+			timermega328.portd.reg->ddr |= (1 << 3);
 			timermega328.tc2.reg->tccr2a |= (1 << COM2B0) | (1 << COM2B1);
 		break;
-		default:
+		default: // Normal port operation, OC2 disconnected.
 		break;
 	}
 }
@@ -637,4 +669,17 @@ void TIMER_COUNTER2_stop(void)
 }
 
 /***EOF***/
+
+
+// ISR(TIMER2_COMPA_vect){}
+// ISR(TIMER2_COMPB_vect){}
+// ISR(TIMER2_OVF_vect){}
+// ISR(TIMER1_CAPT_vect){}
+// ISR(TIMER1_COMPA_vect){}
+// ISR(TIMER1_COMPB_vect){}
+// ISR(TIMER1_OVF_vect){}
+// ISR(TIMER0_COMPA_vect){}
+// ISR(TIMER0_COMPB_vect){}
+// ISR(TIMER0_OVF_vect){}
+
 

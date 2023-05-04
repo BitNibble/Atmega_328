@@ -40,7 +40,7 @@ ATMEGA328 ATMEGA328enable(void){
 	ret.cpu.reg = (Atmega328CPURegister_TypeDef*) Atmega328CPURegister_Address;
 	// EEPROM
 	ret.eeprom.reg = (Atmega328Eeprom_TypeDef*) Atmega328Eeprom_Address;
-	#if defined(_EEPROM_H_)
+	#if defined(_ATMEGAEEPROM_H_)
 		ret.eeprom.enable = EEPROMenable;
 	#endif
 	// EXINT
