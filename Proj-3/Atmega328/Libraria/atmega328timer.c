@@ -361,7 +361,8 @@ void TIMER_COUNTER1_start(unsigned int prescaler)
 //	External clock source on Tn pin. Clock on rising edge; default - clk T 0 S /1024 (From prescaler).
 {
 	if(timer1_state == 0){ // one shot
-		timermega328.tc1.reg->ocr1a = timermega328.writelhbyte(0xFFFF);
+		TIMER_COUNTER1_compareA(0xFFFF); // preset as max
+		TIMER_COUNTER1_compareB(0xFFFF); // preset as max
 		timermega328.tc1.reg->tccr1b &= ~(7 << CS10); // No clock source. (Timer/Counter stopped)
 		switch(prescaler){
 			case 1: // clkI/O/1 (No prescaler)
@@ -385,7 +386,7 @@ void TIMER_COUNTER1_start(unsigned int prescaler)
 			case 5: // External clock source on Tn pin. Clock on rising edge
 				timermega328.tc1.reg->tccr1b |= (7 << CS10);
 			break;
-			default:
+			default: // clkI/O/1024 (From prescaler)
 				timermega328.tc1.reg->tccr1b |= (5 << CS10);
 			break;
 		}
@@ -437,7 +438,7 @@ void TIMER_COUNTER1_compoutmodeB(unsigned char compoutmode)
 				// Set OC0 on compare match
 			timermega328.tc1.reg->tccr1a |= (1 << COM1B0) | (1 << COM1B1);
 		break;
-		default:
+		default: // Normal port operation, OC0 disconnected.
 		break;
 	}
 }

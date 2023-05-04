@@ -63,7 +63,7 @@ Comment:
 
 /*** File Variable ***/
 ATMEGA328 m;
-TIMER_COUNTER0 tc0;
+TIMER_COUNTER1 tc1;
 HC595 sh;
 UART uart;
 FUNC func;
@@ -134,11 +134,11 @@ int main(void)
 	// UART 103 para 9600, 68 para 14400, 25 para 38400, 8 para 115200 at 16Mhz
 	// UART 51 para 9600, 12 para 38400 at 8Mhz
 	uart = m.usart.enable(12,8,1,NONE);
-	tc0 = m.tc0.enable(2, 1);
+	tc1 = m.tc1.enable(4, 1);
 	button = EXPLODEenable();
 	disp = EXPLODEenable();
 	
-	tc0.start(1024);
+	tc1.start(1024);
 	
 	uint8_t input;	
 	uint8_t output = 0xFF;
@@ -335,11 +335,11 @@ void exponencial(double* target, double rate)
 }
 //double product (double u, double v){return (u * v);}
 /*** File Interrupt ***/
-ISR(TIMER0_OVF_vect)
+ISR(TIMER1_OVF_vect)
 {
 	//interrupt1();
 	//linear(&d,0.2);
-	exponencial(&d,1.001);
+	exponencial(&d,1.2718);
 	//d=2.0 * 2;
 	/**
 	// Play around
