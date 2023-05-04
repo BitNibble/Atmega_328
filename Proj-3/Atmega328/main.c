@@ -323,7 +323,9 @@ void PORTINIT(void)
 
 void linear(double* target, double rate)
 {
-	*target += rate;
+	double u;
+	u = rate + *target;
+	*target = u;
 }
 void exponencial(double* target, double rate)
 {
@@ -333,13 +335,14 @@ void exponencial(double* target, double rate)
 	*target = u;
 	
 }
+
 //double product (double u, double v){return (u * v);}
 /*** File Interrupt ***/
 ISR(TIMER1_OVF_vect)
 {
 	//interrupt1();
-	//linear(&d,0.2);
-	exponencial(&d,1.2718);
+	linear(&d,0.2);
+	//exponencial(&d,1.2718);
 	//d=2.0 * 2;
 	/**
 	// Play around
