@@ -72,6 +72,7 @@ EXPLODE button;
 EXPLODE disp;
 
 double d;
+double e;
 uint8_t i;
 // uint8_t j;
 
@@ -100,7 +101,6 @@ char LCDline1[18];
 /*** File Header ***/
 void PORTINIT(void);
 void interrupt1(void){d++;}
-//double product (double u, double v);
 void linear(double* target, double rate);
 void exponencial(double* target, double rate);
 
@@ -134,11 +134,12 @@ int main(void)
 	// UART 103 para 9600, 68 para 14400, 25 para 38400, 8 para 115200 at 16Mhz
 	// UART 51 para 9600, 12 para 38400 at 8Mhz
 	uart = m.usart.enable(12,8,1,NONE);
-	tc1 = m.tc1.enable(4, 1);
+	tc1 = m.tc1.enable(4, 2);
 	button = EXPLODEenable();
 	disp = EXPLODEenable();
 	
 	tc1.start(1024);
+	tc1.compareA(0x1AFF);
 	
 	uint8_t input;	
 	uint8_t output = 0xFF;
@@ -200,7 +201,7 @@ int main(void)
 					lcd.gotoxy(0,0);
 					lcd.string_size("Testing, 1 2 3",16);
 					lcd.gotoxy(1,0);
-					lcd.string_size(func.ftoa(d,result,2), 16);
+					lcd.string_size(func.ftoa(e,result,2), 16);
 				break;
 				default:
 					break;
@@ -329,20 +330,29 @@ void linear(double* target, double rate)
 }
 void exponencial(double* target, double rate)
 {
+	double cpy = *target;
 	double u;
-	u = rate * *target;
-	if(u == 0.0){u = rate;}
-	*target = u;
-	
+	double diff;
+	if(rate < 0){
+		u = - (cpy * rate);
+		diff = u - cpy;
+	}else{
+		u = rate * cpy;
+		diff = u - cpy;
+	}
+	if( diff ) ; else cpy = rate;
+	*target = cpy + diff;
 }
 
 //double product (double u, double v){return (u * v);}
 /*** File Interrupt ***/
-ISR(TIMER1_OVF_vect)
+// ISR(TIMER1_OVF_vect)
+ISR(TIMER1_COMPA_vect)
 {
 	//interrupt1();
-	linear(&d,0.2);
-	//exponencial(&d,1.2718);
+	//linear(&d,-0.2);
+	exponencial(&d,-1.002718);
+	e = 1024 + d;
 	//d=2.0 * 2;
 	/**
 	// Play around

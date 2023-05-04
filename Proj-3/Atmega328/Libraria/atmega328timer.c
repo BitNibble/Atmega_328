@@ -444,11 +444,11 @@ void TIMER_COUNTER1_compoutmodeB(unsigned char compoutmode)
 }
 void TIMER_COUNTER1_compareA(uint16_t compare)
 {
-	timermega328.tc1.reg->ocr1a = timermega328.writelhbyte(compare);
+	timermega328.tc1.reg->ocr1a = timermega328.writehlbyte(compare);
 }
 void TIMER_COUNTER1_compareB(uint16_t compare)
 {
-	timermega328.tc1.reg->ocr1b = timermega328.writelhbyte(compare);
+	timermega328.tc1.reg->ocr1b = timermega328.writehlbyte(compare);
 }
 void TIMER_COUNTER1_stop(void)
 // stops timer by setting prescaler to zero
@@ -638,4 +638,17 @@ void TIMER_COUNTER2_stop(void)
 }
 
 /***EOF***/
+
+
+// ISR(TIMER2_COMPA_vect){}
+// ISR(TIMER2_COMPB_vect){}
+// ISR(TIMER2_OVF_vect){}
+// ISR(TIMER1_CAPT_vect){}
+// ISR(TIMER1_COMPA_vect){}
+// ISR(TIMER1_COMPB_vect){}
+// ISR(TIMER1_OVF_vect){}
+// ISR(TIMER0_COMPA_vect){}
+// ISR(TIMER0_COMPB_vect){}
+// ISR(TIMER0_OVF_vect){}
+
 
