@@ -317,6 +317,15 @@ void PORTINIT(void)
 	m.portd.reg->port |= ( 1 << 2 );
 }
 
+void linear(uint16_t* x, uint16_t rate)
+{
+	*x += rate;
+}
+void exponencial(uint16_t* x, uint16_t rate)
+{
+	*x *= rate;
+}
+
 /*** File Interrupt ***/
 ISR(TIMER0_OVF_vect)
 {
