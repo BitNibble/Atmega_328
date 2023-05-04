@@ -51,11 +51,11 @@ Comment:
 //#include "atcommands.h"
 #include <util/delay.h>
 //#include <stdio.h>
-//#include <stdlib.h>
+#include <stdlib.h>
 //#include <inttypes.h>
 #include <string.h>
 //#include <stdarg.h>
-//#include <math.h>
+#include <math.h>
 
 /*** File Constant and Macros ***/
 #define TRUE 1
@@ -71,13 +71,14 @@ LCD0 lcd;
 EXPLODE button;
 EXPLODE disp;
 
-uint16_t d;
+double d;
 uint8_t i;
 // uint8_t j;
 
 char* uartreceive = NULL; // pointing to Rx Buffer raw
 char uartrcv[UART_RX_BUFFER_SIZE];
 char uartmsg[UART_RX_BUFFER_SIZE];
+char result[UART_RX_BUFFER_SIZE];
 
 // Virtual LCD
 struct LCDposition {
@@ -99,6 +100,9 @@ char LCDline1[18];
 /*** File Header ***/
 void PORTINIT(void);
 void interrupt1(void){d++;}
+//double product (double u, double v);
+void linear(double* target, double rate);
+void exponencial(double* target, double rate);
 
 /*** File Procedure & Function ***/
 int main(void)
@@ -130,11 +134,11 @@ int main(void)
 	// UART 103 para 9600, 68 para 14400, 25 para 38400, 8 para 115200 at 16Mhz
 	// UART 51 para 9600, 12 para 38400 at 8Mhz
 	uart = m.usart.enable(12,8,1,NONE);
-	tc0 = m.tc0.enable(1, 1);
+	tc0 = m.tc0.enable(2, 1);
 	button = EXPLODEenable();
 	disp = EXPLODEenable();
 	
-	tc0.start(~0);
+	tc0.start(1024);
 	
 	uint8_t input;	
 	uint8_t output = 0xFF;
@@ -196,7 +200,7 @@ int main(void)
 					lcd.gotoxy(0,0);
 					lcd.string_size("Testing, 1 2 3",16);
 					lcd.gotoxy(1,0);
-					lcd.hspace(2); lcd.string_size(func.ui16toa(d), 6);
+					lcd.string_size(func.ftoa(d,result,2), 16);
 				break;
 				default:
 					break;
@@ -317,19 +321,26 @@ void PORTINIT(void)
 	m.portd.reg->port |= ( 1 << 2 );
 }
 
-void linear(uint16_t* x, uint16_t rate)
+void linear(double* target, double rate)
 {
-	*x += rate;
+	*target += rate;
 }
-void exponencial(uint16_t* x, uint16_t rate)
+void exponencial(double* target, double rate)
 {
-	*x *= rate;
+	double u;
+	u = rate * *target;
+	if(u == 0.0){u = rate;}
+	*target = u;
+	
 }
-
+//double product (double u, double v){return (u * v);}
 /*** File Interrupt ***/
 ISR(TIMER0_OVF_vect)
 {
-	interrupt1();
+	//interrupt1();
+	//linear(&d,0.2);
+	exponencial(&d,1.001);
+	//d=2.0 * 2;
 	/**
 	// Play around
 	if(i < 8){
