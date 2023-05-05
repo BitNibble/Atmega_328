@@ -42,5 +42,6 @@ typedef struct flsh FLASH;
 FLASH FLASHenable(void);
 
 #endif
+
 /***EOF***/
 

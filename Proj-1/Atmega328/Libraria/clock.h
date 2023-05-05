@@ -40,5 +40,6 @@ typedef struct clck CLOCK;
 CLOCK CLOCKenable(uint8_t hour, uint8_t minute, uint8_t second);
 
 #endif
+
 /***EOF***/
 

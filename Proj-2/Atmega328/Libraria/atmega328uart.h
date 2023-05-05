@@ -52,5 +52,6 @@ typedef struct uart UART;
 UART UARTenable( unsigned int baudrate, unsigned int FDbits, unsigned int Stopbits, unsigned int Parity );
 
 #endif
+
 /***EOF***/
 

@@ -68,5 +68,6 @@ typedef struct pcfrtc PCF8563RTC;
 PCF8563RTC PCF8563RTCenable(uint8_t prescaler);
 
 #endif
+
 /***EOF***/
 

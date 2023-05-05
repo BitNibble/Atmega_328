@@ -39,7 +39,7 @@ HC595 HC595enable(volatile uint8_t *ddr, volatile uint8_t *port, uint8_t datapin
 	HC595_clkpin = clkpin;
 	HC595_outpin = outpin;
 	// inic variables
-    *hc595_DDR |= (1 << datapin) | (1 << clkpin) | (1 << outpin);
+	*hc595_DDR |= (1 << datapin) | (1 << clkpin) | (1 << outpin);
 	*hc595_PORT &= ~((1<<datapin) | (1<<clkpin) | (1 << outpin));
 	// Direccionar apontadores para PROTOTIPOS
 	hc595.bit = HC595_shift_bit;

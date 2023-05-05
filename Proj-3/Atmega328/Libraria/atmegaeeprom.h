@@ -42,5 +42,6 @@ typedef struct prm EEPROM;
 EEPROM EEPROMenable(void);
 
 #endif
+
 /***EOF***/
 

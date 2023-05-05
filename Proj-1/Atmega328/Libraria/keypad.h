@@ -50,5 +50,6 @@ typedef struct keypad KEYPAD;
 KEYPAD KEYPADenable(volatile uint8_t *ddr, volatile uint8_t *pin, volatile uint8_t *port);
 
 #endif
+
 /***EOF***/
 

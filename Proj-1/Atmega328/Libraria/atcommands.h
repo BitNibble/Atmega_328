@@ -25,5 +25,6 @@ char* HC05ATcmd(uint16_t num);
 char* ESP8266cmd(uint16_t num);
 
 #endif
+
 /***EOF***/
 

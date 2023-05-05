@@ -56,5 +56,6 @@ typedef struct lfsm LFSM;
 LFSM LFSMenable(EEPROM* eeprom, const uint16_t sizeeeprom);
 
 #endif
+
 /***EOF***/
 

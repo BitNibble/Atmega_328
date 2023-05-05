@@ -42,5 +42,6 @@ typedef struct znpid ZNPID;
 ZNPID ZNPIDenable(void);
 
 #endif
+
 /***EOF***/
 

@@ -49,5 +49,6 @@ typedef struct twowire TWI;
 TWI TWIenable(uint8_t atmega_ID, uint8_t prescaler);
 
 #endif
+
 /***EOF***/
 

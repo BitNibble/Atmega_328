@@ -6,7 +6,7 @@ License: GNU General Public License
 Hardware: all
 Date: 20042023
 Comment:
-    Pin Analysis
+	Pin Analysis
 ********************************************************************/
 /*** File Library ***/
 #include "explode.h"

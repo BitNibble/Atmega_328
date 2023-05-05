@@ -6,7 +6,7 @@ License: GNU General Public License
 Hardware: all
 Date: 17112022
 Comment:
-    Buffer
+	Buffer
 ******************************************************************************/
 /*** File Library ***/
 #include "buffer.h"

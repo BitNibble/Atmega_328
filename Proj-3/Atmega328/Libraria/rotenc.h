@@ -33,5 +33,6 @@ typedef struct rotenc ROTENC;
 ROTENC ROTENCenable(uint8_t ChnApin, uint8_t ChnBpin);
 
 #endif
+
 /***EOF***/
 

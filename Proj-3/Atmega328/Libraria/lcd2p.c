@@ -6,7 +6,7 @@ License: GNU General Public License
 Hardware: all
 Date: 20042023
 Comment:
-   Tested Atemga128 16Mhz and Atmega328 8Mhz                    
+	Tested Atemga128 16Mhz and Atmega328 8Mhz                    
 ************************************************************************/
 /*** File Library ***/
 #include "lcd2p.h"

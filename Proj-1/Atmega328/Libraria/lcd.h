@@ -1,7 +1,7 @@
 /************************************************************************
 	LCD
 Author: Sergio Santos 
-   <sergio.salazar.santos@gmail.com>
+	<sergio.salazar.santos@gmail.com>
 License: GNU General Public License
 Hardware: all
 Date: 12112022
@@ -54,5 +54,6 @@ LCD0 LCD0enable(volatile uint8_t *ddr, volatile uint8_t *pin, volatile uint8_t *
 LCD1 LCD1enable(volatile uint8_t *ddr, volatile uint8_t *pin, volatile uint8_t *port);
 
 #endif
+
 /***EOF***/
 

@@ -126,7 +126,7 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
 			analogmega328.adc.reg->adcsra |= (7 << ADPS0);
 			analog.DIVISION_FACTOR = 128;
 		break;
-		default:
+		default: // 7
 			analogmega328.adc.reg->adcsra |= (7 << ADPS0);
 			analog.DIVISION_FACTOR = 128;
 		break;

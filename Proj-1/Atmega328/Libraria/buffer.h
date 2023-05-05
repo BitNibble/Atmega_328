@@ -39,5 +39,6 @@ typedef struct buffer BUFF;
 BUFF BUFFenable(uint8_t size_buff, BUFFvar* buff);
 
 #endif
+
 /***EOF***/
 

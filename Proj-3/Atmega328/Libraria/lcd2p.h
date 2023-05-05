@@ -50,5 +50,6 @@ typedef struct dspl LCD0;
 LCD0 LCD0enable(volatile uint8_t *cmdddr, volatile uint8_t *cmdpin, volatile uint8_t *cmdport, volatile uint8_t *dataddr, volatile uint8_t *datapin, volatile uint8_t *dataport);
 
 #endif
+
 /***EOF***/
 

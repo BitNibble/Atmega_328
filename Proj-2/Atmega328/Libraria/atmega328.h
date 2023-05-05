@@ -34,7 +34,7 @@ Comment:
 
 /*** Global Variable ***/
 // Low Byte High Byte
-typedef struct {
+typedef struct { // little endian
 	uint8_t L; // Lower address
 	uint8_t H; // Higher address
 } HighLowByte;
@@ -86,30 +86,30 @@ typedef struct {
 	uint8_t adcsra; // 0x7A
 	uint8_t adscrb; // 0x7B
 	uint8_t admux; // 0x7C
-	uint8_t fill; // (7E - 7C) - 1
+	uint8_t fill; // (0x7E - 0x7C) - 1
 	uint8_t didr0; // 0x7E
 } Atmega328AnalogToDigitalConverter_TypeDef;
 
 // CPU Register (CPU)
 typedef struct {
 	uint8_t gpior0; // 0x3E
-	uint8_t fill1[11]; // (4A - 3E) - 1
+	uint8_t fill1[11]; // (0x4A - 0x3E) - 1
 	uint8_t gpior1; // 0x4A
 	uint8_t gpior2; // 0x4B
-	uint8_t fill2[7]; // (53 4B) - 1
+	uint8_t fill2[7]; // (0x53 - 0x4B) - 1
 	uint8_t smcr; // 0x53
 	uint8_t mcusr; // 0x54
 	uint8_t mcucr; // 0x55
-	uint8_t fill3; // (57 - 55) - 1
+	uint8_t fill3; // (0x57 - 0x55) - 1
 	uint8_t spmcsr; // 0x57
-	uint8_t fill4[5]; // (5D - 57) - 1
+	uint8_t fill4[5]; // (0x5D - 0x57) - 1
 	HighLowByte sp; // 0x5D 0x5E
 	uint8_t sreg; // 0x5F
-	uint8_t fill5; // (61 - 5F) - 1
+	uint8_t fill5; // (0x61 - 0x5F) - 1
 	uint8_t clkpr; // 0x61
-	uint8_t fill6[2]; // (64 - 61) - 1
+	uint8_t fill6[2]; // (0x64 - 0x61) - 1
 	uint8_t prr; // 0x64
-	uint8_t fill7; // (66 - 64) - 1
+	uint8_t fill7; // (0x66 - 0x64) - 1
 	uint8_t osccal; // 0x66
 } Atmega328CPURegister_TypeDef;
 
@@ -125,10 +125,10 @@ typedef struct {
 	uint8_t pcifr; // 0x3B
 	uint8_t eifr; // 0x3C
 	uint8_t eimsk; // 0x3D
-	uint8_t fill1[42]; // (68 - 3D) - 1
+	uint8_t fill1[42]; // (0x68 - 0x3D) - 1
 	uint8_t pcicr; // 0x68
 	uint8_t eicra; // 0x69
-	uint8_t fill2; // (6B - 69) - 1
+	uint8_t fill2; // (0x6B - 0x69) - 1
 	uint8_t pcmsk0; // 0x6B
 	uint8_t pcmsk1; // 0x6C
 	uint8_t pcmsk2; // 0x6D
@@ -165,15 +165,15 @@ typedef struct {
 // Timer/Counter, 16-bit (TC1)
 typedef struct {
 	uint8_t tifr1; // 0x36
-	uint8_t fill1[12]; // (43 - 36) - 1
+	uint8_t fill1[12]; // (0x43 - 0x36) - 1
 	uint8_t gtccr; // 0x43
-	uint8_t fill2[43]; // (6F - 43) - 1
+	uint8_t fill2[43]; // (0x6F - 0x43) - 1
 	uint8_t timsk1; // 0x6F
-	uint8_t fill3[16]; // (80 - 6F) - 1
+	uint8_t fill3[16]; // (0x80 - 0x6F) - 1
 	uint8_t tccr1a; // 0x80
 	uint8_t tccr1b; // 0x81
 	uint8_t tccr1c; // 0x82
-	uint8_t fill4; // (84 - 82) - 1
+	uint8_t fill4; // (0x84 - 0x82) - 1
 	HighLowByte tcnt1; // 0x84 0x85
 	HighLowByte icr1; // 0x86 0x87
 	HighLowByte ocr1a; // 0x88 0x89
@@ -183,31 +183,31 @@ typedef struct {
 // Timer/Counter, 8-bit A sync (TC0)
 typedef struct {
 	uint8_t tifr0; // 0x35
-	uint8_t fill1[13]; // (43 - 35) - 1
+	uint8_t fill1[13]; // (0x43 - 0x35) - 1
 	uint8_t gtccr; // 0x43
 	uint8_t tccr0a; // 0x44
 	uint8_t tccr0b; // 0x45
 	uint8_t tcnt0; // 0x46
 	uint8_t ocr0a; // 0x47
 	uint8_t ocr0b; // 0x48
-	uint8_t fill2[37]; // (6E - 48) - 1
+	uint8_t fill2[37]; // (0x6E - 0x48) - 1
 	uint8_t timsk0; // 0x6E
 } Atmega328TimerCounter0_TypeDef;
 
 // Timer/Counter, 8-bit (TC2)
 typedef struct {
 	uint8_t tifr2; // 0x37
-	uint8_t fill1[11]; // (43 - 37) - 1
+	uint8_t fill1[11]; // (0x43 - 0x37) - 1
 	uint8_t gtccr; // 0x43
-	uint8_t fill2[44]; // (70 - 43) - 1
+	uint8_t fill2[44]; // (0x70 - 0x43) - 1
 	uint8_t timsk2; // 0x70
-	uint8_t fill3[63]; // (b0 - 70) - 1
+	uint8_t fill3[63]; // (0xB0 - 0x70) - 1
 	uint8_t tccr2a; // 0xB0
 	uint8_t tccr2b; // 0xB1
 	uint8_t tcnt2; // 0xB2
 	uint8_t ocr2a; // 0xB3
 	uint8_t ocr2b; // 0xB4
-	uint8_t fill4; // (B6 - B4) - 1
+	uint8_t fill4; // (0xB6 - 0xB4) - 1
 	uint8_t assr; // 0xB6
 } Atmega328TimerCounter2_TypeDef;
 
@@ -226,14 +226,14 @@ typedef struct {
 	uint8_t ucsr0a; // 0xC0
 	uint8_t ucsr0b; // 0xC1
 	uint8_t ucsr0c; // 0xC2
-	uint8_t fill; // (C4 - C2) - 1
+	uint8_t fill; // (0xC4 - 0xC2) - 1
 	HighLowByte ubrr0; // 0xC4 0xC5
 	uint8_t udr0; // 0xC6
 } Atmega328Usart_TypeDef;
 
 // Watchdog Timer (WDT)
 typedef struct {
-	uint8_t wdtcr; // 0x60
+	uint8_t wdtcsr; // 0x60
 } Atmega328WatchdogTimer_TypeDef;
 
 /*** STATIC RAM ***/
@@ -268,6 +268,7 @@ typedef struct { // SRAM START = 0x0100 END = 0x0877 atmega328
 } Atmega328InterruptVectors_TypeDef;
 
 #endif
+
 /***EOF***/
 /***
 Notes:
