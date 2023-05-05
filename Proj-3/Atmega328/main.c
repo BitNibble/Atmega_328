@@ -331,16 +331,16 @@ void linear(double* target, double rate)
 void exponencial(double* target, double rate)
 {
 	double cpy = *target;
-	double u;
+	double next;
 	double diff;
 	if(rate < 0){
-		u = - (cpy * rate);
-		diff = u - cpy;
+		next = cpy * rate;
+		diff = - next - cpy;
 	}else{
-		u = rate * cpy;
-		diff = u - cpy;
+		next = rate * cpy;
+		diff = next - cpy;
 	}
-	if( diff ) ; else cpy = rate;
+	if( cpy ) ; else cpy = rate;
 	*target = cpy + diff;
 }
 
@@ -351,19 +351,19 @@ ISR(TIMER1_COMPA_vect)
 {
 	//interrupt1();
 	//linear(&d,-0.2);
-	exponencial(&d,1.2718);
+	exponencial(&d,-1.2718);
 	switch(j){
 		case 1:
-			if(e > 1065){
+			if(e < -1065){
 				d = 0; j = 2;
 			}else
 				e = 1066.95 - (1066.95 - d);
 			break;
 		case 2:
-			if(e < 1.2720){
+			if(e > -1.2720){
 				d = 0; j = 1;
 			}else
-				e = 1066.95 - d;
+				e = -1066.95 - d;
 			break;
 		default:
 			break;

@@ -23,7 +23,7 @@ struct ZNPID_DATA{
 	float derivative;
 }reading;
 ***************************/
-float tmp;
+float ZNPID_tmp;
 
 /***File Header***/
 void ZNPID_set_kc(ZNPID* self, float kc);
@@ -95,14 +95,14 @@ float product(float value_1, float value_2)
 }
 float integral(ZNPID* self, float PV, float timelapse)
 {
-	tmp = product(sum(delta(self->SetPoint, PV), self->Err_past), timelapse);
-	tmp /= 2;
-	return (self->integral += tmp);
+	ZNPID_tmp = product(sum(delta(self->SetPoint, PV), self->Err_past), timelapse);
+	ZNPID_tmp /= 2;
+	return (self->integral += ZNPID_tmp);
 }
 float derivative(ZNPID* self, float PV, float timelapse)
 {
-	tmp=delta(delta(self->SetPoint, PV), self->Err_past);
-	return (self->derivative = (tmp / timelapse));
+	ZNPID_tmp = delta(delta(self->SetPoint, PV), self->Err_past);
+	return (self->derivative = (ZNPID_tmp / timelapse));
 }
 float ZNPID_output(ZNPID* self, float PV, float timelapse)
 {
@@ -111,16 +111,16 @@ float ZNPID_output(ZNPID* self, float PV, float timelapse)
 	self->dy = delta(self->SetPoint, PV);
 	self->dx = timelapse;
 	result = product(self->kc, self->dy);
-	tmp = product(self->ki, integral(self, PV, timelapse));
-	result = sum(result, tmp);
-	tmp = product(self->kd, derivative(self, PV, timelapse));
-	result = sum(result, tmp);
+	ZNPID_tmp = product(self->ki, integral(self, PV, timelapse));
+	result = sum(result, ZNPID_tmp);
+	ZNPID_tmp = product(self->kd, derivative(self, PV, timelapse));
+	result = sum(result, ZNPID_tmp);
 	self->Err_past = self->dy;
 	self->OP = result;
 	if(result > ZNPID_outMAX)
-		self->integral=ZNPID_outMAX - (self->dy * self->dx) - (self->derivative * self->dx * self->dx);
+		self->integral = ZNPID_outMAX - (self->dy * self->dx) - (self->derivative * self->dx * self->dx);
 	else if(result < ZNPID_outMIN)
-		self->integral=ZNPID_outMIN + (self->dy * self->dx) + (self->derivative * self->dx * self->dx);
+		self->integral = ZNPID_outMIN + (self->dy * self->dx) + (self->derivative * self->dx * self->dx);
 	return result;
 }
 
