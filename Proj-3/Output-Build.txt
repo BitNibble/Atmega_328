@@ -1,23 +1,16 @@
-﻿------ Build started: Project: Atmega328, Configuration: Debug AVR ------
+﻿------ Clean started: Project: Atmega328, Configuration: Debug AVR ------
 Build started.
-Project "Atmega328.cproj" (default targets):
-Target "PreBuildEvent" skipped, due to false condition; ('$(PreBuildEvent)'!='') was evaluated as (''!='').
-Target "CoreBuild" in file "C:\Program Files (x86)\Atmel\Studio\7.0\Vs\Compiler.targets" from project "C:\Users\sergi\Documents\GitHub_2023\Atmega_328\Proj-3\Atmega328\Atmega328.cproj" (target "Build" depends on it):
+Project "Atmega328.cproj" (Clean target(s)):
+Target "Clean" in file "C:\Program Files (x86)\Atmel\Studio\7.0\Vs\Compiler.targets" from project "C:\Users\sergi\Documents\GitHub_2023\Atmega_328\Proj-3\Atmega328\Atmega328.cproj" (entry point):
 	Task "RunCompilerTask"
 		Shell Utils Path C:\Program Files (x86)\Atmel\Studio\7.0\shellUtils
-		C:\Program Files (x86)\Atmel\Studio\7.0\shellUtils\make.exe all --jobs 4 --output-sync 
-		make: Nothing to be done for 'all'.
+		C:\Program Files (x86)\Atmel\Studio\7.0\shellUtils\make.exe clean 
+		rm -rf  Libraria/74hc595.o Libraria/atcommands.o Libraria/atmega328analog.o Libraria/atmega328interrupt.o Libraria/atmega328mapping.o Libraria/atmega328timer.o Libraria/atmega328twi.o Libraria/atmega328uart.o Libraria/atmegaeeprom.o Libraria/buffer.o Libraria/clock.o Libraria/explode.o Libraria/function.o Libraria/hx711.o Libraria/keypad.o Libraria/lcd2p.o Libraria/lfsm.o Libraria/mm74c923.o Libraria/pcf8563rtc.o Libraria/rotenc.o Libraria/watch.o Libraria/znpid.o main.o   
+		rm -rf  Libraria/74hc595.d Libraria/atcommands.d Libraria/atmega328analog.d Libraria/atmega328interrupt.d Libraria/atmega328mapping.d Libraria/atmega328timer.d Libraria/atmega328twi.d Libraria/atmega328uart.d Libraria/atmegaeeprom.d Libraria/buffer.d Libraria/clock.d Libraria/explode.d Libraria/function.d Libraria/hx711.d Libraria/keypad.d Libraria/lcd2p.d Libraria/lfsm.d Libraria/mm74c923.d Libraria/pcf8563rtc.d Libraria/rotenc.d Libraria/watch.d Libraria/znpid.d main.d   
+		rm -rf "Atmega328.elf" "Atmega328.a" "Atmega328.hex" "Atmega328.lss" "Atmega328.eep" "Atmega328.map" "Atmega328.srec" "Atmega328.usersignatures"
 	Done executing task "RunCompilerTask".
-	Task "RunOutputFileVerifyTask"
-				Program Memory Usage 	:	19478 bytes   59.4 % Full
-				Data Memory Usage 		:	1058 bytes   51.7 % Full
-				Warning: Memory Usage estimation may not be accurate if there are sections other than .text sections in ELF file
-	Done executing task "RunOutputFileVerifyTask".
-Done building target "CoreBuild" in project "Atmega328.cproj".
-Target "PostBuildEvent" skipped, due to false condition; ('$(PostBuildEvent)' != '') was evaluated as ('' != '').
-Target "Build" in file "C:\Program Files (x86)\Atmel\Studio\7.0\Vs\Avr.common.targets" from project "C:\Users\sergi\Documents\GitHub_2023\Atmega_328\Proj-3\Atmega328\Atmega328.cproj" (entry point):
-Done building target "Build" in project "Atmega328.cproj".
+Done building target "Clean" in project "Atmega328.cproj".
 Done building project "Atmega328.cproj".
 
 Build succeeded.
-========== Build: 1 succeeded or up-to-date, 0 failed, 0 skipped ==========
+========== Clean: 1 succeeded, 0 failed, 0 skipped ==========

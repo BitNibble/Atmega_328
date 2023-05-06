@@ -4,7 +4,7 @@ Author: Sergio Santos
 	<sergio.salazar.santos@gmail.com>
 License: GNU General Public License
 Hardware: all
-Date: 20042023
+Date: 06052023
 Comment:
 	Pin Analysis
 ********************************************************************/
@@ -39,10 +39,10 @@ void EXPLODEupdate(EXPLODE *self, uint8_t x)
 {
 	self->par.XI = self->par.XF;
 	self->par.XF = x;
-	self->HL = EXPLODEhl(self);
-	self->LH = EXPLODElh(self);
-	self->HH = EXPLODEhh(self);
-	self->LL = EXPLODEll(self);
+	self->sig.HL = EXPLODEhl(self);
+	self->sig.LH = EXPLODElh(self);
+	self->sig.HH = EXPLODEhh(self);
+	self->sig.LL = EXPLODEll(self);
 }
 // hh
 uint8_t EXPLODEhh(EXPLODE *self)
