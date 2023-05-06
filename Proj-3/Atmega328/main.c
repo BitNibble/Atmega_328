@@ -143,7 +143,7 @@ int main(void)
 	
 	uint8_t input;	
 	uint8_t output = 0xFF;
-	d = 0; j=1;
+	d = 0; j=1; e=0;
 	
 	sh.byte(output);
 	func.strtovec(LCD.pos.l10, "off");
@@ -322,25 +322,25 @@ void PORTINIT(void)
 	m.portd.reg->port |= ( 1 << 2 );
 }
 
-void linear(double* target, double rate)
+// make a library for these functions with extra functionalities (these are incomplete)
+void linear(double* target, double rate) // *target = rate * t -> t is interrupt timer
 {
-	double u;
-	u = rate + *target;
-	*target = u;
+	double cpy = *target;
+	double next;
+	next = rate + cpy;
+	*target = next;
 }
-void exponencial(double* target, double rate)
+void exponencial(double* target, double rate) // *target = rate ^ t -> t is interrupt timer therefore rate > 0
 {
 	double cpy = *target;
 	double next;
 	double diff;
-	if(rate < 0){
-		next = cpy * rate;
-		diff = - next - cpy;
-	}else{
-		next = rate * cpy;
-		diff = next - cpy;
-	}
-	if( cpy ) ; else cpy = rate;
+	// filter inputs
+	if( rate ){ if(rate < 0) rate = - rate; }else rate = 1;
+	if( cpy ) ; else cpy = 1;
+	
+	next = rate * cpy;
+	diff = next - cpy; // to have growth rate (could be bypassed)
 	*target = cpy + diff;
 }
 
@@ -354,16 +354,16 @@ ISR(TIMER1_COMPA_vect)
 	exponencial(&d,-1.2718);
 	switch(j){
 		case 1:
-			if(e < -1065){
+			if(e > 1065){
 				d = 0; j = 2;
 			}else
-				e = 1066.95 - (1066.95 - d);
+				e = 1066.95 - (1066.95 - d); // d = x ^ t
 			break;
 		case 2:
-			if(e > -1.2720){
+			if(e < 1.2720){
 				d = 0; j = 1;
 			}else
-				e = -1066.95 - d;
+				e = 1066.95 - d;
 			break;
 		default:
 			break;
