@@ -17,27 +17,28 @@ Comment:
 /*** Global Constant & Macro ***/
 
 /*** Global Variable ***/
-struct znpidparam{
-	float kc; // constant p
-	float ki; // constant i
-	float kd; // constant d
-	float SetPoint; // desired output
-};
+typedef struct {
+	double kc; // constant p
+	double ki; // constant i
+	double kd; // constant d
+	double SetPoint; // desired output
+	double Err_past; // Last Error reading
+	double dy; // difference error y axis points.
+	double dx; // difference time x axis points.
+	double integral; // progression
+	double derivative; // rate of growth (tangent), or derivative
+	double PV; // output feedback
+	double OP; // output signal
+}znpidparameter;
+
 struct znpid{
-	struct znpidparam par;
-	float Err_past; // Last Error reading
-	float dy; // difference error y axis points.
-	float dx; // difference time x axis points.
-	float integral; // progression
-	float derivative; // rate of growth (tangent), or derivative
-	float PV; // output feedback
-	float OP; // output signal
+	znpidparameter par;
 	/******/
-	void (*set_kc)(struct znpid* self, float kc);
-	void (*set_ki)(struct znpid* self, float ki);
-	void (*set_kd)(struct znpid* self, float kd);
-	void (*set_SP)(struct znpid* self, float setpoint);
-	float (*output)(struct znpid* self, float PV, float timelapse);
+	void (*set_kc)(znpidparameter* par, double kc);
+	void (*set_ki)(znpidparameter* par, double ki);
+	void (*set_kd)(znpidparameter* par, double kd);
+	void (*set_SP)(znpidparameter* par, double setpoint);
+	double (*output)(znpidparameter* par, double PV, double timelapse);
 };
 typedef struct znpid ZNPID;
 

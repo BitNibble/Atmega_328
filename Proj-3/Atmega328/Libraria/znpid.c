@@ -16,46 +16,37 @@ Comment:
 #define ZNPID_outMIN -1023
 
 /***File Variable***/
-/***************************
-struct ZNPID_DATA{
-	float proportional;
-	float integral;
-	float derivative;
-}reading;
-***************************/
-float ZNPID_tmp;
+double ZNPID_tmp;
 
 /***File Header***/
-void ZNPID_set_kc(ZNPID* self, float kc);
-void ZNPID_set_ki(ZNPID* self, float ki);
-void ZNPID_set_kd(ZNPID* self, float kp);
-void ZNPID_set_SP(ZNPID* self, float setpoint);
-float ZNPID_delta(float present_value, float past_value);
-float ZNPID_sum(float value_1, float value_2);
-float ZNPID_product(float value_1, float value_2);
-float ZNPID_integral(ZNPID* self, float PV, float timelapse);
-float ZNPID_derivative(ZNPID* self, float PV, float timelapse);
-float ZNPID_output(ZNPID* self, float PV, float timelapse);
+void ZNPID_set_kc(znpidparameter* par, double kc);
+void ZNPID_set_ki(znpidparameter* par, double ki);
+void ZNPID_set_kd(znpidparameter* par, double kp);
+void ZNPID_set_SP(znpidparameter* par, double setpoint);
+double ZNPID_output(znpidparameter* par, double PV, double timelapse);
+double ZNPID_integral(znpidparameter* par, double PV, double timelapse);
+double ZNPID_derivative(znpidparameter* par, double PV, double timelapse);
+double ZNPID_delta(double present_value, double past_value);
+double ZNPID_sum(double value_1, double value_2);
+double ZNPID_product(double value_1, double value_2);
 
 /***Procedure & Function***/
 ZNPID ZNPIDenable(void)
 {
 	// LOCAL VARIABLES
-	// ALLOCAÇÂO MEMORIA PARA Estrutura
 	ZNPID znpid;
-	// import parameters
 	// initialize variables
 	znpid.par.kc = 1;
 	znpid.par.ki = 0;
 	znpid.par.kd = 0;
 	znpid.par.SetPoint = 0;
-	znpid.Err_past = 0;
-	znpid.dy = 0;
-	znpid.dx = 0;
-	znpid.integral = 0;
-	znpid.derivative = 0;
-	znpid.PV = 0;
-	znpid.OP = 0;
+	znpid.par.Err_past = 0;
+	znpid.par.dy = 0;
+	znpid.par.dx = 0;
+	znpid.par.integral = 0;
+	znpid.par.derivative = 0;
+	znpid.par.PV = 0;
+	znpid.par.OP = 0;
 	// Direccionar apontadores para PROTOTIPOS
 	znpid.set_kc = ZNPID_set_kc;
 	znpid.set_ki = ZNPID_set_ki;
@@ -65,63 +56,69 @@ ZNPID ZNPIDenable(void)
 	
 	return znpid;
 }
-void ZNPID_set_kc(ZNPID* self, float kc)
+void ZNPID_set_kc(znpidparameter* par, double kc)
 {
-	self->par.kc = kc;
+	par->kc = kc;
 }
-void ZNPID_set_ki(ZNPID* self, float ki)
+void ZNPID_set_ki(znpidparameter* par, double ki)
 {
-	self->par.ki = ki;
+	par->ki = ki;
 }
-void ZNPID_set_kd(ZNPID* self, float kd)
+void ZNPID_set_kd(znpidparameter* par, double kd)
 {	
-	self->par.kd = kd;
+	par->kd = kd;
 }
-void ZNPID_set_SP(ZNPID* self, float setpoint)
+void ZNPID_set_SP(znpidparameter* par, double setpoint)
 {
-	self->par.SetPoint = setpoint;
+	par->SetPoint = setpoint;
 }
-float ZNPID_delta(float present_value, float past_value)
+
+double ZNPID_output(znpidparameter* par, double PV, double timelapse)
+{
+	double result;
+	par->PV = PV;
+	par->dy = ZNPID_delta(par->SetPoint, PV);
+	par->dx = timelapse;
+	result = ZNPID_product(par->kc, par->dy);
+	ZNPID_tmp = ZNPID_product(par->ki, ZNPID_integral(par, PV, timelapse));
+	result = ZNPID_sum(result, ZNPID_tmp);
+	ZNPID_tmp = ZNPID_product(par->kd, ZNPID_derivative(par, PV, timelapse));
+	result = ZNPID_sum(result, ZNPID_tmp);
+	par->Err_past = par->dy;
+	par->OP = result;
+	if(result > ZNPID_outMAX)
+		par->integral = ZNPID_outMAX - (par->dy * par->dx) - (par->derivative * par->dx * par->dx);
+	else if(result < ZNPID_outMIN)
+		par->integral = ZNPID_outMIN + (par->dy * par->dx) + (par->derivative * par->dx * par->dx);
+	return result;
+}
+
+double ZNPID_integral(znpidparameter* par, double PV, double timelapse)
+{
+	ZNPID_tmp = ZNPID_product(ZNPID_sum(ZNPID_delta(par->SetPoint, PV), par->Err_past), timelapse);
+	ZNPID_tmp /= 2;
+	return (par->integral += ZNPID_tmp);
+}
+
+double ZNPID_derivative(znpidparameter* par, double PV, double timelapse)
+{
+	ZNPID_tmp = ZNPID_delta(ZNPID_delta(par->SetPoint, PV), par->Err_past);
+	return (par->derivative = (ZNPID_tmp / timelapse));
+}
+
+double ZNPID_delta(double present_value, double past_value)
 {
 	return (present_value - past_value);
 }
-float ZNPID_sum(float value_1, float value_2)
+
+double ZNPID_sum(double value_1, double value_2)
 {
 	return (value_1 + value_2);
 }
-float ZNPID_product(float value_1, float value_2)
+
+double ZNPID_product(double value_1, double value_2)
 {
 	return (value_1 * value_2);
-}
-float ZNPID_integral(ZNPID* self, float PV, float timelapse)
-{
-	ZNPID_tmp = ZNPID_product(ZNPID_sum(ZNPID_delta(self->par.SetPoint, PV), self->Err_past), timelapse);
-	ZNPID_tmp /= 2;
-	return (self->integral += ZNPID_tmp);
-}
-float ZNPID_derivative(ZNPID* self, float PV, float timelapse)
-{
-	ZNPID_tmp = ZNPID_delta(ZNPID_delta(self->par.SetPoint, PV), self->Err_past);
-	return (self->derivative = (ZNPID_tmp / timelapse));
-}
-float ZNPID_output(ZNPID* self, float PV, float timelapse)
-{
-	float result;
-	self->PV = PV;
-	self->dy = ZNPID_delta(self->par.SetPoint, PV);
-	self->dx = timelapse;
-	result = ZNPID_product(self->par.kc, self->dy);
-	ZNPID_tmp = ZNPID_product(self->par.ki, ZNPID_integral(self, PV, timelapse));
-	result = ZNPID_sum(result, ZNPID_tmp);
-	ZNPID_tmp = ZNPID_product(self->par.kd, ZNPID_derivative(self, PV, timelapse));
-	result = ZNPID_sum(result, ZNPID_tmp);
-	self->Err_past = self->dy;
-	self->OP = result;
-	if(result > ZNPID_outMAX)
-		self->integral = ZNPID_outMAX - (self->dy * self->dx) - (self->derivative * self->dx * self->dx);
-	else if(result < ZNPID_outMIN)
-		self->integral = ZNPID_outMIN + (self->dy * self->dx) + (self->derivative * self->dx * self->dx);
-	return result;
 }
 
 /***File Interrupt***/
