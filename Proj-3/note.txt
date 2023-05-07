@@ -1,99 +1,14 @@
-/***Play around***/
-	for(i=0;i<8;i++){
-		shift.bit(1);
-		shift.out();
-		_delay_ms(100);
-	}
-	for(i=0;i<8;i++){
-		shift.bit(0);
-		shift.out();
-		_delay_ms(100);
-	}
-	for(i=0;i<8;i++){
-		shift.bit(1);
-		shift.out();
-		_delay_ms(100);
-		shift.bit(0);
-		shift.out();
-		_delay_ms(100);
-	}
-	//
-	for(i=7;i;i--){
-		shift.bit(1);
-		shift.out();
-		_delay_ms(100);
-	}
-	for(i=7;i;i--){
-		shift.bit(0);
-		shift.out();
-		_delay_ms(100);
-	}
-	for(i=7;i;i--){
-		shift.bit(1);
-		shift.out();
-		_delay_ms(100);
-		shift.bit(0);
-		shift.out();
-		_delay_ms(100);
-	}
-	//
-	for(i=0;i<8;i++){
-		shift.byte(1<<i);
-		_delay_ms(100);
-	}
-	//
-	for(j=0;j<10;j++){
-		for(i=0;i<8;i++){
-			shift.byte(~(1<<i));
-			_delay_ms(50);
-		}
-		for(i=6;i;i--){
-			shift.byte(~(1<<i));
-			_delay_ms(50);
-		}
-	}
-	for(j=0;j<10;j++){
-		for(i=0;i<8;i++){
-			shift.byte(~(3<<i));
-			_delay_ms(50);
-		}
-		for(i=6;i;i--){
-			shift.byte(~(3<<i));
-			_delay_ms(50);
-		}
-	}
-	for(j=0;j<10;j++){
-		for(i=0;i<8;i++){
-			shift.byte(~(7<<i));
-			_delay_ms(50);
-		}
-		for(i=6;i;i--){
-			shift.byte(~(7<<i));
-			_delay_ms(50);
-		}
-	}
-	for(j=0;j<10;j++){
-		for(i=0;i<8;i++){
-			shift.byte(~(0x0F<<i));
-			_delay_ms(50);
-		}
-		for(i=6;i;i--){
-			shift.byte(~(0x0F<<i));
-			_delay_ms(50);
-		}
-	}
-	for(j=0;j<20;j++){
-		for(i=0;i<8;i++){
-			shift.byte(~(0x05<<i));
-			_delay_ms(50);
-		}
-		for(i=6;i;i--){
-			shift.byte(~(0x05<<i));
-			_delay_ms(50);
-		}
-	}
-	/***/
-/********************************************************************/
+In C there are basically 4 or five styles of programming, following the syntax basically can solve any problem.
 
-atcommands ESP8266 in progress
+Here using one of them consistently, creating a fixed programming architecture, that is flexible, easy to maintain,
+upgrade and add functionalities.
+
+Just by sticking to the process.
+
+That is why STM32 is seen as the most evolved programming structure comparing to other microcontroller networks,
+but here take a different approach, which to me is more adequate, even though can easily be intertwined with STM32
+architecture, using it as a piggy back, diferences can easily be converted from one to another, or use them both, 
+which is not advised, because routine simplifies life, not worrying always which is which.
+
+
 
