@@ -18,16 +18,15 @@ Comment:
 #define BUFFvar char
 
 /*** Global Variable ***/
-struct bufferposition
-{
+typedef struct {
 	BUFFvar* orig;
 	BUFFvar* head;
 	BUFFvar* end;
-};
+}bufferposition;
 
 struct buffer
 {
-	struct bufferposition pos;
+	bufferposition pos;
 	void (*push)(struct buffer* self, BUFFvar data);
 	BUFFvar* (*raw)(struct buffer* self);
 	void (*flush)(struct buffer* self);
