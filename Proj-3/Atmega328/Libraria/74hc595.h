@@ -21,20 +21,16 @@ typedef struct {
 	uint8_t HC595_datapin;
 	uint8_t HC595_clkpin;
 	uint8_t HC595_outpin;
-}hc595parameter;
-
-typedef struct {
 	volatile uint8_t *hc595_DDR;
 	volatile uint8_t *hc595_PORT;
-}hc595signal;
+}hc595parameter;
 
 struct hc595{
 	hc595parameter par;
-	hc595signal sig;
-	void (*bit)(struct hc595* self, uint8_t bool);
-	void (*ibyte)(struct hc595* self, uint8_t byte);
-	void (*byte)(struct hc595* self, uint8_t byte);
-	void (*out)(struct hc595* self);
+	void (*bit)(hc595parameter* par, uint8_t bool);
+	void (*ibyte)(hc595parameter* par, uint8_t byte);
+	void (*byte)(hc595parameter* par, uint8_t byte);
+	void (*out)(hc595parameter* par);
 };
 typedef struct hc595 HC595;
 

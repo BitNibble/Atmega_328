@@ -4,7 +4,7 @@ Author: Sergio Santos
 	<sergio.salazar.santos@gmail.com>
 License: GNU General Public License
 Hardware: all
-Date: 06052023
+Date: 07052023
 Comment:
 	Pin Analysis
 ********************************************************************/
@@ -16,11 +16,11 @@ Comment:
 /*** File Variable ***/
 
 /*** File Header ***/
-void EXPLODEupdate(EXPLODE *self, uint8_t x);
-uint8_t EXPLODEhh(EXPLODE *self);
-uint8_t EXPLODEll(EXPLODE *self);
-uint8_t EXPLODElh(EXPLODE *self);
-uint8_t EXPLODEhl(EXPLODE *self);
+void EXPLODEupdate(explodesignal* sig, uint8_t x);
+uint8_t EXPLODEhh(explodesignal* sig);
+uint8_t EXPLODEll(explodesignal* sig);
+uint8_t EXPLODElh(explodesignal* sig);
+uint8_t EXPLODEhl(explodesignal* sig);
 
 /*** Procedure & Function ***/
 EXPLODE EXPLODEenable( void )
@@ -28,46 +28,46 @@ EXPLODE EXPLODEenable( void )
 	// struct object
 	struct expld explode;
 	// initialize VAR
-	explode.par.XI = 0;
-	explode.par.XF = 0;
+	explode.sig.XI = 0;
+	explode.sig.XF = 0;
 	// function pointers
 	explode.update = EXPLODEupdate;
 	return explode; // return copy
 }
 // boot (preamble in while loop)
-void EXPLODEupdate(EXPLODE *self, uint8_t x)
+void EXPLODEupdate(explodesignal* sig, uint8_t x)
 {
-	self->par.XI = self->par.XF;
-	self->par.XF = x;
-	self->sig.HL = EXPLODEhl(self);
-	self->sig.LH = EXPLODElh(self);
-	self->sig.HH = EXPLODEhh(self);
-	self->sig.LL = EXPLODEll(self);
+	sig->XI = sig->XF;
+	sig->XF = x;
+	sig->HL = EXPLODEhl(sig);
+	sig->LH = EXPLODElh(sig);
+	sig->HH = EXPLODEhh(sig);
+	sig->LL = EXPLODEll(sig);
 }
 // hh
-uint8_t EXPLODEhh(EXPLODE *self)
+uint8_t EXPLODEhh(explodesignal* sig)
 {
-	return (self->par.XI & self->par.XF);
+	return (sig->XI & sig->XF);
 }
 // ll
-uint8_t EXPLODEll(EXPLODE *self)
+uint8_t EXPLODEll(explodesignal* sig)
 {
-	return ~(self->par.XI | self->par.XF);
+	return ~(sig->XI | sig->XF);
 }
 // lh
-uint8_t EXPLODElh(EXPLODE *self)
+uint8_t EXPLODElh(explodesignal* sig)
 {
 	uint8_t i;
-	i = self->par.XI ^ self->par.XF;
-	i &= self->par.XF;
+	i = sig->XI ^ sig->XF;
+	i &= sig->XF;
 	return i;
 }
 // hl
-uint8_t EXPLODEhl(EXPLODE *self)
+uint8_t EXPLODEhl(explodesignal* sig)
 {
 	uint8_t i;
-	i = self->par.XF ^ self->par.XI;
-	i &= self->par.XI;
+	i = sig->XF ^ sig->XI;
+	i &= sig->XI;
 	return i;
 }
 

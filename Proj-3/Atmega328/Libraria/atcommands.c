@@ -20,7 +20,7 @@ Comment:
 /*** File Constant & Macro ***/
 
 /*** File Variable ***/
-char ATstr[32];
+char ATstr[72];
 
 
 /*** File Header ***/
@@ -499,19 +499,21 @@ char* ESP8266cmd(uint16_t num)
 {
 	switch(num)
 	{
-		case 1: // zs-040: works.
+		case 1:
 			strcpy(ATstr, "AT\r\n");
 		break;
 		
 		
+		
+		case 99:
+			strcpy(ATstr, "AT+RST\r\n");
+		break;
 		default:
 			strcpy(ATstr, "AT\r\n");
 		break;
 	};
 	
 	/***
-	Restart AT+RST OK [System Ready, Vendor:www.ai-thinker.com]
-	
 	Firmware version AT+GMR AT+GMR 0018000902 OK
 	
 	List Access Points AT+CWLAP AT+CWLAP +CWLAP:(4,"RochefortSurLac",-

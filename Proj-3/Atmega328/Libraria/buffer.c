@@ -18,9 +18,9 @@ Comment:
 /*** File Variable ***/
 
 /*** File Header ***/
-void BUFF_push(BUFF* self, BUFFvar data);
-BUFFvar* BUFF_raw(BUFF* self);
-void BUFF_flush(BUFF* self);
+void BUFF_push(bufferposition* pos, BUFFvar data);
+BUFFvar* BUFF_raw(bufferposition* pos);
+void BUFF_flush(bufferposition* pos);
 
 /*** Procedure & Function ***/
 BUFF BUFFenable( uint8_t size_buff, BUFFvar* buff )
@@ -38,30 +38,30 @@ BUFF BUFFenable( uint8_t size_buff, BUFFvar* buff )
 	return ret; // return copy
 }
 
-void BUFF_push( BUFF* self, BUFFvar data ){
+void BUFF_push( bufferposition* pos, BUFFvar data ){
 	BUFFvar* head; BUFFvar* next;
-	head = self->pos.head;
+	head = pos->head;
 	if(data){
-		if( head == self->pos.end ){
-			head = self->pos.orig;
+		if( head == pos->end ){
+			head = pos->orig;
 			next = head + 1;
 		}else{
 			next = head + 1;
 		}
 			*head = data;
 			*next = 0;
-			self->pos.head = next;
+			pos->head = next;
 	}
 }
 
-BUFFvar* BUFF_raw( BUFF* self ){
-		return self->pos.orig;
+BUFFvar* BUFF_raw( bufferposition* pos ){
+		return pos->orig;
 }
 
-void BUFF_flush( BUFF* self ){
+void BUFF_flush( bufferposition* pos ){
 	BUFFvar* head;
-	head = self->pos.orig;
-	self->pos.head = head;
+	head = pos->orig;
+	pos->head = head;
 	*head = 0;
 }
 

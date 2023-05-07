@@ -27,9 +27,9 @@ typedef struct {
 struct buffer
 {
 	bufferposition pos;
-	void (*push)(struct buffer* self, BUFFvar data);
-	BUFFvar* (*raw)(struct buffer* self);
-	void (*flush)(struct buffer* self);
+	void (*push)(bufferposition* pos, BUFFvar data);
+	BUFFvar* (*raw)(bufferposition* pos);
+	void (*flush)(bufferposition* pos);
 };
 
 typedef struct buffer BUFF;

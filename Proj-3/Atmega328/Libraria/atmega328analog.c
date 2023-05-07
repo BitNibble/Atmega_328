@@ -66,18 +66,18 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
 	analogmega328.adc.reg->admux &= ~(3 << REFS0);
 	switch( Vreff ){
 		case 0:
-			analog.VREFF = 0;
+			analog.par.VREFF = 0;
 		break;
 		case 1:
 			analogmega328.adc.reg->admux |=	(1 << REFS0);
-			analog.VREFF = 1;
+			analog.par.VREFF = 1;
 		break;
 		case 3:
 			analogmega328.adc.reg->admux |=	(3 << REFS0);
-			analog.VREFF = 3;
+			analog.par.VREFF = 3;
 		break;
 		default:
-			analog.VREFF = 0;
+			analog.par.VREFF = 0;
 		break;
 	}
 	
@@ -100,35 +100,35 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
 	analogmega328.adc.reg->adcsra &= ~(7 << ADPS0);
 	switch( Divfactor ){
 		case 2: // 1
-			analog.DIVISION_FACTOR = 2;
+			analog.par.DIVISION_FACTOR = 2;
 		break;
 		case 4: // 2
 			analogmega328.adc.reg->adcsra |= (1 << ADPS1);
-			analog.DIVISION_FACTOR = 4;
+			analog.par.DIVISION_FACTOR = 4;
 		break;
 		case 8: // 3
 			analogmega328.adc.reg->adcsra |= (3 << ADPS0);
-			analog.DIVISION_FACTOR = 8;
+			analog.par.DIVISION_FACTOR = 8;
 		break;
 		case 16: // 4
 			analogmega328.adc.reg->adcsra |= (1 << ADPS2);
-			analog.DIVISION_FACTOR	=	16;
+			analog.par.DIVISION_FACTOR	=	16;
 		break;
 		case 32: // 5
 			analogmega328.adc.reg->adcsra |= (5 << ADPS0);
-			analog.DIVISION_FACTOR = 32;
+			analog.par.DIVISION_FACTOR = 32;
 		break;
 		case 64: // 6
 			analogmega328.adc.reg->adcsra |= (6 << ADPS0);
-			analog.DIVISION_FACTOR = 64;
+			analog.par.DIVISION_FACTOR = 64;
 		break;
 		case 128: // 7
 			analogmega328.adc.reg->adcsra |= (7 << ADPS0);
-			analog.DIVISION_FACTOR = 128;
+			analog.par.DIVISION_FACTOR = 128;
 		break;
 		default: // 7
 			analogmega328.adc.reg->adcsra |= (7 << ADPS0);
-			analog.DIVISION_FACTOR = 128;
+			analog.par.DIVISION_FACTOR = 128;
 		break;
 	}
 	analogmega328.cpu.reg->sreg = tSREG;

@@ -71,7 +71,7 @@ MM74C923 MM74C923enable(volatile uint8_t *ddr, volatile uint8_t *pin, volatile u
 	return mm74c923;
 }
 void MM74C923_activate(void){
-	vari.update(&vari, *mm74c923_PIN);
+	vari.update(&vari.sig, *mm74c923_PIN);
 }
 char MM74C923_getch(void)
 {

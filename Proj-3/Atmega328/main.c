@@ -145,7 +145,7 @@ int main(void)
 	uint8_t output = 0xFF;
 	d = 0; j=1; e=0;
 	
-	sh.byte(&sh,output);
+	sh.byte(&sh.par,output);
 	func.strtovec(LCD.pos.l10, "off");
 	func.strtovec(LCD.pos.l11, "off");
 	func.strtovec(LCD.pos.l12, "off");
@@ -159,9 +159,9 @@ int main(void)
 			lcd.reboot();
 		
 			input = ( m.portc.reg->pin & 0xF0 ) | ( m.portb.reg->pin >> 4 );
-			button.update(&button, input);
+			button.update(&button.sig, input);
 		
-			disp.update(&disp, m.portd.reg->pin);
+			disp.update(&disp.sig, m.portd.reg->pin);
 			
 			// uart capture
 			uartreceive = uart.gets(); // UART1
@@ -208,7 +208,7 @@ int main(void)
 			}
 					
 					
-			sh.byte(&sh,output);
+			sh.byte(&sh.par,output);
 			
 			//LED 1
 			if(!strcmp(uartrcv, "led 1.") || (button.sig.HL & 1)){
