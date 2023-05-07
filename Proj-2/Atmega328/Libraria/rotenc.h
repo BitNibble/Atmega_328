@@ -17,15 +17,19 @@ Comment:
 /*** Global Constant & Macro ***/
 
 /*** Global Variable ***/
-struct rotenc{
-	// VARIABLIES
+typedef struct{
 	uint8_t PinChnA;
 	uint8_t PinChnB;
 	uint8_t pchn;
 	uint8_t chn;
 	uint16_t num;
+}rotaryencoderparameter;
+	
+struct rotenc{
+	// VARIABLIES
+	rotaryencoderparameter par;
 	// PROTOTYPES VTABLE
-	struct rotenc (*rte)(struct rotenc *self, uint8_t data);
+	rotaryencoderparameter (*rte)(rotaryencoderparameter* par, uint8_t data);
 };
 typedef struct rotenc ROTENC;
 
