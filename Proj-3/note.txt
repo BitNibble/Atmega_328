@@ -10,5 +10,10 @@ but here take a different approach, which to me is more adequate, even though ca
 architecture, using it as a piggy back, diferences can easily be converted from one to another, or use them both, 
 which is not advised, because routine simplifies life, not worrying always which is which.
 
+A microncontroller is what, but a cpu with modules, communication modules, timming modules, and ADC modules.
 
+If one creates a structure that manipulates these very very well, then life will become so simple tha can make anything.
+The problem is that most are complex, and to many types, normalization should be consistant. Just choose one.
+
+That is why programming languages instead of helping just becomes barriers.
 
