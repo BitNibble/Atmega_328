@@ -270,10 +270,9 @@ typedef struct { // SRAM START = 0x0100 END = 0x0877 atmega328
 #endif
 
 /***EOF***/
+
 /***
 Notes:
 The Reset button is an interrupt [address 0 rjump] that jumps to the main() location.
-
-
 ***/
 

@@ -15,7 +15,6 @@ Comment:
 /*** File Define and Macro ***/
 #define TWI_T_START 0X08
 #define TWI_T_REPEATSTART 0X10
-
 // Status Codes for MASTER Transmitter Mode
 #define TWI_M_SLAW_R_ACK 0X18
 #define TWI_M_SLAW_R_NACK 0X20
@@ -74,7 +73,6 @@ uint8_t TWI_status(void);
 void TWI_wait_twint( uint16_t nticks );
 
 /*** Procedure and Function ***/
-// TWI TWIenable(uint8_t atmega_ID,  uint8_t prescaler)
 TWI TWIenable(uint8_t atmega_ID,  uint8_t prescaler)
 {
 	//local var

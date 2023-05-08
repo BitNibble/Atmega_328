@@ -142,7 +142,7 @@ typedef struct {
 	Atmega328WatchdogTimer_TypeDef* reg;
 } Atmega328WatchdogTimer;
 
-// STATIC RAM
+//		STATIC RAM
 // Interrupt Vectors (ISR)
 typedef struct {
 	Atmega328InterruptVectors_TypeDef* reg;
@@ -169,7 +169,6 @@ typedef struct {
 	Atmega328TwoWireSerialInterface twi;
 	Atmega328Usart usart;
 	Atmega328WatchdogTimer wdt;
-	Atmega328InterruptVectors isr;
 	//		Function Pointer
 	uint16_t (*readhlbyte)(HighLowByte reg);
 	uint16_t (*readlhbyte)(HighLowByte reg);

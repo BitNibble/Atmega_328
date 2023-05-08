@@ -74,5 +74,3 @@ TIMER_COUNTER2 TIMER_COUNTER2enable(unsigned char wavegenmode, unsigned char int
 // ISR(TIMER0_COMPB_vect){}
 // ISR(TIMER0_OVF_vect){}
 
-
-

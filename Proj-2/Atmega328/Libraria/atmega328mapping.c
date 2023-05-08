@@ -86,9 +86,6 @@ ATMEGA328 ATMEGA328enable(void){
 	#endif
 	// WDT
 	ret.wdt.reg = (Atmega328WatchdogTimer_TypeDef*) Atmega328WatchdogTimer_Address;
-	// Static RAM
-	// ISR
-	ret.isr.reg = (Atmega328InterruptVectors_TypeDef*) Atmega328InterruptVectors_Address;
 	// func
 	ret.readhlbyte = ReadHLByte;
 	ret.readlhbyte = ReadLHByte;
