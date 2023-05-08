@@ -22,14 +22,14 @@ typedef struct {
 	BUFFvar* orig;
 	BUFFvar* head;
 	BUFFvar* end;
-}bufferposition;
+}bufferparameter;
 
 struct buffer
 {
-	bufferposition pos;
-	void (*push)(bufferposition* pos, BUFFvar data);
-	BUFFvar* (*raw)(bufferposition* pos);
-	void (*flush)(bufferposition* pos);
+	bufferparameter par;
+	void (*push)(bufferparameter* par, BUFFvar data);
+	BUFFvar* (*raw)(bufferparameter* par);
+	void (*flush)(bufferparameter* par);
 };
 
 typedef struct buffer BUFF;

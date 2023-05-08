@@ -24,13 +24,13 @@ typedef struct {
 	unsigned int LH;
 	unsigned int HH;
 	unsigned int LL;
-}explodesignal;
+}explodeparameter;
 
 struct expld{
 	// Variable
-	explodesignal sig;
+	explodeparameter par;
 	// PROTOTYPES VTABLE
-	void (*update)(explodesignal* sig, uint8_t x); // preamble in (while loop)
+	void (*update)(explodeparameter* par, uint8_t x); // preamble in (while loop)
 };
 
 typedef struct expld EXPLODE;

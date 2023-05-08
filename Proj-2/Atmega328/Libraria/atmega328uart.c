@@ -181,11 +181,11 @@ UARTvar uart_getch(void)
 }
 UARTvar* uart_gets(void)
 {
-	return rxbuff.raw(&rxbuff);
+	return rxbuff.raw(&rxbuff.par);
 }
 void uart_rxflush(void)
 {
-	rxbuff.flush(&rxbuff);
+	rxbuff.flush(&rxbuff.par);
 }
 void uart_write(UARTvar data)
 {
@@ -219,7 +219,7 @@ ISR(UART_RX_COMPLETE)
     UART_LastRxError = (usr & (_BV(FE0) | _BV(DOR0)));
 	
 	UART_Rx = uartmega328.usart.reg->udr0;
-	rxbuff.push(&rxbuff, UART_Rx);
+	rxbuff.push(&rxbuff.par, UART_Rx);
 }
 
 ISR(UART_UDR_EMPTY)

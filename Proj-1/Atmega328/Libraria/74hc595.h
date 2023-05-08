@@ -4,7 +4,7 @@ Author: Sergio Santos
 	<sergio.salazar.santos@gmail.com>
 License: GNU General Public License
 Hardware: 74HC595
-Date: 25102020
+Date: 07052023
 Comment:
 	tested Atemga128 16Mhz and Atmega328 8Mhz
 ************************************************************************/
@@ -17,11 +17,20 @@ Comment:
 /*** Global Constant & Macro ***/
 
 /*** Global Variable ***/
+typedef struct {
+	uint8_t HC595_datapin;
+	uint8_t HC595_clkpin;
+	uint8_t HC595_outpin;
+	volatile uint8_t *hc595_DDR;
+	volatile uint8_t *hc595_PORT;
+}hc595parameter;
+
 struct hc595{
-	void (*bit)(uint8_t bool);
-	void (*ibyte)(uint8_t byte);
-	void (*byte)(uint8_t byte);
-	void (*out)(void);
+	hc595parameter par;
+	void (*bit)(hc595parameter* par, uint8_t bool);
+	void (*ibyte)(hc595parameter* par, uint8_t byte);
+	void (*byte)(hc595parameter* par, uint8_t byte);
+	void (*out)(hc595parameter* par);
 };
 typedef struct hc595 HC595;
 

@@ -4,7 +4,7 @@ Author: Sergio Santos
 	<sergio.salazar.santos@gmail.com>
 License: GNU General Public License
 Hardware: all
-Date: 20042023
+Date: 07052023
 Comment:
 	Pin Analysis
 ************************************************************************/
@@ -17,21 +17,22 @@ Comment:
 /*** Global Constant & Macro ***/
 
 /*** Global Variable ***/
-struct expldparam{
+typedef struct {
 	unsigned int XI;
 	unsigned int XF;
-};
-
-struct expld{
-	// Variable
-	struct expldparam par;
 	unsigned int HL;
 	unsigned int LH;
 	unsigned int HH;
 	unsigned int LL;
+}explodeparameter;
+
+struct expld{
+	// Variable
+	explodeparameter par;
 	// PROTOTYPES VTABLE
-	void (*update)(struct expld *self, uint8_t x); // preamble (while loop)
+	void (*update)(explodeparameter* par, uint8_t x); // preamble in (while loop)
 };
+
 typedef struct expld EXPLODE;
 
 /*** Global Header ***/

@@ -71,13 +71,13 @@ MM74C923 MM74C923enable(volatile uint8_t *ddr, volatile uint8_t *pin, volatile u
 	return mm74c923;
 }
 void MM74C923_activate(void){
-	vari.update(&vari, *mm74c923_PIN);
+	vari.update(&vari.par, *mm74c923_PIN);
 }
 char MM74C923_getch(void)
 {
 	uint8_t c, lh;
 	// uint8_t hl;
-	lh = vari.LH; // low to high bit mask
+	lh = vari.par.LH; // low to high bit mask
 	// hl=vari.HL(mm74c923_mem, mm74c923_tmp); // high to low bit mask
 	if(lh & (1 << MM74C923_DATA_AVAILABLE)){
 		*mm74c923_PORT &= ~(1 << MM74C923_OUTPUT_ENABLE);

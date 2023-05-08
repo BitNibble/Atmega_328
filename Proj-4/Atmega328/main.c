@@ -103,7 +103,7 @@ for (window = 0; TRUE; ) // Looping
 	if(!window){ // preamble
 		lcd.reboot();
 		input = ( m.portc.reg->pin & 0xF0 ) | ( m.portb.reg->pin >> 4 );
-		button.update(&button, input);
+		button.update(&button.par, input);
 		uartreceive = uart.gets();
 		strcpy(uartrcv, uartreceive);
 		if(uart.getch() == '.'){ uart.rxflush(); }

@@ -4,7 +4,7 @@ Author: Sergio Santos
 	<sergio.salazar.santos@gmail.com>
 License: GNU General Public License
 Hardware: all
-Date: 20042023
+Date: 07052023
 Comment:
 	Pin Analysis
 ********************************************************************/
@@ -16,11 +16,11 @@ Comment:
 /*** File Variable ***/
 
 /*** File Header ***/
-void EXPLODEupdate(EXPLODE *self, uint8_t x);
-uint8_t EXPLODEhh(EXPLODE *self);
-uint8_t EXPLODEll(EXPLODE *self);
-uint8_t EXPLODElh(EXPLODE *self);
-uint8_t EXPLODEhl(EXPLODE *self);
+void EXPLODEupdate(explodeparameter* par, uint8_t x);
+uint8_t EXPLODEhh(explodeparameter* par);
+uint8_t EXPLODEll(explodeparameter* par);
+uint8_t EXPLODElh(explodeparameter* par);
+uint8_t EXPLODEhl(explodeparameter* par);
 
 /*** Procedure & Function ***/
 EXPLODE EXPLODEenable( void )
@@ -35,39 +35,39 @@ EXPLODE EXPLODEenable( void )
 	return explode; // return copy
 }
 // boot (preamble in while loop)
-void EXPLODEupdate(EXPLODE *self, uint8_t x)
+void EXPLODEupdate(explodeparameter* par, uint8_t x)
 {
-	self->par.XI = self->par.XF;
-	self->par.XF = x;
-	self->HL = EXPLODEhl(self);
-	self->LH = EXPLODElh(self);
-	self->HH = EXPLODEhh(self);
-	self->LL = EXPLODEll(self);
+	par->XI = par->XF;
+	par->XF = x;
+	par->HL = EXPLODEhl(par);
+	par->LH = EXPLODElh(par);
+	par->HH = EXPLODEhh(par);
+	par->LL = EXPLODEll(par);
 }
 // hh
-uint8_t EXPLODEhh(EXPLODE *self)
+uint8_t EXPLODEhh(explodeparameter* par)
 {
-	return (self->par.XI & self->par.XF);
+	return (par->XI & par->XF);
 }
 // ll
-uint8_t EXPLODEll(EXPLODE *self)
+uint8_t EXPLODEll(explodeparameter* par)
 {
-	return ~(self->par.XI | self->par.XF);
+	return ~(par->XI | par->XF);
 }
 // lh
-uint8_t EXPLODElh(EXPLODE *self)
+uint8_t EXPLODElh(explodeparameter* par)
 {
 	uint8_t i;
-	i = self->par.XI ^ self->par.XF;
-	i &= self->par.XF;
+	i = par->XI ^ par->XF;
+	i &= par->XF;
 	return i;
 }
 // hl
-uint8_t EXPLODEhl(EXPLODE *self)
+uint8_t EXPLODEhl(explodeparameter* par)
 {
 	uint8_t i;
-	i = self->par.XF ^ self->par.XI;
-	i &= self->par.XI;
+	i = par->XF ^ par->XI;
+	i &= par->XI;
 	return i;
 }
 

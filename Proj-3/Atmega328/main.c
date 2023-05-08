@@ -159,9 +159,9 @@ int main(void)
 			lcd.reboot();
 		
 			input = ( m.portc.reg->pin & 0xF0 ) | ( m.portb.reg->pin >> 4 );
-			button.update(&button.sig, input);
+			button.update(&button.par, input);
 		
-			disp.update(&disp.sig, m.portd.reg->pin);
+			disp.update(&disp.par, m.portd.reg->pin);
 			
 			// uart capture
 			uartreceive = uart.gets(); // UART1
@@ -176,28 +176,28 @@ int main(void)
 			
 			switch(menu){ // MENU
 				case 1: // Main Program Menu
-					if(disp.sig.HL & (1 << 2)){menu = 2;}
+					if(disp.par.HL & (1 << 2)){menu = 2;}
 					lcd.gotoxy(0,0);
 					lcd.putch(':'); lcd.string_size(uartmsg,16);
 					lcd.gotoxy(1,0);
 					lcd.string_size(LCDline1, 16);		
 					break;
 				case 2: // Main Program Menu
-					if(disp.sig.HL & (1 << 2)){menu = 3;}
+					if(disp.par.HL & (1 << 2)){menu = 3;}
 					lcd.gotoxy(0,0);
 					lcd.hspace(4); lcd.string_size("Welcome",7);
 					lcd.gotoxy(1,0);
 					lcd.string_size(LCDline1, 16);
 				break;
 				case 3: // Main Program Menu
-					if(disp.sig.HL & (1 << 2)){menu = 4;}
+					if(disp.par.HL & (1 << 2)){menu = 4;}
 					lcd.gotoxy(0,0);
 					lcd.string_size("Testing, 1 2 3",16);
 					lcd.gotoxy(1,0);
 					lcd.string_size("Testing, 1 2 3",16);
 				break;
 				case 4: // Main Program Menu
-					if(disp.sig.HL & (1 << 2)){menu = 1;}
+					if(disp.par.HL & (1 << 2)){menu = 1;}
 					lcd.gotoxy(0,0);
 					lcd.string_size("Testing, 1 2 3",16);
 					lcd.gotoxy(1,0);
@@ -211,7 +211,7 @@ int main(void)
 			sh.byte(&sh.par,output);
 			
 			//LED 1
-			if(!strcmp(uartrcv, "led 1.") || (button.sig.HL & 1)){
+			if(!strcmp(uartrcv, "led 1.") || (button.par.HL & 1)){
 				if(output & 1){
 					output&=~1;
 					func.strtovec(LCD.pos.l10, "on ");
@@ -226,7 +226,7 @@ int main(void)
 			}
 		
 			//LED 2
-			if(!strcmp(uartrcv, "led 2.") || (button.sig.HL & 2)){
+			if(!strcmp(uartrcv, "led 2.") || (button.par.HL & 2)){
 				if(output & 2){
 					output&=~2;
 					func.strtovec(LCD.pos.l11, "on ");
@@ -241,7 +241,7 @@ int main(void)
 			}
 		
 			//LED 3
-			if(!strcmp(uartrcv, "led 3.") || (button.sig.HL & 16)){
+			if(!strcmp(uartrcv, "led 3.") || (button.par.HL & 16)){
 				if(output & 4){
 					output&=~4;
 					func.strtovec(LCD.pos.l12, "on ");
@@ -256,7 +256,7 @@ int main(void)
 			}
 		
 			//LED 4
-			if(!strcmp(uartrcv, "led 4.") || (button.sig.HL & 32)){
+			if(!strcmp(uartrcv, "led 4.") || (button.par.HL & 32)){
 				if(output & 8){
 					output&=~8;
 					func.strtovec(LCD.pos.l13, "on ");

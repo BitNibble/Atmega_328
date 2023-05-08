@@ -42,7 +42,7 @@ int main(void)
 	/***Local Variable***/
 	m328.gpwr.reg->r0=0xFF;
 	m328.gpwr.reg->r1=0xFF;
-	m328.gpwr.reg->X.L=m328.HLByte.L=0xFF;
+	m328.gpwr.reg->X.L=m328.HLbyte.L=0xFF;
 	m328.tc1.reg->timsk1=0XFF;
 	//m328.gpwr.reg->X=0xFFFF;
 	m328.ac.reg->acsr=0xFF;
