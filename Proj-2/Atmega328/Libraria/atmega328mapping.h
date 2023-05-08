@@ -30,7 +30,11 @@ Comment:
 #include "atmega328uart.h"
 
 /*** Global Variable ***/
-// SECOND LAYER
+//		PARAMETER
+typedef struct {
+	HighLowByte HLbyte;
+}Atmega328Parameter;
+//		SECOND LAYER
 // GPWR
 typedef struct {
 	Atmega328GPWR_TypeDef* reg;
@@ -146,6 +150,9 @@ typedef struct {
 
 // ATMEGA 328 IMAGE
 typedef struct {
+	//		Parameter
+	Atmega328Parameter par;
+	//		Second Layer
 	Atmega328GPWR gpwr;
 	Atmega328AnalogComparator ac;
 	Atmega328AnalogToDigitalConverter adc;
@@ -163,8 +170,7 @@ typedef struct {
 	Atmega328Usart usart;
 	Atmega328WatchdogTimer wdt;
 	Atmega328InterruptVectors isr;
-	
-	HighLowByte HLbyte;
+	//		Function Pointer
 	uint16_t (*readhlbyte)(HighLowByte reg);
 	uint16_t (*readlhbyte)(HighLowByte reg);
 	HighLowByte (*writehlbyte)(uint16_t val);

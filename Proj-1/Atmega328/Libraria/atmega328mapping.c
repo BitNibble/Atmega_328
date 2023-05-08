@@ -48,8 +48,11 @@ ATMEGA328 ATMEGA328enable(void){
 	#if defined(_ATMEGA328INTERRUPT_H_)
 		ret.exint.enable = INTERRUPTenable;
 	#endif
+	// PORTB
 	ret.portb.reg = (Atmega328PORTB_TypeDef*) Atmega328PORTB_Address;
+	// PORTC
 	ret.portc.reg = (Atmega328PORTC_TypeDef*) Atmega328PORTC_Address;
+	// PORTD
 	ret.portd.reg = (Atmega328PORTD_TypeDef*) Atmega328PORTD_Address;
 	// SPI
 	ret.spi.reg = (Atmega328SerialPeripherialInterface_TypeDef*) Atmega328SerialPeripherialInterface_Address;

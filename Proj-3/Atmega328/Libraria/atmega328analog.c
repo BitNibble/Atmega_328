@@ -21,8 +21,6 @@ Comment:
 #if defined(__AVR_ATmega48__) ||defined(__AVR_ATmega88__) || defined(__AVR_ATmega168__) || \
       defined(__AVR_ATmega48P__) ||defined(__AVR_ATmega88P__) || defined(__AVR_ATmega168P__) || \
       defined(__AVR_ATmega328P__) ||defined(__AVR_ATmega328__)
-	//#define MEGA_ANALOG
-	//#define DIGITAL_INPUT_DISABLE_REGISTER DIDR0
 	#define MUX_MASK 15
 	#define ANALOG_INTERRUPT ADC_vect
 #else

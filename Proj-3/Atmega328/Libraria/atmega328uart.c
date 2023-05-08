@@ -33,7 +33,6 @@ Comment:
 #if defined(__AVR_ATmega48__) ||defined(__AVR_ATmega88__) || defined(__AVR_ATmega168__) || \
       defined(__AVR_ATmega48P__) ||defined(__AVR_ATmega88P__) || defined(__AVR_ATmega168P__) || \
       defined(__AVR_ATmega328__) || defined(__AVR_ATmega328P__)
-	 #define ATMEGA_328_USART
 	 // USART, RX Complete Handler
 	 #define UART_RX_COMPLETE		USART_RX_vect
 	 // USART, UDR Empty Handler

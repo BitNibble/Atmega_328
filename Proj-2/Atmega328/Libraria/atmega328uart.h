@@ -31,12 +31,16 @@ Comment:
 #define ODD 3
 
 /*** Global Variable ***/
-struct uart {
-	// Parameters
+typedef struct {
 	unsigned int ubrr;
 	unsigned int FDbits;
 	unsigned int Stopbits;
 	unsigned int Parity;
+}uartparameter;
+
+struct uart {
+	// Parameters
+	uartparameter par;
 	// prototype pointers
 	UARTvar (*read)(void);
 	UARTvar (*getch)(void);
