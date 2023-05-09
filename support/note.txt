@@ -1,0 +1,9 @@
+to use user C libraries in arduino:
+
+rename the .c file to .cpp
+
+or add in main File Libraries:
+
+extern "C" {
+	#include <TheLibrary.h>
+}
