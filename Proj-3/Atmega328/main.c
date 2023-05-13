@@ -107,8 +107,11 @@ void exponencial(double* target, double rate);
 /*** File Procedure & Function ***/
 int main(void)
 {	
+	//		main preamble
+	m = ATMEGA328enable();
 	PORTINIT();
 	
+	//		Inic Global Vars
 	//timer0_ovf = interrupt1;
 	
 	LCD.pos.l00 = LCDline0;
@@ -126,7 +129,6 @@ int main(void)
 	LCDline0[17] = '\0';
 	LCDline1[17] = '\0';
 	
-	m = ATMEGA328enable();
 	func = FUNCenable();
 	lcd = LCD0enable(&DDRB, &PINB, &PORTB, &DDRC, &PINC, &PORTC);
 	// HC595 sh = HC595enable(&DDRB,&PORTB,3,1,0); //using arduino
@@ -141,6 +143,7 @@ int main(void)
 	tc1.start(1024);
 	tc1.compareA(0x1AFF);
 	
+	// Local Vars
 	uint8_t input;	
 	uint8_t output = 0xFF;
 	d = 0; j=1; e=0;
@@ -155,49 +158,45 @@ int main(void)
 	uint8_t window, menu;
     for (window = 0, menu = 1; TRUE; ) // Looping
     {
-		if(!window){ // preamble
+		// 0
+		if(!window){ // Loop preamble
 			lcd.reboot();
-		
 			input = m.byte_mask( m.portc.reg->pin, 0xF0 ) | m.byte_shiftright( m.portb.reg->pin, 4 );
 			button.update(&button.par, input);
-		
 			disp.update(&disp.par, m.portd.reg->pin);
-			
 			// uart capture
 			uartreceive = uart.gets(); // UART1
 			strcpy(uartrcv, uartreceive);
-		
 			if(uart.getch() == '.'){ uart.rxflush(); }
 			else{strcpy( uartmsg, uartreceive ); }
-			
 			window = 1; continue;
 		}
+		// 1
 		if(window == 1){ // procedures
-			
 			switch(menu){ // MENU
 				case 1: // Main Program Menu
-					if(disp.par.HL & (1 << 2)){menu = 2;}
+					if(m.byte_mask(disp.par.HL, m.byte_shiftleft(1, 2))){menu = 2;}
 					lcd.gotoxy(0,0);
 					lcd.putch(':'); lcd.string_size(uartmsg,16);
 					lcd.gotoxy(1,0);
 					lcd.string_size(LCDline1, 16);		
 					break;
 				case 2: // Main Program Menu
-					if(disp.par.HL & (1 << 2)){menu = 3;}
+					if(m.byte_mask(disp.par.HL, m.byte_shiftleft(1, 2))){menu = 3;}
 					lcd.gotoxy(0,0);
 					lcd.hspace(4); lcd.string_size("Welcome",7);
 					lcd.gotoxy(1,0);
 					lcd.string_size(LCDline1, 16);
 				break;
 				case 3: // Main Program Menu
-					if(disp.par.HL & (1 << 2)){menu = 4;}
+					if(m.byte_mask(disp.par.HL, m.byte_shiftleft(1, 2))){menu = 4;}
 					lcd.gotoxy(0,0);
 					lcd.string_size("Testing, 1 2 3",16);
 					lcd.gotoxy(1,0);
 					lcd.string_size("Testing, 1 2 3",16);
 				break;
 				case 4: // Main Program Menu
-					if(disp.par.HL & (1 << 2)){menu = 1;}
+					if(m.byte_mask(disp.par.HL, m.byte_shiftleft(1, 2))){menu = 1;}
 					lcd.gotoxy(0,0);
 					lcd.string_size("Testing, 1 2 3",16);
 					lcd.gotoxy(1,0);
@@ -205,13 +204,10 @@ int main(void)
 				break;
 				default:
 					break;
-			}
-					
-					
-			sh.byte(&sh.par,output);
-			
+			}		
+			sh.byte(&sh.par,output);	
 			//LED 1
-			if(!strcmp(uartrcv, "led 1.") || (button.par.HL & 1)){
+			if(!strcmp(uartrcv, "led 1.") || m.byte_mask(button.par.HL, 1)){
 				if(output & 1){
 					output&=~1;
 					func.strtovec(LCD.pos.l10, "on ");
@@ -224,9 +220,8 @@ int main(void)
 					output|=1;
 					func.strtovec(LCD.pos.l10, "off");
 			}
-		
 			//LED 2
-			if(!strcmp(uartrcv, "led 2.") || (button.par.HL & 2)){
+			if(!strcmp(uartrcv, "led 2.") || m.byte_mask(button.par.HL, 2)){
 				if(output & 2){
 					output&=~2;
 					func.strtovec(LCD.pos.l11, "on ");
@@ -238,10 +233,9 @@ int main(void)
 			if(!strcmp(uartrcv, "led 2 off.")){
 				output|=2;
 				func.strtovec(LCD.pos.l11, "off");
-			}
-		
+			}		
 			//LED 3
-			if(!strcmp(uartrcv, "led 3.") || (button.par.HL & 16)){
+			if(!strcmp(uartrcv, "led 3.") || m.byte_mask(button.par.HL, 16)){
 				if(output & 4){
 					output&=~4;
 					func.strtovec(LCD.pos.l12, "on ");
@@ -254,9 +248,8 @@ int main(void)
 				output|=4;
 				func.strtovec(LCD.pos.l12, "off");
 			}
-		
 			//LED 4
-			if(!strcmp(uartrcv, "led 4.") || (button.par.HL & 32)){
+			if(!strcmp(uartrcv, "led 4.") || m.byte_mask(button.par.HL, 32)){
 				if(output & 8){
 					output&=~8;
 					func.strtovec(LCD.pos.l13, "on ");
@@ -269,7 +262,6 @@ int main(void)
 				output|=8;
 				func.strtovec(LCD.pos.l13, "off");
 			}
-		
 			//ALL OFF
 			if(!strcmp(uartrcv, "all off.")){
 				output = 0xFF;
@@ -278,17 +270,14 @@ int main(void)
 				func.strtovec(LCD.pos.l12, "off");
 				func.strtovec(LCD.pos.l13, "off");
 			}
-		
 			//STATUS FEEDBACK
 			if(!strcmp(uartrcv, "status.")){
 				uart.puts(LCDline1);
 			}
-		
 			window = 0; continue;
-		
 		}
-		if(window == 2){ // testing
-			
+		// 2
+		if(window == 2){ // testing	
 			// check character table of LCD
 			//for(i=0;i<16;lcd.putch(i),i++);
 			//for(i=16;i<32;lcd.putch(i),i++);
@@ -305,13 +294,12 @@ int main(void)
 			//for(i=208;i<224;lcd.putch(i),i++);
 			//for(i=224;i<240;lcd.putch(i),i++);
 			//for(i=240;i<255;lcd.putch(i),i++); // 255 is a BLACK P.
-		
 			window = 0; continue;
-		
 		}
     }
 }
 
+/*** Procedure and Function Definitions ***/
 void PORTINIT(void)
 {
 	m.byte_clear(&m.portb.reg->ddr, 0xFF);
@@ -319,9 +307,15 @@ void PORTINIT(void)
 	m.byte_clear(&m.portc.reg->ddr, 0xFF);
 	m.byte_set(&m.portc.reg->port, 0xF0);
 	m.byte_clear(&m.portd.reg->ddr, m.byte_shiftleft(1, 2));
-	m.byte_set(&m.portd.reg->port, m.byte_shiftleft(1, 2));
+	m.byte_set(&m.portd.reg->port, m.byte_shiftleft(1, 2));	
+	//		OLD WAY
+	//m.portb.reg->ddr = 0x00;
+	//m.portb.reg->port |= 0xF0;
+	//m.portc.reg->ddr = 0x00;
+	//m.portc.reg->port |= 0xF0;
+	//m.portd.reg->ddr &= ~m.byte_shiftleft(1, 2);
+	//m.portd.reg->port |= m.byte_shiftleft(1, 2);
 }
-
 // make a library for these functions with extra functionalities (these are incomplete)
 void linear(double* target, double rate) // *target = rate * t -> t is interrupt timer
 {
@@ -343,8 +337,8 @@ void exponencial(double* target, double rate) // *target = rate ^ t -> t is inte
 	diff = next - cpy; // to have growth rate (could be bypassed)
 	*target = cpy + diff;
 }
-
 //double product (double u, double v){return (u * v);}
+
 /*** File Interrupt ***/
 // ISR(TIMER1_OVF_vect)
 ISR(TIMER1_COMPA_vect)
@@ -367,8 +361,7 @@ ISR(TIMER1_COMPA_vect)
 			break;
 		default:
 			break;
-	}
-	
+	}	
 	//d=2.0 * 2;
 	/**
 	// Play around
