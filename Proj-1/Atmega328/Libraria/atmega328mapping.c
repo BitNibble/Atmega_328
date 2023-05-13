@@ -4,7 +4,7 @@ Author: Sergio Manuel Santos
 	<sergio.salazar.santos@gmail.com>
 License: GNU General Public License
 Hardware: Atmega328 by ETT ET-BASE
-Date: 07122022
+Date: 13052023
 Comment:
 	Virtual Image Atmega 328 mapping and linking.
 *********************************************************************/
@@ -37,7 +37,9 @@ ATMEGA328 ATMEGA328enable(void){
 	#if defined(_ATMEGA328ANALOG_H_)
 		ret.adc.enable = ANALOGenable;
 	#endif
+	// CPU
 	ret.cpu.reg = (Atmega328CPURegister_TypeDef*) Atmega328CPURegister_Address;
+	ret.cpu.gpio = (Atmega328CpuGeneralPurposeIoRegister_TypeDef*) Atmega328CpuGeneralPurposeIoRegister_Address;
 	// EEPROM
 	ret.eeprom.reg = (Atmega328Eeprom_TypeDef*) Atmega328Eeprom_Address;
 	#if defined(_ATMEGAEEPROM_H_)
@@ -61,16 +63,28 @@ ATMEGA328 ATMEGA328enable(void){
 	#endif
 	// TC1
 	ret.tc1.reg = (Atmega328TimerCounter1_TypeDef*) Atmega328TimerCounter1_Address;
+	ret.tc1.gcr = (Atmega328TimerGeneralControlRegister_TypeDef*) Atmega328TimerGeneralControlRegister_Address;
+	ret.tc1.iflag = (Atmega328TimerInterruptFlag_TypeDef*) Atmega328TimerInterruptFlag_Address;
+	ret.tc1.imask = (Atmega328TimerMask_TypeDef*) Atmega328TimerMask_Address;
+	ret.tc1.comp = (Atmega328TimerCompareRegister1_TypeDef*) Atmega328TimerCompareRegister1_Address;
 	#if defined(_ATMEGA328TIMER_H_)
 		ret.tc1.enable = TIMER_COUNTER1enable;
 	#endif
 	// TC0
 	ret.tc0.reg = (Atmega328TimerCounter0_TypeDef*) Atmega328TimerCounter0_Address;
+	ret.tc0.gcr = (Atmega328TimerGeneralControlRegister_TypeDef*) Atmega328TimerGeneralControlRegister_Address;
+	ret.tc0.iflag = (Atmega328TimerInterruptFlag_TypeDef*) Atmega328TimerInterruptFlag_Address;
+	ret.tc0.imask = (Atmega328TimerMask_TypeDef*) Atmega328TimerMask_Address;
+	ret.tc0.comp = (Atmega328TimerCompareRegister0_TypeDef*) Atmega328TimerCompareRegister0_Address;
 	#if defined(_ATMEGA328TIMER_H_)
 		ret.tc0.enable = TIMER_COUNTER0enable;
 	#endif
 	// TC2
 	ret.tc2.reg = (Atmega328TimerCounter2_TypeDef*) Atmega328TimerCounter2_Address;
+	ret.tc2.gcr = (Atmega328TimerGeneralControlRegister_TypeDef*) Atmega328TimerGeneralControlRegister_Address;
+	ret.tc2.iflag = (Atmega328TimerInterruptFlag_TypeDef*) Atmega328TimerInterruptFlag_Address;
+	ret.tc2.imask = (Atmega328TimerMask_TypeDef*) Atmega328TimerMask_Address;
+	ret.tc2.comp = (Atmega328TimerCompareRegister2_TypeDef*) Atmega328TimerCompareRegister2_Address;
 	#if defined(_ATMEGA328TIMER_H_)
 		ret.tc2.enable = TIMER_COUNTER2enable;
 	#endif

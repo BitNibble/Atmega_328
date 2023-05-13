@@ -4,9 +4,10 @@ Author: Sergio Manuel Santos
 	<sergio.salazar.santos@gmail.com>
 License: GNU General Public License
 Hardware: Atmega328 by ETT ET-BASE
-Date: 03122022
-Comment: 
+Date: 13052023
+Comment:
 	Virtual Image Atmega 328.
+	In Search of Perfection
 ************************************************************************/
 #ifndef _ATMEGA328_H_
 	#define _ATMEGA328_H_
@@ -18,28 +19,36 @@ Comment:
 #define Atmega328GPWR_Address 0x0000
 #define Atmega328AnalogComparator_Address 0x0050
 #define Atmega328AnalogToDigitalConverter_Address 0x0078
-#define Atmega328CPURegister_Address 0x003E
+#define Atmega328CPURegister_Address 0x0053
 #define Atmega328Eeprom_Address 0x003F
 #define Atmega328ExternalInterrupts_Address 0x003B
 #define Atmega328PORTB_Address 0x0023
 #define Atmega328PORTC_Address 0x0026
 #define Atmega328PORTD_Address 0x0029
 #define Atmega328SerialPeripherialInterface_Address 0x004C
-#define Atmega328TimerCounter1_Address 0x0036
-#define Atmega328TimerCounter0_Address 0x0035
-#define Atmega328TimerCounter2_Address 0x0037
+#define Atmega328TimerCounter1_Address 0x0080
+#define Atmega328TimerCounter0_Address 0x0044
+#define Atmega328TimerCounter2_Address 0x00B0
 #define Atmega328TwoWireSerialInterface_Address 0x00B8
 #define Atmega328Usart_Address 0x00C0
 #define Atmega328WatchdogTimer_Address 0x0060
+// AUXILIAR
+#define Atmega328TimerGeneralControlRegister_Address 0x0043
+#define Atmega328TimerInterruptFlag_Address 0x0035
+#define Atmega328TimerMask_Address 0x006E;
+#define Atmega328TimerCompareRegister0_Address 0x0047
+#define Atmega328TimerCompareRegister1_Address 0x0086
+#define Atmega328TimerCompareRegister2_Address 0x00B3
+#define Atmega328CpuGeneralPurposeIoRegister_Address 0x003E
 
 /*** Global Variable ***/
-// Low Byte High Byte
-typedef struct { // little endian
+// HLbyte
+typedef struct {
 	uint8_t L; // Lower address
 	uint8_t H; // Higher address
 } HighLowByte;
 
-/*** MAIN HARDWARE LAYER ***/
+//		MAIN HARDWARE LAYER
 // GPWR
 typedef struct {
 	uint8_t r0;
@@ -84,7 +93,7 @@ typedef struct {
 typedef struct {
 	HighLowByte adc; // 0x78 0x79
 	uint8_t adcsra; // 0x7A
-	uint8_t adscrb; // 0x7B
+	uint8_t adcsrb; // 0x7B
 	uint8_t admux; // 0x7C
 	uint8_t fill; // (0x7E - 0x7C) - 1
 	uint8_t didr0; // 0x7E
@@ -92,26 +101,28 @@ typedef struct {
 
 // CPU Register (CPU)
 typedef struct {
+	uint8_t smcr; // 0x53
+	uint8_t mcusr; // 0x54
+	uint8_t mcucr; // 0x55
+	uint8_t fill1; // (0x57 - 0x55) - 1
+	uint8_t spmcsr; // 0x57
+	uint8_t fill2[5]; // (0x5D - 0x57) - 1
+	HighLowByte sp; // 0x5D 0x5E
+	uint8_t sreg; // 0x5F
+	uint8_t fill3; // (0x61 - 0x5F) - 1
+	uint8_t clkpr; // 0x61
+	uint8_t fill4[2]; // (0x64 - 0x61) - 1
+	uint8_t prr; // 0x64
+	uint8_t fill5; // (0x66 - 0x64) - 1
+	uint8_t osccal; // 0x66
+} Atmega328CPURegister_TypeDef;
+
+typedef struct {
 	uint8_t gpior0; // 0x3E
 	uint8_t fill1[11]; // (0x4A - 0x3E) - 1
 	uint8_t gpior1; // 0x4A
 	uint8_t gpior2; // 0x4B
-	uint8_t fill2[7]; // (0x53 - 0x4B) - 1
-	uint8_t smcr; // 0x53
-	uint8_t mcusr; // 0x54
-	uint8_t mcucr; // 0x55
-	uint8_t fill3; // (0x57 - 0x55) - 1
-	uint8_t spmcsr; // 0x57
-	uint8_t fill4[5]; // (0x5D - 0x57) - 1
-	HighLowByte sp; // 0x5D 0x5E
-	uint8_t sreg; // 0x5F
-	uint8_t fill5; // (0x61 - 0x5F) - 1
-	uint8_t clkpr; // 0x61
-	uint8_t fill6[2]; // (0x64 - 0x61) - 1
-	uint8_t prr; // 0x64
-	uint8_t fill7; // (0x66 - 0x64) - 1
-	uint8_t osccal; // 0x66
-} Atmega328CPURegister_TypeDef;
+} Atmega328CpuGeneralPurposeIoRegister_TypeDef;
 
 // EEPROM (EEPROM)
 typedef struct {
@@ -162,54 +173,63 @@ typedef struct {
 	uint8_t spdr; // 0x4E
 } Atmega328SerialPeripherialInterface_TypeDef;
 
+// TIMER
+typedef struct {
+	uint8_t gtccr; // 0x43
+} Atmega328TimerGeneralControlRegister_TypeDef;
+
+typedef struct {
+	uint8_t tifr0; // 0x35
+	uint8_t tifr1; // 0x36
+	uint8_t tifr2; // 0x37
+} Atmega328TimerInterruptFlag_TypeDef;
+
+typedef struct {
+	uint8_t timsk0; // 0x6E
+	uint8_t timsk1; // 0x6F
+	uint8_t timsk2; // 0x70
+} Atmega328TimerMask_TypeDef;
+
 // Timer/Counter, 16-bit (TC1)
 typedef struct {
-	uint8_t tifr1; // 0x36
-	uint8_t fill1[12]; // (0x43 - 0x36) - 1
-	uint8_t gtccr; // 0x43
-	uint8_t fill2[43]; // (0x6F - 0x43) - 1
-	uint8_t timsk1; // 0x6F
-	uint8_t fill3[16]; // (0x80 - 0x6F) - 1
 	uint8_t tccr1a; // 0x80
 	uint8_t tccr1b; // 0x81
 	uint8_t tccr1c; // 0x82
-	uint8_t fill4; // (0x84 - 0x82) - 1
+	uint8_t fill; // (0x84 - 0x82) - 1
 	HighLowByte tcnt1; // 0x84 0x85
+} Atmega328TimerCounter1_TypeDef;
+
+typedef struct {
 	HighLowByte icr1; // 0x86 0x87
 	HighLowByte ocr1a; // 0x88 0x89
 	HighLowByte ocr1b; // 0x8A 0x8B
-} Atmega328TimerCounter1_TypeDef;
+} Atmega328TimerCompareRegister1_TypeDef;
 
 // Timer/Counter, 8-bit A sync (TC0)
 typedef struct {
-	uint8_t tifr0; // 0x35
-	uint8_t fill1[13]; // (0x43 - 0x35) - 1
-	uint8_t gtccr; // 0x43
 	uint8_t tccr0a; // 0x44
 	uint8_t tccr0b; // 0x45
 	uint8_t tcnt0; // 0x46
+} Atmega328TimerCounter0_TypeDef;
+
+typedef struct {
 	uint8_t ocr0a; // 0x47
 	uint8_t ocr0b; // 0x48
-	uint8_t fill2[37]; // (0x6E - 0x48) - 1
-	uint8_t timsk0; // 0x6E
-} Atmega328TimerCounter0_TypeDef;
+} Atmega328TimerCompareRegister0_TypeDef;
 
 // Timer/Counter, 8-bit (TC2)
 typedef struct {
-	uint8_t tifr2; // 0x37
-	uint8_t fill1[11]; // (0x43 - 0x37) - 1
-	uint8_t gtccr; // 0x43
-	uint8_t fill2[44]; // (0x70 - 0x43) - 1
-	uint8_t timsk2; // 0x70
-	uint8_t fill3[63]; // (0xB0 - 0x70) - 1
 	uint8_t tccr2a; // 0xB0
 	uint8_t tccr2b; // 0xB1
 	uint8_t tcnt2; // 0xB2
+} Atmega328TimerCounter2_TypeDef;
+
+typedef struct {
 	uint8_t ocr2a; // 0xB3
 	uint8_t ocr2b; // 0xB4
 	uint8_t fill4; // (0xB6 - 0xB4) - 1
 	uint8_t assr; // 0xB6
-} Atmega328TimerCounter2_TypeDef;
+} Atmega328TimerCompareRegister2_TypeDef;
 
 // Two Wire Serial Interface (TWI)
 typedef struct {

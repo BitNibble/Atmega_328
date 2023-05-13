@@ -92,7 +92,7 @@ ANALOG ANALOGenable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
 	analogmega328.adc.reg->adcsra |= (1 << ADEN);
 	analogmega328.adc.reg->adcsra |= (1 << ADSC);
 	analogmega328.adc.reg->adcsra &= ~(1 << ADATE);
-	analogmega328.adc.reg->adscrb &= ~(7 << ADTS0);
+	analogmega328.adc.reg->adcsrb &= ~(7 << ADTS0);
 	analogmega328.adc.reg->adcsra |= (1 << ADIE);
 	
 	analogmega328.adc.reg->adcsra &= ~(7 << ADPS0);

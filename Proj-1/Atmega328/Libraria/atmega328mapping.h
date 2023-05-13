@@ -4,7 +4,7 @@ Author: Sergio Manuel Santos
 	<sergio.salazar.santos@gmail.com>
 License: GNU General Public License
 Hardware: Atmega328 by ETT ET-BASE
-Date: 07122022
+Date: 13052023
 Comment: 
 	Virtual Image Atmega 328 mapping.
 *********************************************************************/
@@ -56,6 +56,7 @@ typedef struct {
 // CPU Register (CPU)
 typedef struct {
 	Atmega328CPURegister_TypeDef* reg;
+	Atmega328CpuGeneralPurposeIoRegister_TypeDef* gpio;
 } Atmega328CPURegister;
 
 // EEPROM (EEPROM)
@@ -100,6 +101,10 @@ typedef struct {
 // Timer/Counter, 16-bit (TC1)
 typedef struct {
 	Atmega328TimerCounter1_TypeDef* reg;
+	Atmega328TimerGeneralControlRegister_TypeDef* gcr;
+	Atmega328TimerInterruptFlag_TypeDef* iflag;
+	Atmega328TimerMask_TypeDef* imask;
+	Atmega328TimerCompareRegister1_TypeDef* comp;
 	#if defined(_ATMEGA328TIMER_H_)
 		TIMER_COUNTER1 (*enable)(unsigned char wavegenmode, unsigned char interrupt);
 	#endif
@@ -108,6 +113,10 @@ typedef struct {
 // Timer/Counter, 8-bit (TC0)
 typedef struct {
 	Atmega328TimerCounter0_TypeDef* reg;
+	Atmega328TimerGeneralControlRegister_TypeDef* gcr;
+	Atmega328TimerInterruptFlag_TypeDef* iflag;
+	Atmega328TimerMask_TypeDef* imask;
+	Atmega328TimerCompareRegister0_TypeDef* comp;
 	#if defined(_ATMEGA328TIMER_H_)
 		TIMER_COUNTER0 (*enable)(unsigned char wavegenmode, unsigned char interrupt);
 	#endif
@@ -116,6 +125,10 @@ typedef struct {
 // Timer/Counter, 8-bit A sync (TC2)
 typedef struct {
 	Atmega328TimerCounter2_TypeDef* reg;
+	Atmega328TimerGeneralControlRegister_TypeDef* gcr;
+	Atmega328TimerInterruptFlag_TypeDef* iflag;
+	Atmega328TimerMask_TypeDef* imask;
+	Atmega328TimerCompareRegister2_TypeDef* comp;
 	#if defined(_ATMEGA328TIMER_H_)
 		TIMER_COUNTER2 (*enable)(unsigned char wavegenmode, unsigned char interrupt);
 	#endif

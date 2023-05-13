@@ -81,36 +81,36 @@ TIMER_COUNTER0 TIMER_COUNTER0enable(unsigned char wavegenmode, unsigned char int
 		default: // Normal
 		break;
 	}
-	timermega328.tc0.reg->timsk0 &= ~((1 << OCIE0B) | (1 << OCIE0A) | (1 << TOIE0));
+	timermega328.tc0.imask->timsk0 &= ~((1 << OCIE0B) | (1 << OCIE0A) | (1 << TOIE0));
 	switch(interrupt){
 		case 0: 
 		break;
 		case 1:
-			timermega328.tc0.reg->timsk0 |= (1 << TOIE0);
+			timermega328.tc0.imask->timsk0 |= (1 << TOIE0);
 			timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
 		break;
 		case 2:
-			timermega328.tc0.reg->timsk0 |= (1 << OCIE0A);
+			timermega328.tc0.imask->timsk0 |= (1 << OCIE0A);
 			timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
 		break;
 		case 3:
-			timermega328.tc0.reg->timsk0 |= (1 << OCIE0B);
+			timermega328.tc0.imask->timsk0 |= (1 << OCIE0B);
 			timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
 		break;
 		case 4:
-			timermega328.tc0.reg->timsk0 |= (1 << TOIE0) | (1 << OCIE0A);
+			timermega328.tc0.imask->timsk0 |= (1 << TOIE0) | (1 << OCIE0A);
 			timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
 		break;
 		case 5:
-			timermega328.tc0.reg->timsk0 |= (1 << TOIE0) | (1 << OCIE0B);
+			timermega328.tc0.imask->timsk0 |= (1 << TOIE0) | (1 << OCIE0B);
 			timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
 		break;
 		case 6:
-			timermega328.tc0.reg->timsk0 |= (1 << TOIE0) | (1 << OCIE0A) | (1 << OCIE0B);
+			timermega328.tc0.imask->timsk0 |= (1 << TOIE0) | (1 << OCIE0A) | (1 << OCIE0B);
 			timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
 		break;
 		case 7:
-			timermega328.tc0.reg->timsk0 |= (1 << OCIE0A) | (1 << OCIE0B);
+			timermega328.tc0.imask->timsk0 |= (1 << OCIE0A) | (1 << OCIE0B);
 			timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
 		break;
 		default:
@@ -132,7 +132,7 @@ void TIMER_COUNTER0_start(unsigned int prescaler)
 //	clk T 0 S /1024 (From prescaler); default - clk T 0 S /1024 (From prescaler).
 {
 	if(timer0_state == 0){ // one shot
-		timermega328.tc0.reg->ocr0a = 0XFF;
+		timermega328.tc0.comp->ocr0a = 0XFF;
 		timermega328.tc0.reg->tccr0b &= ~(7 << CS00); // No clock source. (Timer/Counter stopped)
 		switch(prescaler){
 			case 1: // clk T0S /(No prescaler)
@@ -232,11 +232,11 @@ void TIMER_COUNTER0_compoutmodeB(unsigned char compoutmode)
 }
 void TIMER_COUNTER0_compareA(unsigned char compare)
 {
-	timermega328.tc0.reg->ocr0a = compare;
+	timermega328.tc0.comp->ocr0a = compare;
 }
 void TIMER_COUNTER0_compareB(unsigned char compare)
 {
-	timermega328.tc0.reg->ocr0b = compare;
+	timermega328.tc0.comp->ocr0b = compare;
 }
 void TIMER_COUNTER0_stop(void)
 // stops timer by setting prescaler to zero
@@ -321,52 +321,52 @@ TIMER_COUNTER1 TIMER_COUNTER1enable(unsigned char wavegenmode, unsigned char int
 		break;
 	}
 	timermega328.tc1.reg->tccr1a &= ~((3 << COM1A0) | (3 << COM1B0));
-	timermega328.tc1.reg->timsk1 &= ~((1 << ICIE1)  | (1 << OCIE1B) | (1 << OCIE1A) | (1 << TOIE1));
+	timermega328.tc1.imask->timsk1 &= ~((1 << ICIE1)  | (1 << OCIE1B) | (1 << OCIE1A) | (1 << TOIE1));
 	switch(interrupt){
 		case 0:
 		break;
 		case 1:
-			timermega328.tc1.reg->timsk1 |= (1 << TOIE1);
+			timermega328.tc1.imask->timsk1 |= (1 << TOIE1);
 			timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
 		break;
 		case 2:
-			timermega328.tc1.reg->timsk1 |= (1 << OCIE1A);
+			timermega328.tc1.imask->timsk1 |= (1 << OCIE1A);
 			timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
 		break;
 		case 3:
-			timermega328.tc1.reg->timsk1 |= (1 << OCIE1B);
+			timermega328.tc1.imask->timsk1 |= (1 << OCIE1B);
 			timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
 		break;
 		case 4:
-			timermega328.tc1.reg->timsk1 |= (1 << ICIE1);
+			timermega328.tc1.imask->timsk1 |= (1 << ICIE1);
 			timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
 		break;
 		case 5:
-			timermega328.tc1.reg->timsk1 |= (1 << OCIE1A) | (1 << OCIE1B);
+			timermega328.tc1.imask->timsk1 |= (1 << OCIE1A) | (1 << OCIE1B);
 			timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
 		break;
 		case 6:
-			timermega328.tc1.reg->timsk1 |= (1 << OCIE1A) | (1 << TOIE1);
+			timermega328.tc1.imask->timsk1 |= (1 << OCIE1A) | (1 << TOIE1);
 			timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
 		break;
 		case 7:
-			timermega328.tc1.reg->timsk1 |= (1 << OCIE1B) | (1 << TOIE1);
+			timermega328.tc1.imask->timsk1 |= (1 << OCIE1B) | (1 << TOIE1);
 			timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
 		break;
 		case 8:
-			timermega328.tc1.reg->timsk1 |= (1 << ICIE1) | (1 << TOIE1);
+			timermega328.tc1.imask->timsk1 |= (1 << ICIE1) | (1 << TOIE1);
 			timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
 		break;
 		case 9:
-			timermega328.tc1.reg->timsk1 |= (1 << OCIE1A) | (1 << OCIE1B) | (1 << TOIE1);
+			timermega328.tc1.imask->timsk1 |= (1 << OCIE1A) | (1 << OCIE1B) | (1 << TOIE1);
 			timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
 		break;
 		case 10:
-			timermega328.tc1.reg->timsk1 |= (1 << ICIE1) | (1 << OCIE1A) | (1 << OCIE1B) | (1 << TOIE1);
+			timermega328.tc1.imask->timsk1 |= (1 << ICIE1) | (1 << OCIE1A) | (1 << OCIE1B) | (1 << TOIE1);
 			timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
 		break;
 		case 11:
-			timermega328.tc1.reg->timsk1 |= (1 << OCIE1A) | (1 << OCIE1B);
+			timermega328.tc1.imask->timsk1 |= (1 << OCIE1A) | (1 << OCIE1B);
 			timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
 		break;
 		default:
@@ -481,11 +481,11 @@ void TIMER_COUNTER1_compoutmodeB(unsigned char compoutmode)
 }
 void TIMER_COUNTER1_compareA(uint16_t compare)
 {
-	timermega328.tc1.reg->ocr1a = timermega328.writehlbyte(compare);
+	timermega328.tc1.comp->ocr1a = timermega328.writehlbyte(compare);
 }
 void TIMER_COUNTER1_compareB(uint16_t compare)
 {
-	timermega328.tc1.reg->ocr1b = timermega328.writehlbyte(compare);
+	timermega328.tc1.comp->ocr1b = timermega328.writehlbyte(compare);
 }
 void TIMER_COUNTER1_stop(void)
 // stops timer by setting prescaler to zero
@@ -529,32 +529,32 @@ TIMER_COUNTER2 TIMER_COUNTER2enable(unsigned char wavegenmode, unsigned char int
 		default: // Normal
 		break;
 	}
-	timermega328.tc2.reg->timsk2 &= ~((1 << OCIE2B) | (1 << OCIE2A) | (1 << TOIE2));
+	timermega328.tc2.imask->timsk2 &= ~((1 << OCIE2B) | (1 << OCIE2A) | (1 << TOIE2));
 	switch(interrupt){
 		case 0: 
 		break;
 		case 1:
-			timermega328.tc2.reg->timsk2 |= (1 << TOIE2);
+			timermega328.tc2.imask->timsk2 |= (1 << TOIE2);
 			timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
 		break;
 		case 2:
-			timermega328.tc2.reg->timsk2 |= (1 << OCIE2A);
+			timermega328.tc2.imask->timsk2 |= (1 << OCIE2A);
 			timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
 		break;
 		case 3:
-			timermega328.tc2.reg->timsk2 |= (1 << TOIE2) | (1 << OCIE2A);
+			timermega328.tc2.imask->timsk2 |= (1 << TOIE2) | (1 << OCIE2A);
 			timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
 		break;
 		case 4:
-			timermega328.tc2.reg->timsk2 |= (1 << TOIE2) | (1 << OCIE2B);
+			timermega328.tc2.imask->timsk2 |= (1 << TOIE2) | (1 << OCIE2B);
 			timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
 		break;
 		case 5:
-			timermega328.tc2.reg->timsk2 |= (1 << OCIE2B) | (1 << OCIE2A);
+			timermega328.tc2.imask->timsk2 |= (1 << OCIE2B) | (1 << OCIE2A);
 			timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
 		break;
 		case 6:
-			timermega328.tc2.reg->timsk2 |= (1 << OCIE2B) | (1 << OCIE2A) | (1 << TOIE2);
+			timermega328.tc2.imask->timsk2 |= (1 << OCIE2B) | (1 << OCIE2A) | (1 << TOIE2);
 			timermega328.cpu.reg->sreg |= (1 << GLOBAL_INTERRUPT_ENABLE);
 		break;
 		default:
@@ -576,7 +576,7 @@ void TIMER_COUNTER2_start(unsigned int prescaler)
 //	External clock source on Tn pin. Clock on rising edge; default - clk T 0 S /1024 (From prescaler).
 {
 	if(timer2_state == 0){ // one shot
-		timermega328.tc2.reg->ocr2a = 0XFF;
+		timermega328.tc2.comp->ocr2a = 0XFF;
 		timermega328.tc2.reg->tccr2b &= ~(7 << CS20); // No clock source. (Timer/Counter stopped)
 		switch(prescaler){
 			case 1: // clkI/O/(No prescaler)
@@ -675,11 +675,11 @@ void TIMER_COUNTER2_compoutmodeB(unsigned char compoutmode)
 }
 void TIMER_COUNTER2_compareA(unsigned char compare)
 {
-	timermega328.tc2.reg->ocr2a = compare;
+	timermega328.tc2.comp->ocr2a = compare;
 }
 	void TIMER_COUNTER2_compareB(unsigned char compare)
 {
-	timermega328.tc2.reg->ocr2b = compare;
+	timermega328.tc2.comp->ocr2b = compare;
 }
 void TIMER_COUNTER2_stop(void)
 // stops timer by setting prescaler to zero
