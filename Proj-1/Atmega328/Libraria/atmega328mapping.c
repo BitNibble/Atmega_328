@@ -19,11 +19,16 @@ Comment:
 ATMEGA328 ret;
 
 /***File Header***/
-uint16_t ReadHLByte(HighLowByte reg);
-uint16_t ReadLHByte(HighLowByte reg);
-HighLowByte WriteHLByte(uint16_t val);
-HighLowByte WriteLHByte(uint16_t val);
-uint16_t SwapByte(uint16_t num);
+uint16_t Atmega328_ReadHLByte(HighLowByte reg);
+uint16_t Atmega328_ReadLHByte(HighLowByte reg);
+HighLowByte Atmega328_WriteHLByte(uint16_t val);
+HighLowByte Atmega328_WriteLHByte(uint16_t val);
+uint16_t Atmega328_SwapByte(uint16_t num);
+uint8_t Atmega328_ByteMask(uint8_t target, uint8_t mask);
+void Atmega328_ByteSet(uint8_t* target, uint8_t set);
+void Atmega328_ByteClear(uint8_t* target, uint8_t clear);
+uint8_t Atmega328_ByteShiftright(uint8_t target, uint8_t shift);
+uint8_t Atmega328_ByteShiftleft(uint8_t target, uint8_t shift);
 
 /*** File Procedure & Function ***/
 ATMEGA328 ATMEGA328enable(void){
@@ -101,42 +106,72 @@ ATMEGA328 ATMEGA328enable(void){
 	// WDT
 	ret.wdt.reg = (Atmega328WatchdogTimer_TypeDef*) Atmega328WatchdogTimer_Address;
 	// func
-	ret.readhlbyte = ReadHLByte;
-	ret.readlhbyte = ReadLHByte;
-	ret.writehlbyte = WriteHLByte;
-	ret.writelhbyte = WriteLHByte;
-	ret.swapbyte = SwapByte;
+	ret.readhlbyte = Atmega328_ReadHLByte;
+	ret.readlhbyte = Atmega328_ReadLHByte;
+	ret.writehlbyte = Atmega328_WriteHLByte;
+	ret.writelhbyte = Atmega328_WriteLHByte;
+	ret.swapbyte = Atmega328_SwapByte;
+	ret.byte_mask = Atmega328_ByteMask;
+	ret.byte_set = Atmega328_ByteSet;
+	ret.byte_clear = Atmega328_ByteClear;
+	ret.byte_shiftright = Atmega328_ByteShiftright;
+	ret.byte_shiftleft = Atmega328_ByteShiftleft;
 	return ret;
 }
 
 // COMMON
-uint16_t ReadHLByte(HighLowByte reg)
+uint16_t Atmega328_ReadHLByte(HighLowByte reg)
 {
 	return (reg.H << 8) | reg.L;
 }
 
-uint16_t ReadLHByte(HighLowByte reg)
+uint16_t Atmega328_ReadLHByte(HighLowByte reg)
 {
 	return (reg.L << 8) | reg.H;
 }
 
-HighLowByte WriteHLByte(uint16_t val) // AVR normal little endian
+HighLowByte Atmega328_WriteHLByte(uint16_t val) // AVR normal little endian
 {
 	HighLowByte reg; reg.H = (val >> 8); reg.L = val;
 	return reg;
 }
 
-HighLowByte WriteLHByte(uint16_t val)
+HighLowByte Atmega328_WriteLHByte(uint16_t val)
 {
 	HighLowByte reg; reg.L = (val >> 8); reg.H = val;
 	return reg;
 }
 
-uint16_t SwapByte(uint16_t num)
+uint16_t Atmega328_SwapByte(uint16_t num)
 {
 	uint16_t tp;
 	tp = (num << 8);
 	return (num >> 8) | tp;
+}
+
+uint8_t Atmega328_ByteMask(uint8_t target, uint8_t mask)
+{
+	return target & mask;
+}
+
+void Atmega328_ByteSet(uint8_t* target, uint8_t set)
+{
+	*target |= set;
+}
+
+void Atmega328_ByteClear(uint8_t* target, uint8_t clear)
+{
+	*target &= ~clear;
+}
+
+uint8_t Atmega328_ByteShiftright(uint8_t target, uint8_t shift)
+{
+	return target >> shift;
+}
+
+uint8_t Atmega328_ByteShiftleft(uint8_t target, uint8_t shift)
+{
+	return target << shift;
 }
 
 /*** File Interrupt ***/

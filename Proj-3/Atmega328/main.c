@@ -158,7 +158,7 @@ int main(void)
 		if(!window){ // preamble
 			lcd.reboot();
 		
-			input = ( m.portc.reg->pin & 0xF0 ) | ( m.portb.reg->pin >> 4 );
+			input = m.byte_mask( m.portc.reg->pin, 0xF0 ) | m.byte_shiftright( m.portb.reg->pin, 4 );
 			button.update(&button.par, input);
 		
 			disp.update(&disp.par, m.portd.reg->pin);
@@ -314,12 +314,12 @@ int main(void)
 
 void PORTINIT(void)
 {
-	m.portb.reg->ddr = 0x00;
-	m.portb.reg->port = 0xF0;
-	m.portc.reg->ddr = 0x00;
-	m.portc.reg->port = 0xF0;
-	m.portd.reg->ddr &= ~( 1 << 2 );
-	m.portd.reg->port |= ( 1 << 2 );
+	m.byte_clear(&m.portb.reg->ddr, 0xFF);
+	m.byte_set(&m.portb.reg->port, 0xF0);
+	m.byte_clear(&m.portc.reg->ddr, 0xFF);
+	m.byte_set(&m.portc.reg->port, 0xF0);
+	m.byte_clear(&m.portd.reg->ddr, m.byte_shiftleft(1, 2));
+	m.byte_set(&m.portd.reg->port, m.byte_shiftleft(1, 2));
 }
 
 // make a library for these functions with extra functionalities (these are incomplete)
