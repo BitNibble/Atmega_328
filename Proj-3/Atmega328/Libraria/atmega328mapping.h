@@ -107,6 +107,12 @@ typedef struct {
 	Atmega328TimerCompareRegister1_TypeDef* comp;
 	#if defined(_ATMEGA328TIMER_H_)
 		TIMER_COUNTER1 (*enable)(unsigned char wavegenmode, unsigned char interrupt);
+		void (*compoutmodeA)(unsigned char compoutmode);
+		void (*compoutmodeB)(unsigned char compoutmode);
+		void (*compareA)(unsigned char compare);
+		void (*compareB)(unsigned char compare);
+		void (*start)(unsigned int prescaler);
+		void (*stop)(void);
 	#endif
 } Atmega328TimerCounter1;
 
@@ -119,6 +125,12 @@ typedef struct {
 	Atmega328TimerCompareRegister0_TypeDef* comp;
 	#if defined(_ATMEGA328TIMER_H_)
 		TIMER_COUNTER0 (*enable)(unsigned char wavegenmode, unsigned char interrupt);
+		void (*compoutmodeA)(unsigned char compoutmode);
+		void (*compoutmodeB)(unsigned char compoutmode);
+		void (*compareA)(unsigned char compare);
+		void (*compareB)(unsigned char compare);
+		void (*start)(unsigned int prescaler);
+		void (*stop)(void);
 	#endif
 } Atmega328TimerCounter0;
 
@@ -131,6 +143,12 @@ typedef struct {
 	Atmega328TimerCompareRegister2_TypeDef* comp;
 	#if defined(_ATMEGA328TIMER_H_)
 		TIMER_COUNTER2 (*enable)(unsigned char wavegenmode, unsigned char interrupt);
+		void (*compoutmodeA)(unsigned char compoutmode);
+		void (*compoutmodeB)(unsigned char compoutmode);
+		void (*compareA)(unsigned char compare);
+		void (*compareB)(unsigned char compare);
+		void (*start)(unsigned int prescaler);
+		void (*stop)(void);
 	#endif
 } Atmega328TimerCounter2;
 

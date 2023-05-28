@@ -136,12 +136,12 @@ int main(void)
 	// UART 103 para 9600, 68 para 14400, 25 para 38400, 8 para 115200 at 16Mhz
 	// UART 51 para 9600, 12 para 38400 at 8Mhz
 	uart = m.usart.enable(12,8,1,NONE);
-	tc1 = m.tc1.enable(4, 2);
+	m.tc1.enable(4, 2);
 	button = EXPLODEenable();
 	disp = EXPLODEenable();
 	
-	tc1.start(1024);
-	tc1.compareA(0x1AFF);
+	m.tc1.start(1024);
+	m.tc1.compareA(0x1AFF);
 	
 	// Local Vars
 	uint8_t input;	

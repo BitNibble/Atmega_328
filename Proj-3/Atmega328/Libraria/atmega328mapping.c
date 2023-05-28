@@ -74,6 +74,12 @@ ATMEGA328 ATMEGA328enable(void){
 	ret.tc1.comp = (Atmega328TimerCompareRegister1_TypeDef*) Atmega328TimerCompareRegister1_Address;
 	#if defined(_ATMEGA328TIMER_H_)
 		ret.tc1.enable = TIMER_COUNTER1enable;
+		ret.tc1.compoutmodeA = TIMER_COUNTER1_compoutmodeA;
+		ret.tc1.compoutmodeB = TIMER_COUNTER1_compoutmodeB;
+		ret.tc1.compareA = TIMER_COUNTER1_compareA;
+		ret.tc1.compareB = TIMER_COUNTER1_compareB;
+		ret.tc1.start = TIMER_COUNTER1_start;
+		ret.tc1.stop = TIMER_COUNTER1_stop;
 	#endif
 	// TC0
 	ret.tc0.reg = (Atmega328TimerCounter0_TypeDef*) Atmega328TimerCounter0_Address;
@@ -83,6 +89,12 @@ ATMEGA328 ATMEGA328enable(void){
 	ret.tc0.comp = (Atmega328TimerCompareRegister0_TypeDef*) Atmega328TimerCompareRegister0_Address;
 	#if defined(_ATMEGA328TIMER_H_)
 		ret.tc0.enable = TIMER_COUNTER0enable;
+		ret.tc0.compoutmodeA = TIMER_COUNTER0_compoutmodeA;
+		ret.tc0.compoutmodeB = TIMER_COUNTER0_compoutmodeB;
+		ret.tc0.compareA = TIMER_COUNTER0_compareA;
+		ret.tc0.compareB = TIMER_COUNTER0_compareB;
+		ret.tc0.start = TIMER_COUNTER0_start;
+		ret.tc0.stop = TIMER_COUNTER0_stop;
 	#endif
 	// TC2
 	ret.tc2.reg = (Atmega328TimerCounter2_TypeDef*) Atmega328TimerCounter2_Address;
@@ -92,6 +104,12 @@ ATMEGA328 ATMEGA328enable(void){
 	ret.tc2.comp = (Atmega328TimerCompareRegister2_TypeDef*) Atmega328TimerCompareRegister2_Address;
 	#if defined(_ATMEGA328TIMER_H_)
 		ret.tc2.enable = TIMER_COUNTER2enable;
+		ret.tc2.compoutmodeA = TIMER_COUNTER2_compoutmodeA;
+		ret.tc2.compoutmodeB = TIMER_COUNTER2_compoutmodeB;
+		ret.tc2.compareA = TIMER_COUNTER2_compareA;
+		ret.tc2.compareB = TIMER_COUNTER2_compareB;
+		ret.tc2.start = TIMER_COUNTER2_start;
+		ret.tc2.stop = TIMER_COUNTER2_stop;
 	#endif
 	// TWI
 	ret.twi.reg = (Atmega328TwoWireSerialInterface_TypeDef*) Atmega328TwoWireSerialInterface_Address;
