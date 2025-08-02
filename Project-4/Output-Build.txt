@@ -1,0 +1,17 @@
+﻿------ Clean started: Project: Atmega328, Configuration: Debug AVR ------
+Build started.
+Project "Atmega328.cproj" (Clean target(s)):
+Target "Clean" in file "C:\Program Files (x86)\Atmel\Studio\7.0\Vs\Compiler.targets" from project "D:\Embedded\Atmega_328p\Project-4\Atmega328\Atmega328.cproj" (entry point):
+	Using "RunCompilerTask" task from assembly "C:\Program Files (x86)\Atmel\Studio\7.0\Extensions\Application\AvrGCC.dll".
+	Task "RunCompilerTask"
+		Shell Utils Path C:\Program Files (x86)\Atmel\Studio\7.0\shellUtils
+		C:\Program Files (x86)\Atmel\Studio\7.0\shellUtils\make.exe clean 
+		rm -rf  Livraria/Src/74hc595.o Livraria/Src/atcommands.o Livraria/Src/atmega328analog.o Livraria/Src/atmega328instance.o Livraria/Src/atmega328interrupt.o Livraria/Src/atmega328mapping.o Livraria/Src/atmega328timer0.o Livraria/Src/atmega328timer1.o Livraria/Src/atmega328timer2.o Livraria/Src/atmega328twi.o Livraria/Src/atmega328usart0.o Livraria/Src/atmegaeeprom.o Livraria/Src/bt05atcommands.o Livraria/Src/buffer.o Livraria/Src/clock.o Livraria/Src/explode.o Livraria/Src/function.o Livraria/Src/hc05atcommands.o Livraria/Src/hx711.o Livraria/Src/keypad.o Livraria/Src/lcd.o Livraria/Src/lcd2p.o Livraria/Src/lfsm.o Livraria/Src/mm74c923.o Livraria/Src/pcf8563rtc.o Livraria/Src/pcf8575.o Livraria/Src/rotenc.o Livraria/Src/watch.o Livraria/Src/znpid.o main.o   
+		rm -rf  Livraria/Src/74hc595.d Livraria/Src/atcommands.d Livraria/Src/atmega328analog.d Livraria/Src/atmega328instance.d Livraria/Src/atmega328interrupt.d Livraria/Src/atmega328mapping.d Livraria/Src/atmega328timer0.d Livraria/Src/atmega328timer1.d Livraria/Src/atmega328timer2.d Livraria/Src/atmega328twi.d Livraria/Src/atmega328usart0.d Livraria/Src/atmegaeeprom.d Livraria/Src/bt05atcommands.d Livraria/Src/buffer.d Livraria/Src/clock.d Livraria/Src/explode.d Livraria/Src/function.d Livraria/Src/hc05atcommands.d Livraria/Src/hx711.d Livraria/Src/keypad.d Livraria/Src/lcd.d Livraria/Src/lcd2p.d Livraria/Src/lfsm.d Livraria/Src/mm74c923.d Livraria/Src/pcf8563rtc.d Livraria/Src/pcf8575.d Livraria/Src/rotenc.d Livraria/Src/watch.d Livraria/Src/znpid.d main.d   
+		rm -rf "Atmega328.elf" "Atmega328.hex" "Atmega328.eep" "Atmega328.map" "Atmega328.usersignatures" "Atmega328.a"  "Atmega328.lss"
+	Done executing task "RunCompilerTask".
+Done building target "Clean" in project "Atmega328.cproj".
+Done building project "Atmega328.cproj".
+
+Build succeeded.
+========== Clean: 1 succeeded, 0 failed, 0 skipped ==========

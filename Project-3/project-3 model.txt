@@ -1,0 +1,8 @@
+Program Memory Usage 	:	19959 bytes   60.9 % Full
+Data Memory Usage 	:	349 bytes   17.0 % Full
+/***10042024***/
+Program Memory Usage 	:	26377 bytes   80.5 % Full
+Data Memory Usage 	:	511 bytes   25.0 % Full
+/******/
+Program Memory Usage 	:	26239 bytes   80.1 % Full
+Data Memory Usage 	:	519 bytes   25.3 % Full

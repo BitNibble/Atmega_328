@@ -1,0 +1,284 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>7.0</ProjectVersion>
+    <ToolchainName>com.microchip.xc8</ToolchainName>
+    <ProjectGuid>2285C48D-296E-43FD-A7B6-69885F64CFFD</ProjectGuid>
+    <avrdevice>ATmega328</avrdevice>
+    <avrdeviceseries>none</avrdeviceseries>
+    <OutputType>Executable</OutputType>
+    <Language>C</Language>
+    <OutputFileName>$(MSBuildProjectName)</OutputFileName>
+    <OutputFileExtension>.elf</OutputFileExtension>
+    <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
+    <AssemblyName>Atmega328</AssemblyName>
+    <Name>Atmega328</Name>
+    <RootNamespace>Atmega328</RootNamespace>
+    <ToolchainFlavour>Native</ToolchainFlavour>
+    <KeepTimersRunning>true</KeepTimersRunning>
+    <OverrideVtor>false</OverrideVtor>
+    <CacheFlash>true</CacheFlash>
+    <ProgFlashFromRam>true</ProgFlashFromRam>
+    <RamSnippetAddress>0x20000000</RamSnippetAddress>
+    <UncachedRange />
+    <preserveEEPROM>true</preserveEEPROM>
+    <OverrideVtorValue>exception_table</OverrideVtorValue>
+    <BootSegment>2</BootSegment>
+    <ResetRule>0</ResetRule>
+    <eraseonlaunchrule>0</eraseonlaunchrule>
+    <EraseKey />
+    <AsfFrameworkConfig>
+      <framework-data xmlns="">
+        <options />
+        <configurations />
+        <files />
+        <documentation help="" />
+        <offline-documentation help="" />
+        <dependencies>
+          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.52.0" />
+        </dependencies>
+      </framework-data>
+    </AsfFrameworkConfig>
+    <avrtool>com.atmel.avrdbg.tool.atmelice</avrtool>
+    <avrtoolserialnumber>J41800026917</avrtoolserialnumber>
+    <avrdeviceexpectedsignature>0x1E9514</avrdeviceexpectedsignature>
+    <com_atmel_avrdbg_tool_atmelice>
+      <ToolOptions>
+        <InterfaceProperties>
+          <IspClock>1999882</IspClock>
+        </InterfaceProperties>
+        <InterfaceName>ISP</InterfaceName>
+      </ToolOptions>
+      <ToolType>com.atmel.avrdbg.tool.atmelice</ToolType>
+      <ToolNumber>J41800026917</ToolNumber>
+      <ToolName>Atmel-ICE</ToolName>
+    </com_atmel_avrdbg_tool_atmelice>
+    <avrtoolinterface>ISP</avrtoolinterface>
+    <avrtoolinterfaceclock>1999882</avrtoolinterfaceclock>
+    <com_atmel_avrdbg_tool_stk500>
+      <ToolOptions>
+        <InterfaceProperties>
+          <IspClock>460800</IspClock>
+        </InterfaceProperties>
+        <InterfaceName>ISP</InterfaceName>
+      </ToolOptions>
+      <ToolType>com.atmel.avrdbg.tool.stk500</ToolType>
+      <ToolNumber>
+      </ToolNumber>
+      <ToolName>STK500</ToolName>
+    </com_atmel_avrdbg_tool_stk500>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <ToolchainSettings>
+      <com.microchip.xc8>
+        <com.microchip.xc8.common.optimization.RelaxBranches>True</com.microchip.xc8.common.optimization.RelaxBranches>
+        <com.microchip.xc8.compiler.general.ChangeDefaultCharTypeUnsigned>True</com.microchip.xc8.compiler.general.ChangeDefaultCharTypeUnsigned>
+        <com.microchip.xc8.compiler.general.ChangeDefaultBitFieldUnsigned>True</com.microchip.xc8.compiler.general.ChangeDefaultBitFieldUnsigned>
+        <com.microchip.xc8.compiler.symbols.DefSymbols>
+          <ListValues>
+            <Value>(%24DeviceMacro)</Value>
+            <Value>NDEBUG</Value>
+          </ListValues>
+        </com.microchip.xc8.compiler.symbols.DefSymbols>
+        <com.microchip.xc8.compiler.optimization.level>Optimize for size (-Os)</com.microchip.xc8.compiler.optimization.level>
+        <com.microchip.xc8.compiler.optimization.PackStructureMembers>True</com.microchip.xc8.compiler.optimization.PackStructureMembers>
+        <com.microchip.xc8.compiler.optimization.AllocateBytesNeededForEnum>True</com.microchip.xc8.compiler.optimization.AllocateBytesNeededForEnum>
+        <com.microchip.xc8.compiler.warnings.AllWarnings>True</com.microchip.xc8.compiler.warnings.AllWarnings>
+        <com.microchip.xc8.linker.libraries.Libraries>
+          <ListValues>
+            <Value>libm</Value>
+          </ListValues>
+        </com.microchip.xc8.linker.libraries.Libraries>
+      </com.microchip.xc8>
+    </ToolchainSettings>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <ToolchainSettings>
+      <com.microchip.xc8>
+        <com.microchip.xc8.compiler.general.ChangeDefaultCharTypeUnsigned>True</com.microchip.xc8.compiler.general.ChangeDefaultCharTypeUnsigned>
+        <com.microchip.xc8.compiler.general.ChangeDefaultBitFieldUnsigned>True</com.microchip.xc8.compiler.general.ChangeDefaultBitFieldUnsigned>
+        <com.microchip.xc8.compiler.symbols.DefSymbols>
+          <ListValues>
+            <Value>(%24DeviceMacro)</Value>
+            <Value>DEBUG</Value>
+          </ListValues>
+        </com.microchip.xc8.compiler.symbols.DefSymbols>
+        <com.microchip.xc8.compiler.directories.IncludePaths>
+          <ListValues>
+            <Value>../Livraria/Inc</Value>
+          </ListValues>
+        </com.microchip.xc8.compiler.directories.IncludePaths>
+        <com.microchip.xc8.compiler.optimization.level>Optimize debugging experience (-Og)</com.microchip.xc8.compiler.optimization.level>
+        <com.microchip.xc8.compiler.optimization.PackStructureMembers>True</com.microchip.xc8.compiler.optimization.PackStructureMembers>
+        <com.microchip.xc8.compiler.optimization.AllocateBytesNeededForEnum>True</com.microchip.xc8.compiler.optimization.AllocateBytesNeededForEnum>
+        <com.microchip.xc8.compiler.optimization.DebugLevel>Default (-g2)</com.microchip.xc8.compiler.optimization.DebugLevel>
+        <com.microchip.xc8.compiler.warnings.AllWarnings>True</com.microchip.xc8.compiler.warnings.AllWarnings>
+        <com.microchip.xc8.linker.libraries.Libraries>
+          <ListValues>
+            <Value>libm</Value>
+          </ListValues>
+        </com.microchip.xc8.linker.libraries.Libraries>
+        <com.microchip.xc8.assembler.debugging.DebugLevel>Default (-Wa,-g)</com.microchip.xc8.assembler.debugging.DebugLevel>
+      </com.microchip.xc8>
+    </ToolchainSettings>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Livraria\Inc\74hc595.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Inc\atmega328.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Inc\atmega328analog.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Inc\atmega328interrupt.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Inc\atmega328registers.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Inc\atmega328timer0.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Inc\atmega328timer1.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Inc\atmega328timer2.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Inc\atmega328twi.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Inc\atmega328_usart0.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Inc\atmegaeeprom.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Inc\bt05atcommands.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Inc\buffer.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Inc\clock.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Inc\explode.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Inc\function.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Inc\hx711.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Inc\keypad.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Inc\lcd2p.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Inc\lfsm.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Inc\mm74c923.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Inc\pcf8563rtc.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Inc\rotenc.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Inc\watch.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Inc\znpid.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Src\74hc595.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Src\atmega328.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Src\atmega328analog.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Src\atmega328interrupt.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Src\atmega328timer0.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Src\atmega328timer1.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Src\atmega328timer2.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Src\atmega328twi.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Src\atmega328_usart0.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Src\atmegaeeprom.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Src\bt05atcommands.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Src\buffer.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Src\clock.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Src\explode.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Src\function.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Src\hx711.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Src\keypad.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Src\lcd2p.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Src\lfsm.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Src\mm74c923.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Src\pcf8563rtc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Src\rotenc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Src\watch.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Livraria\Src\znpid.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="main.c">
+      <SubType>compile</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Livraria" />
+    <Folder Include="Livraria\Inc" />
+    <Folder Include="Livraria\Src" />
+  </ItemGroup>
+  <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
+</Project>
