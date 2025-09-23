@@ -47,7 +47,7 @@ typedef struct{
 	void (*write)(char c, unsigned short D_I);
 	char (*read)(unsigned short D_I);
 	uint8_t (*BF)(void);
-	void (*putch)(char c);
+	uint8_t (*putch)(char c);
 	char (*getch)(void);
 	void (*string)(const char *s); // RAW
 	void (*string_size)(const char* s, uint8_t size); // RAW

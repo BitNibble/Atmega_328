@@ -1,7 +1,7 @@
 ﻿------ Clean started: Project: Atmega328, Configuration: Debug AVR ------
 Build started.
 Project "Atmega328.cproj" (Clean target(s)):
-Target "Clean" in file "C:\Program Files (x86)\Atmel\Studio\7.0\Vs\Compiler.targets" from project "D:\Embedded\atmega328\Project-1\Atmega328\Atmega328.cproj" (entry point):
+Target "Clean" in file "C:\Program Files (x86)\Atmel\Studio\7.0\Vs\Compiler.targets" from project "D:\Embedded\Atmega_328\Project-1\Atmega328\Atmega328.cproj" (entry point):
 	Task "RunCompilerTask"
 		Shell Utils Path C:\Program Files (x86)\Atmel\Studio\7.0\shellUtils
 		C:\Program Files (x86)\Atmel\Studio\7.0\shellUtils\make.exe clean 

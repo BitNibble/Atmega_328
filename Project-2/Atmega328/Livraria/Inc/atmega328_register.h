@@ -1,12 +1,12 @@
 /************************************************************************
-	ATMEGA 328P REGISTERS
+	ATMEGA 328P REGISTER
 Author:   <sergio.salazar.santos@gmail.com>
 License:  GNU General Public License
 Hardware: Atmega 328 by ETT ET-BASE
 Date:   06122024
 ************************************************************************/
-#ifndef _ATMEGA328REGISTERS_H_
-	#define _ATMEGA328REGISTERS_H_
+#ifndef _ATMEGA328_REGISTER_H_
+	#define _ATMEGA328_REGISTER_H_
 
 /*** Compiler ***/
 #if (__GNUC__ * 100 + __GNUC_MINOR__) < 304

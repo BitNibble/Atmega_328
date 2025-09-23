@@ -196,7 +196,9 @@ uint16_t SwapByte(uint16_t num)
 	tp = (num << 8);
 	return (num >> 8) | tp;
 }
-/*** Procedure & Function ToolSet ***/
+/*********************************************************************/
+/**************** Procedure and Function definition ******************/
+/*********************************************************************/
 inline uint8_t Msk_Pos(uint8_t Msk){
 	uint8_t Pos = 0;
 	if( Msk ){
@@ -332,7 +334,9 @@ void ftdelayReset(uint8_t ID) {
 	ft_Delay_Lock[ID] = 0;
 	ftCounter[ID] = 0;
 }
-/******************/
+/*********************************************************************/
+/**************** Procedure and Function definition ******************/
+/*********************************************************************/
 uint16_t BAUDRATEnormal(uint32_t BAUD)
 {
 	uint32_t baudrate = F_CPU/16;
@@ -351,7 +355,9 @@ uint16_t BAUDRATEsynchronous(uint32_t BAUD)
 	baudrate /= BAUD; baudrate -= 1;
 	return (uint16_t) baudrate;
 }
-/****** System ******/
+/*********************************************************************/
+/**************** Procedure and Function definition ******************/
+/*********************************************************************/
 void Atmega328ClockPrescalerSelect(volatile uint8_t prescaler)
 {
 	volatile uint8_t sreg;
