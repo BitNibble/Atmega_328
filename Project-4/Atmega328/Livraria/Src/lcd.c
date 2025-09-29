@@ -1,12 +1,13 @@
-/*************************************************************************
+/**********************************************************************
 	LCD
 Author:   <sergio.salazar.santos@gmail.com>
 License:  GNU General Public License
 Hardware: all
-Date:     04072025              
-************************************************************************/
+Date:     29092025              
+**********************************************************************/
 /*** Library ***/
 #include "lcd.h"
+#include <avr/interrupt.h>
 #include <util/delay.h>
 #include <stdio.h>
 
@@ -57,8 +58,28 @@ void LCD1_hspace(uint8_t n);
 void LCD1_clear(void);
 void LCD1_gotoxy(unsigned int y, unsigned int x);
 void LCD1_reboot(void);
-void lcd_set_reg(volatile uint8_t* reg, uint8_t hbits);
-void lcd_clear_reg(volatile uint8_t* reg, uint8_t hbits);
+static inline void lcd_set_reg(volatile uint8_t* reg, uint8_t hbits){
+	*reg |= hbits;
+}
+static inline void lcd_clear_reg(volatile uint8_t* reg, uint8_t hbits){
+	*reg &= ~hbits;
+}
+static inline void lcd0_en_pulse(void)
+{
+	_delay_us(1); // data setup
+	lcd_set_reg(lcd0_PORT, (1 << EN));
+	_delay_us(2); // EN high width ? 450 ns
+	lcd_clear_reg(lcd0_PORT, (1 << EN));
+	_delay_us(1); // data hold
+}
+static inline void lcd1_en_pulse(void)
+{
+	_delay_us(1); // data setup
+	lcd_set_reg(lcd1_PORT, (1 << EN));
+	_delay_us(2); // EN high width ? 450 ns
+	lcd_clear_reg(lcd1_PORT, (1 << EN));
+	_delay_us(1); // data hold
+}
 
 static FILE lcd0_stdout;
 static FILE lcd1_stdout;
@@ -81,21 +102,6 @@ static LCD0_Handler lcd0_setup = {
 	.gotoxy = LCD0_gotoxy,
 	.reboot = LCD0_reboot,
 	.printf = printf
-};
-static LCD1_Handler lcd1_setup = {
-	// V-table
-	.write = LCD1_write,
-	.read = LCD1_read,
-	.BF = LCD1_BF,
-	.putch = LCD1_putch,
-	.getch = LCD1_getch,
-	.string = LCD1_string, // RAW
-	.string_size = LCD1_string_size, // RAW
-	.hspace = LCD1_hspace,
-	.clear = LCD1_clear,
-	.gotoxy = LCD1_gotoxy,
-	.reboot = LCD1_reboot,
-	.printf  = printf
 };
 
 /*** Handler ***/
@@ -148,53 +154,77 @@ void LCD0_inic(void)
 }
 void LCD0_write(char c, unsigned short D_I)
 {
+	// Always write: RW=0
 	lcd_clear_reg(lcd0_PORT, (1 << RW));
 	lcd_set_reg(lcd0_DDR, (1 << DB4) | (1 << DB5) | (1 << DB6) | (1 << DB7));
 	
-	if(D_I) lcd_set_reg(lcd0_PORT, (1 << RS));  else lcd_clear_reg(lcd0_PORT, (1 << RS));
+	// Select instruction/data
+	if(D_I) lcd_set_reg(lcd0_PORT, (1 << RS));  
+	else    lcd_clear_reg(lcd0_PORT, (1 << RS));
 	
-	lcd_set_reg(lcd0_PORT, (1 << EN));
+	// --- High nibble ---
 	if(c & 0x80) *lcd0_PORT |= 1 << DB7; else *lcd0_PORT &= ~(1 << DB7);
 	if(c & 0x40) *lcd0_PORT |= 1 << DB6; else *lcd0_PORT &= ~(1 << DB6);
 	if(c & 0x20) *lcd0_PORT |= 1 << DB5; else *lcd0_PORT &= ~(1 << DB5);
 	if(c & 0x10) *lcd0_PORT |= 1 << DB4; else *lcd0_PORT &= ~(1 << DB4);
-	lcd_clear_reg(lcd0_PORT, (1 << EN));
+
+    cli();
+    lcd0_en_pulse();   // already has setup, pulse width, hold delays
+    sei();	
 	
-	lcd_set_reg(lcd0_PORT, (1 << EN));
+	// --- Low nibble ---
 	if(c & 0x08) *lcd0_PORT |= 1 << DB7; else *lcd0_PORT &= ~(1 << DB7);
 	if(c & 0x04) *lcd0_PORT |= 1 << DB6; else *lcd0_PORT &= ~(1 << DB6);
 	if(c & 0x02) *lcd0_PORT |= 1 << DB5; else *lcd0_PORT &= ~(1 << DB5);
 	if(c & 0x01) *lcd0_PORT |= 1 << DB4; else *lcd0_PORT &= ~(1 << DB4);
-	lcd_clear_reg(lcd0_PORT, (1 << EN));
 	
-	for (uint16_t i = 0; i < 180; i++); // value above 140 for 16Mhz
+    cli();
+    lcd0_en_pulse();
+    sei();
+	
+	// Return data bus to input
 	lcd_clear_reg(lcd0_DDR, (1 << DB4) | (1 << DB5) | (1 << DB6) | (1 << DB7));
 	lcd_set_reg(lcd0_PORT, (1 << DB4) | (1 << DB5) | (1 << DB6) | (1 << DB7));
+	
+    // Command execution time (normal instructions: ~37 µs)
+    _delay_us(40);
 }
 char LCD0_read(unsigned short D_I)
 {
 	char c = 0x00;
+	
+	// Configure bus for input
 	lcd_clear_reg(lcd0_DDR, (1 << DB4) | (1 << DB5) | (1 << DB6) | (1 << DB7));
 	lcd_set_reg(lcd0_PORT, (1 << DB4) | (1 << DB5) | (1 << DB6) | (1 << DB7));
+	
+	// RW=1 (read)
 	lcd_set_reg(lcd0_PORT, (1 << RW));
 	
-	if(D_I) lcd_set_reg(lcd0_PORT, (1 << RS));  else lcd_clear_reg(lcd0_PORT, (1 << RS));
+	// RS = data/instruction
+	if(D_I) lcd_set_reg(lcd0_PORT, (1 << RS));  
+	else    lcd_clear_reg(lcd0_PORT, (1 << RS));
 	
+	// --- High nibble ---
 	lcd_set_reg(lcd0_PORT, (1 << EN));
+	_delay_us(1);   // let data settle
 	if(*lcd0_PIN & (1 << DB7)) c |= 1 << 7; else c &= ~(1 << 7);
 	if(*lcd0_PIN & (1 << DB6)) c |= 1 << 6; else c &= ~(1 << 6);
 	if(*lcd0_PIN & (1 << DB5)) c |= 1 << 5; else c &= ~(1 << 5);
 	if(*lcd0_PIN & (1 << DB4)) c |= 1 << 4; else c &= ~(1 << 4);
 	lcd_clear_reg(lcd0_PORT, (1 << EN));
+	_delay_us(1);   // hold time
 	
+	// --- Low nibble ---
 	lcd_set_reg(lcd0_PORT, (1 << EN));
+	 _delay_us(1);
 	if(*lcd0_PIN & (1 << DB7)) c |= 1 << 3; else c &= ~(1 << 3);
 	if(*lcd0_PIN & (1 << DB6)) c |= 1 << 2; else c &= ~(1 << 2);
 	if(*lcd0_PIN & (1 << DB5)) c |= 1 << 1; else c &= ~(1 << 1);
 	if(*lcd0_PIN & (1 << DB4)) c |= 1 << 0; else c &= ~(1 << 0);
 	lcd_clear_reg(lcd0_PORT, (1 << EN));
+	 _delay_us(1);
 	
-	for (uint16_t i = 0; i < 180; i++); // value above 140 for 16Mhz
+	// Back to write mode
 	lcd_clear_reg(lcd0_PORT, (1 << RW));
 	
 	return c;
@@ -205,7 +235,7 @@ uint8_t LCD0_BF(void)
 	char inst = 0x80;
 	for(i=0; 0x80 & inst; i++){
 		inst = LCD0_read(INST);
-		if(i > 2)
+		if(i > 50)
 			break;
 	}
 	return (inst & 0x7F);
@@ -286,6 +316,23 @@ int lcd0_putchar(char c, FILE *stream) {
 	return 0;
 }
 
+/*** Internal State ***/
+static LCD1_Handler lcd1_setup = {
+	// V-table
+	.write = LCD1_write,
+	.read = LCD1_read,
+	.BF = LCD1_BF,
+	.putch = LCD1_putch,
+	.getch = LCD1_getch,
+	.string = LCD1_string, // RAW
+	.string_size = LCD1_string_size, // RAW
+	.hspace = LCD1_hspace,
+	.clear = LCD1_clear,
+	.gotoxy = LCD1_gotoxy,
+	.reboot = LCD1_reboot,
+	.printf = printf
+};
+
 /*** Handler ***/
 void lcd1_enable(volatile uint8_t *ddr, volatile uint8_t *pin, volatile uint8_t *port)
 {
@@ -294,7 +341,7 @@ void lcd1_enable(volatile uint8_t *ddr, volatile uint8_t *pin, volatile uint8_t 
 	lcd1_PIN = pin;
 	lcd1_PORT = port;
 	// initialize variables
-	*lcd1_DDR = 0x00;
+	*lcd1_DDR = ((1 << RS) | (1 << RW) | (1 << EN));
 	*lcd1_PORT = 0xFF;
 	lcd1_detect = *lcd1_PIN & (1 << NC);
 	// LCD INIC
@@ -310,7 +357,7 @@ LCD1_Handler* lcd1(void){ return &lcd1_setup; }
 void LCD1_inic(void)
 {
 	// LCD INIC
-	*lcd1_DDR |= (1 << RS) | (1 << RW) | (1 << EN);
+	*lcd1_DDR |= ((1 << RS) | (1 << RW) | (1 << EN));
 	*lcd1_PORT |= 0xFF;
 
 	// INICIALIZACAO LCD data sheet
@@ -321,7 +368,7 @@ void LCD1_inic(void)
 	_delay_us(150);
 	LCD1_write(0x30, INST); // 0x30 8 bit, 1 line, 5x8, --, --
 	_delay_us(150);
-	LCD1_write(0x20, INST); // 0x28 4 bit, 1 line, 5x8, --, --
+	LCD1_write(0x20, INST); // 0x20 4 bit, 1 line, 5x8, --, --
 	_delay_us(150);
 	LCD1_write(0x28, INST); // 0x28 4 bit, 2 line, 5x8, --, --
 	_delay_us(50);
@@ -336,53 +383,77 @@ void LCD1_inic(void)
 }
 void LCD1_write(char c, unsigned short D_I)
 {
+	// Always write: RW=0
 	lcd_clear_reg(lcd1_PORT, (1 << RW));
 	lcd_set_reg(lcd1_DDR, (1 << DB4) | (1 << DB5) | (1 << DB6) | (1 << DB7));
 	
-	if(D_I) lcd_set_reg(lcd1_PORT, (1 << RS));  else lcd_clear_reg(lcd1_PORT, (1 << RS));
+	// Select instruction/data
+	if(D_I) lcd_set_reg(lcd1_PORT, (1 << RS));
+	else    lcd_clear_reg(lcd1_PORT, (1 << RS));
 	
-	lcd_set_reg(lcd1_PORT, (1 << EN));
+	// --- High nibble ---
 	if(c & 0x80) *lcd1_PORT |= 1 << DB7; else *lcd1_PORT &= ~(1 << DB7);
 	if(c & 0x40) *lcd1_PORT |= 1 << DB6; else *lcd1_PORT &= ~(1 << DB6);
 	if(c & 0x20) *lcd1_PORT |= 1 << DB5; else *lcd1_PORT &= ~(1 << DB5);
 	if(c & 0x10) *lcd1_PORT |= 1 << DB4; else *lcd1_PORT &= ~(1 << DB4);
-	lcd_clear_reg(lcd1_PORT, (1 << EN));
+
+	cli();
+	lcd1_en_pulse();   // already has setup, pulse width, hold delays
+	sei();
 	
-	lcd_set_reg(lcd1_PORT, (1 << EN));
+	// --- Low nibble ---
 	if(c & 0x08) *lcd1_PORT |= 1 << DB7; else *lcd1_PORT &= ~(1 << DB7);
 	if(c & 0x04) *lcd1_PORT |= 1 << DB6; else *lcd1_PORT &= ~(1 << DB6);
 	if(c & 0x02) *lcd1_PORT |= 1 << DB5; else *lcd1_PORT &= ~(1 << DB5);
 	if(c & 0x01) *lcd1_PORT |= 1 << DB4; else *lcd1_PORT &= ~(1 << DB4);
-	lcd_clear_reg(lcd1_PORT, (1 << EN));
 	
-	for (uint16_t i = 0; i < 180; i++); // value above 140 for 16Mhz
+	cli();
+	lcd1_en_pulse();
+	sei();
+	
+	// Return data bus to input
 	lcd_clear_reg(lcd1_DDR, (1 << DB4) | (1 << DB5) | (1 << DB6) | (1 << DB7));
 	lcd_set_reg(lcd1_PORT, (1 << DB4) | (1 << DB5) | (1 << DB6) | (1 << DB7));
+	
+	// Command execution time (normal instructions: ~37 µs)
+	_delay_us(40);
 }
 char LCD1_read(unsigned short D_I)
 {
 	char c = 0x00;
+	
+	// Configure bus for input
 	lcd_clear_reg(lcd1_DDR, (1 << DB4) | (1 << DB5) | (1 << DB6) | (1 << DB7));
 	lcd_set_reg(lcd1_PORT, (1 << DB4) | (1 << DB5) | (1 << DB6) | (1 << DB7));
+	
+	// RW=1 (read)
 	lcd_set_reg(lcd1_PORT, (1 << RW));
 	
-	if(D_I) lcd_set_reg(lcd1_PORT, (1 << RS));  else lcd_clear_reg(lcd1_PORT, (1 << RS));
+	// RS = data/instruction
+	if(D_I) lcd_set_reg(lcd1_PORT, (1 << RS));
+	else    lcd_clear_reg(lcd1_PORT, (1 << RS));
 	
+	// --- High nibble ---
 	lcd_set_reg(lcd1_PORT, (1 << EN));
+	_delay_us(1);   // let data settle
 	if(*lcd1_PIN & (1 << DB7)) c |= 1 << 7; else c &= ~(1 << 7);
 	if(*lcd1_PIN & (1 << DB6)) c |= 1 << 6; else c &= ~(1 << 6);
 	if(*lcd1_PIN & (1 << DB5)) c |= 1 << 5; else c &= ~(1 << 5);
 	if(*lcd1_PIN & (1 << DB4)) c |= 1 << 4; else c &= ~(1 << 4);
 	lcd_clear_reg(lcd1_PORT, (1 << EN));
+	_delay_us(1);   // hold time
 	
+	// --- Low nibble ---
 	lcd_set_reg(lcd1_PORT, (1 << EN));
+	_delay_us(1);
 	if(*lcd1_PIN & (1 << DB7)) c |= 1 << 3; else c &= ~(1 << 3);
 	if(*lcd1_PIN & (1 << DB6)) c |= 1 << 2; else c &= ~(1 << 2);
 	if(*lcd1_PIN & (1 << DB5)) c |= 1 << 1; else c &= ~(1 << 1);
 	if(*lcd1_PIN & (1 << DB4)) c |= 1 << 0; else c &= ~(1 << 0);
 	lcd_clear_reg(lcd1_PORT, (1 << EN));
+	_delay_us(1);
 	
-	for (uint16_t i = 0; i < 180; i++); // value above 140 for 16Mhz
+	// Back to write mode
 	lcd_clear_reg(lcd1_PORT, (1 << RW));
 	
 	return c;
@@ -391,10 +462,10 @@ uint8_t LCD1_BF(void)
 {
 	uint8_t i;
 	char inst = 0x80;
-	for(i=0; (0x80 & inst); i++){
+	for(i=0; 0x80 & inst; i++){
 		inst = LCD1_read(INST);
-		if(i > 2)
-			break;
+		if(i > 50)
+		break;
 	}
 	return (inst & 0x7F);
 }
@@ -418,11 +489,11 @@ void LCD1_string_size(const char* s, uint8_t size)
 	uint8_t pos = 0;
 	while(*s){
 		pos++;
-		if(pos > size)
-			break;
+		if(pos > size) // 1 TO SIZE+1
+		break;
 		LCD1_putch(*(s++));
 	}
-	while(pos < size){
+	while(pos < size){ // TO SIZE
 		LCD1_putch(' ');
 		pos++;
 	}
@@ -441,7 +512,7 @@ void LCD1_clear(void)
 void LCD1_gotoxy(unsigned int y, unsigned int x)
 {
 	uint8_t addr = row_offset[y] + x;
-	LCD0_write(0x80 | addr, INST);
+	LCD1_write(0x80 | addr, INST);
 }
 void LCD1_reboot(void)
 {
@@ -450,7 +521,7 @@ void LCD1_reboot(void)
 	uint8_t i = tmp ^ lcd1_detect;
 	i &= tmp;
 	if(i)
-		LCD1_inic();
+	LCD1_inic();
 	lcd1_detect = tmp;
 }
 // Custom character output function
@@ -472,12 +543,6 @@ int lcd1_putchar(char c, FILE *stream) {
 		LCD1_gotoxy(3, 0);
 	}
 	return 0;
-}
-void lcd_set_reg(volatile uint8_t* reg, uint8_t hbits){
-	*reg |= hbits;
-}
-void lcd_clear_reg(volatile uint8_t* reg, uint8_t hbits){
-	*reg &= ~hbits;
 }
 
 /*** EOF ***/
