@@ -7,6 +7,7 @@ Date:     29092025
 ************************************************************************/
 /*** Library ***/
 #include "lcd2p.h"
+#include <avr/interrupt.h>
 #include <util/delay.h>
 #include <stdio.h>
 
