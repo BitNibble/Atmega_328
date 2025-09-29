@@ -3,7 +3,7 @@
 Author:   <sergio.salazar.santos@gmail.com>
 License:  GNU General Public License
 Hardware: all
-Date:     12072025
+Date:     29092025
 ************************************************************************/
 #ifndef _LCD2P_H_
 	#define _LCD2P_H_
