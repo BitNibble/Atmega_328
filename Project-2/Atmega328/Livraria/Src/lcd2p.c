@@ -173,7 +173,7 @@ void LCD02P_write(char c, unsigned short D_I)
 }
 char LCD02P_read(unsigned short D_I)
 {
-    char c = 0x00;
+    char data = 0x00; char c = 0x00;
 
     // Configure bus for input
     lcd02p_clear_reg(lcd02pdata_DDR, DDR_DATA_MASK);
@@ -189,22 +189,26 @@ char LCD02P_read(unsigned short D_I)
     // --- High nibble ---
     lcd02p_set_reg(lcd02pcmd_PORT, (1 << LCD02P_EN));
     _delay_us(1);   // let data settle
-    if(*lcd02pdata_PIN & (1 << LCD02P_DB7)) c |= 1 << 7;
-    if(*lcd02pdata_PIN & (1 << LCD02P_DB6)) c |= 1 << 6;
-    if(*lcd02pdata_PIN & (1 << LCD02P_DB5)) c |= 1 << 5;
-    if(*lcd02pdata_PIN & (1 << LCD02P_DB4)) c |= 1 << 4;
+	data = *lcd02pdata_PIN;
     lcd02p_clear_reg(lcd02pcmd_PORT, (1 << LCD02P_EN));
     _delay_us(1);   // hold time
+	
+	if(data & (1 << LCD02P_DB7)) c |= 1 << 7;
+	if(data & (1 << LCD02P_DB6)) c |= 1 << 6;
+	if(data & (1 << LCD02P_DB5)) c |= 1 << 5;
+	if(data & (1 << LCD02P_DB4)) c |= 1 << 4;
 
     // --- Low nibble ---
     lcd02p_set_reg(lcd02pcmd_PORT, (1 << LCD02P_EN));
     _delay_us(1);
-    if(*lcd02pdata_PIN & (1 << LCD02P_DB7)) c |= 1 << 3;
-    if(*lcd02pdata_PIN & (1 << LCD02P_DB6)) c |= 1 << 2;
-    if(*lcd02pdata_PIN & (1 << LCD02P_DB5)) c |= 1 << 1;
-    if(*lcd02pdata_PIN & (1 << LCD02P_DB4)) c |= 1 << 0;
+	data = *lcd02pdata_PIN;
     lcd02p_clear_reg(lcd02pcmd_PORT, (1 << LCD02P_EN));
     _delay_us(1);
+	
+    if(data & (1 << LCD02P_DB7)) c |= 1 << 3;
+    if(data & (1 << LCD02P_DB6)) c |= 1 << 2;
+    if(data & (1 << LCD02P_DB5)) c |= 1 << 1;
+    if(data & (1 << LCD02P_DB4)) c |= 1 << 0;	
 
     // Back to write mode
     lcd02p_clear_reg(lcd02pcmd_PORT, (1 << LCD02P_RW));
