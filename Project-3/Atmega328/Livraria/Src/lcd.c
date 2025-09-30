@@ -191,7 +191,7 @@ void LCD0_write(char c, unsigned short D_I)
 }
 char LCD0_read(unsigned short D_I)
 {
-	char c = 0x00;
+	char data = 0x00; char c = 0x00;
 	
 	// Configure bus for input
 	lcd_clear_reg(lcd0_DDR, (1 << DB4) | (1 << DB5) | (1 << DB6) | (1 << DB7));
@@ -207,23 +207,27 @@ char LCD0_read(unsigned short D_I)
 	// --- High nibble ---
 	lcd_set_reg(lcd0_PORT, (1 << EN));
 	_delay_us(1);   // let data settle
-	if(*lcd0_PIN & (1 << DB7)) c |= 1 << 7; else c &= ~(1 << 7);
-	if(*lcd0_PIN & (1 << DB6)) c |= 1 << 6; else c &= ~(1 << 6);
-	if(*lcd0_PIN & (1 << DB5)) c |= 1 << 5; else c &= ~(1 << 5);
-	if(*lcd0_PIN & (1 << DB4)) c |= 1 << 4; else c &= ~(1 << 4);
+	data = *lcd0_PIN;
 	lcd_clear_reg(lcd0_PORT, (1 << EN));
 	_delay_us(1);   // hold time
+	
+	if(data & (1 << DB7)) c |= 1 << 7; else c &= ~(1 << 7);
+	if(data & (1 << DB6)) c |= 1 << 6; else c &= ~(1 << 6);
+	if(data & (1 << DB5)) c |= 1 << 5; else c &= ~(1 << 5);
+	if(data & (1 << DB4)) c |= 1 << 4; else c &= ~(1 << 4);
 	
 	// --- Low nibble ---
 	lcd_set_reg(lcd0_PORT, (1 << EN));
 	 _delay_us(1);
-	if(*lcd0_PIN & (1 << DB7)) c |= 1 << 3; else c &= ~(1 << 3);
-	if(*lcd0_PIN & (1 << DB6)) c |= 1 << 2; else c &= ~(1 << 2);
-	if(*lcd0_PIN & (1 << DB5)) c |= 1 << 1; else c &= ~(1 << 1);
-	if(*lcd0_PIN & (1 << DB4)) c |= 1 << 0; else c &= ~(1 << 0);
+	data = *lcd0_PIN;
 	lcd_clear_reg(lcd0_PORT, (1 << EN));
 	 _delay_us(1);
-	
+	 
+	if(data & (1 << DB7)) c |= 1 << 3; else c &= ~(1 << 3);
+	if(data & (1 << DB6)) c |= 1 << 2; else c &= ~(1 << 2);
+	if(data & (1 << DB5)) c |= 1 << 1; else c &= ~(1 << 1);
+	if(data & (1 << DB4)) c |= 1 << 0; else c &= ~(1 << 0);	 
+	 
 	// Back to write mode
 	lcd_clear_reg(lcd0_PORT, (1 << RW));
 	
@@ -420,7 +424,7 @@ void LCD1_write(char c, unsigned short D_I)
 }
 char LCD1_read(unsigned short D_I)
 {
-	char c = 0x00;
+	char data = 0x00; char c = 0x00;
 	
 	// Configure bus for input
 	lcd_clear_reg(lcd1_DDR, (1 << DB4) | (1 << DB5) | (1 << DB6) | (1 << DB7));
@@ -436,22 +440,26 @@ char LCD1_read(unsigned short D_I)
 	// --- High nibble ---
 	lcd_set_reg(lcd1_PORT, (1 << EN));
 	_delay_us(1);   // let data settle
-	if(*lcd1_PIN & (1 << DB7)) c |= 1 << 7; else c &= ~(1 << 7);
-	if(*lcd1_PIN & (1 << DB6)) c |= 1 << 6; else c &= ~(1 << 6);
-	if(*lcd1_PIN & (1 << DB5)) c |= 1 << 5; else c &= ~(1 << 5);
-	if(*lcd1_PIN & (1 << DB4)) c |= 1 << 4; else c &= ~(1 << 4);
+	data = *lcd1_PIN;
 	lcd_clear_reg(lcd1_PORT, (1 << EN));
 	_delay_us(1);   // hold time
 	
+	if(data & (1 << DB7)) c |= 1 << 7; else c &= ~(1 << 7);
+	if(data & (1 << DB6)) c |= 1 << 6; else c &= ~(1 << 6);
+	if(data & (1 << DB5)) c |= 1 << 5; else c &= ~(1 << 5);
+	if(data & (1 << DB4)) c |= 1 << 4; else c &= ~(1 << 4);
+		
 	// --- Low nibble ---
 	lcd_set_reg(lcd1_PORT, (1 << EN));
 	_delay_us(1);
-	if(*lcd1_PIN & (1 << DB7)) c |= 1 << 3; else c &= ~(1 << 3);
-	if(*lcd1_PIN & (1 << DB6)) c |= 1 << 2; else c &= ~(1 << 2);
-	if(*lcd1_PIN & (1 << DB5)) c |= 1 << 1; else c &= ~(1 << 1);
-	if(*lcd1_PIN & (1 << DB4)) c |= 1 << 0; else c &= ~(1 << 0);
+	data = *lcd1_PIN;
 	lcd_clear_reg(lcd1_PORT, (1 << EN));
 	_delay_us(1);
+	
+	if(data & (1 << DB7)) c |= 1 << 3; else c &= ~(1 << 3);
+	if(data & (1 << DB6)) c |= 1 << 2; else c &= ~(1 << 2);
+	if(data & (1 << DB5)) c |= 1 << 1; else c &= ~(1 << 1);
+	if(data & (1 << DB4)) c |= 1 << 0; else c &= ~(1 << 0);	
 	
 	// Back to write mode
 	lcd_clear_reg(lcd1_PORT, (1 << RW));
