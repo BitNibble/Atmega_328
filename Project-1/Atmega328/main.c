@@ -152,6 +152,8 @@ for (window = 0, menu = 1; TRUE; )
 		// uart capture
 		uartreceive = usart0_messageprint( usart0(), uartrcv, uartmsg, "\r\n");
 		
+		func()->rmcrnl(uartmsg);
+		
 		window = 1; continue;
 	}
 	// 1

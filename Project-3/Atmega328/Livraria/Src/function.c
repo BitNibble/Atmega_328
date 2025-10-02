@@ -55,6 +55,7 @@ char* FUNCdectohex(int32_t num);
 uint16_t FUNCSwapByte(uint16_t num);
 char* FUNCprint(const char *format, ... );
 void FUNCstrtovec(char* pos, const char* str);
+void function_rmcrnl(char* str);
 /************ pc use ************
 char* FUNCfltos(FILE* stream);
 char* FUNCftos(FILE* stream);
@@ -101,6 +102,7 @@ FUNC func_enable( void )
 	setup_func.SwapByte = FUNCSwapByte;
 	setup_func.print = FUNCprint;
 	setup_func.strtovec = FUNCstrtovec;
+	setup_func.rmcrnl = function_rmcrnl;
 	/***********pc use************
 	setup_func.fltos = FUNCfltos;
 	setup_func.ftos = FUNCftos;
@@ -462,6 +464,19 @@ char* FUNCprint( const char* format, ... )
 void FUNCstrtovec(char* pos, const char* str){
 	int i;
 	for(i=0; str[i]; *(pos + i) = str[i], i++);
+}
+// rmcrnl
+void function_rmcrnl(char* str)
+{
+	if (!str) return;
+	int len = (int)strlen(str) - 1;
+	if(len > 1){
+		for (int stop = len - 2; len > stop; len--) {
+			if (*(str + len) == '\r' || *(str + len) == '\n') {
+				*(str + len) = '\0';
+			}
+		}
+	}else{*str = '\0';}
 }
 /********************************************************************
 int gcd( int a, int b ) {

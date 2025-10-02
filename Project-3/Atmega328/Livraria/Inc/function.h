@@ -55,6 +55,7 @@ typedef struct
 	uint16_t (*SwapByte)(uint16_t num);
 	char* (*print)( const char *format, ... );
 	void (*strtovec)(char* pos, const char* str);
+	void (*rmcrnl)(char* str);
 	/**********************pc use**********************
 	char* (*fltos)(FILE* stream);
 	char* (*ftos)(FILE* stream);
