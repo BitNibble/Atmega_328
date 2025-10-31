@@ -20,11 +20,14 @@ Update:   23092025
 #include <avr/eeprom.h>
 #include <avr/pgmspace.h>
 #include <avr/interrupt.h>
+#include <util/atomic.h>
 #include <util/delay.h>
 
 #include "atmega328_instance.h"
 
 /*** Constant & Macro ***/
+#define ZERO 0
+#define ONE 1
 #define TWO 2
 #define NIBBLE_BITS 4
 #define BYTE_BITS 8
@@ -38,6 +41,32 @@ Update:   23092025
 #define CLEAR_REG(REG, HBITS)	(REG &= ~HBITS)
 #define READ_BIT(REG, BIT)		((REG >> BIT) & 1)
 #define TOGGLE_REG(REG, HBITS)	(REG ^= HBITS)
+
+/*******************************************************************/
+/********************** ATMEGA 328 IMAGE **************************/
+/*******************************************************************/
+typedef struct {
+	//		Second Layer
+	Atmega328GPWR_TypeDef* const gpwr;
+	Atmega328AnalogComparator_TypeDef* const ac;
+	Atmega328AnalogToDigitalConverter_TypeDef* const adc;
+	Atmega328CPURegister_TypeDef* const cpu;
+	Atmega328Eeprom_TypeDef* const eeprom;
+	Atmega328ExternalInterrupt_TypeDef* const exint;
+	Atmega328PORTB_TypeDef* const portb;
+	Atmega328PORTC_TypeDef* const portc;
+	Atmega328PORTD_TypeDef* const portd;
+	Atmega328SerialPeripherialInterface_TypeDef* const spi;
+	Atmega328TimerCounter1_TypeDef* const tc1;
+	Atmega328TimerCounter0_TypeDef* const tc0;
+	Atmega328TimerCounter2_TypeDef* const tc2;
+	Atmega328TwoWireSerialInterface_TypeDef* const twi;
+	Atmega328Usart0_TypeDef* const usart0;
+	Atmega328WatchdogTimer_TypeDef* const wdt;
+} DEV_ATMEGA328;
+
+/*** Global Header ***/
+DEV_ATMEGA328* dev(void);
 
 /*****************************/
 /**** MAIN HARDWARE LAYER ****/
