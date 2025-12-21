@@ -15,6 +15,31 @@ Update:	  10072025
 unsigned int ft_Delay_Lock[FTDELAY_SIZE] = {0};
 unsigned int ftCounter[FTDELAY_SIZE] = {0};
 
+/*******************************/
+/**** SECOND HARDWARE LAYER ****/
+/*******************************/
+static DEV_ATMEGA328 atmega328_setup = {
+		.gpwr = (Atmega328GPWR_TypeDef*) 0x0000,
+		.ac = (Atmega328AnalogComparator_TypeDef*) 0x0050,
+		.adc = (Atmega328AnalogToDigitalConverter_TypeDef*) 0x0078,
+		.cpu = (Atmega328CPURegister_TypeDef*) 0x003E,
+		.eeprom = (Atmega328Eeprom_TypeDef*) 0x003F,
+		.exint = (Atmega328ExternalInterrupt_TypeDef*) 0x003B,
+		.portb = (Atmega328PORTB_TypeDef*) 0x0023,
+		.portc = (Atmega328PORTC_TypeDef*) 0x0026,
+		.portd = (Atmega328PORTD_TypeDef*) 0x0029,
+		.spi = (Atmega328SerialPeripherialInterface_TypeDef*) 0x004C,
+		.tc1 = (Atmega328TimerCounter1_TypeDef*) 0x0036,
+		.tc0 = (Atmega328TimerCounter0_TypeDef*) 0x0035,
+		.tc2 = (Atmega328TimerCounter2_TypeDef*) 0x0037,
+		.twi = (Atmega328ExternalInterrupt_TypeDef*) 0x00B8,
+		.usart0 = (Atmega328Usart0_TypeDef*) 0x00C0,
+		.wdt = (Atmega328WatchdogTimer_TypeDef*) 0x0060
+};
+
+// DEV_ATMEGA328
+DEV_ATMEGA328* dev(void){ return (DEV_ATMEGA328*) &atmega328_setup; }
+
 /*****************************/
 /**** MAIN HARDWARE LAYER ****/
 /*****************************/
