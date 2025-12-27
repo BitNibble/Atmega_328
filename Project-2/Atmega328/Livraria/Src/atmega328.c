@@ -32,7 +32,7 @@ static DEV_ATMEGA328 atmega328_setup = {
 		.tc1 = (Atmega328TimerCounter1_TypeDef*) 0x0036,
 		.tc0 = (Atmega328TimerCounter0_TypeDef*) 0x0035,
 		.tc2 = (Atmega328TimerCounter2_TypeDef*) 0x0037,
-		.twi = (Atmega328ExternalInterrupt_TypeDef*) 0x00B8,
+		.twi = (Atmega328TwoWireSerialInterface_TypeDef*) 0x00B8,
 		.usart0 = (Atmega328Usart0_TypeDef*) 0x00C0,
 		.wdt = (Atmega328WatchdogTimer_TypeDef*) 0x0060
 };

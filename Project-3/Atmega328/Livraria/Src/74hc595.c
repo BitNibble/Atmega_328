@@ -12,6 +12,8 @@ Date:     25/10/2020
 void HC595_shift_bit(hc595_parameter* par, uint8_t state);
 void HC595_shift_ibyte(hc595_parameter* par, uint8_t byte);
 void HC595_shift_byte(hc595_parameter* par, uint8_t byte);
+void HC595_ibyte(hc595_parameter* par, uint8_t byte);
+void HC595_byte(hc595_parameter* par, uint8_t byte);
 void HC595_shift_out(hc595_parameter* par);
 hc595_parameter hc595_par_inic(volatile IO_var *ddr, volatile IO_var *port, uint8_t datapin, uint8_t clkpin, uint8_t outpin);
 
@@ -27,9 +29,11 @@ HC595 hc595_enable(volatile IO_var *ddr, volatile IO_var *port, uint8_t datapin,
 			.HC595_outpin = outpin
 		},
 		// V-table
-		.bit = HC595_shift_bit,
-		.ibyte = HC595_shift_ibyte,
-		.byte = HC595_shift_byte,
+		.shift_bit = HC595_shift_bit,
+		.shift_ibyte = HC595_shift_ibyte,
+		.shift_byte = HC595_shift_byte,
+		.ibyte = HC595_ibyte,
+		.byte = HC595_byte,
 		.out = HC595_shift_out
 	};
 	#if defined (STM32F4)
@@ -59,6 +63,11 @@ void HC595_shift_ibyte(hc595_parameter* par, uint8_t byte)
 	uint8_t i;
 	for(i = 0; i < 8; i++)
 		HC595_shift_bit(par, byte & (1 << i));
+}
+
+void HC595_ibyte(hc595_parameter* par, uint8_t byte)
+{
+	HC595_shift_ibyte(par, byte);
 	HC595_shift_out(par);
 }
 
@@ -67,6 +76,11 @@ void HC595_shift_byte(hc595_parameter* par, uint8_t byte)
 	uint8_t i;
 	for(i = 0; i < 8; i++)
 		HC595_shift_bit(par, byte & (1 << (7 - i)));
+}
+
+void HC595_byte(hc595_parameter* par, uint8_t byte)
+{
+	HC595_shift_byte(par, byte);
 	HC595_shift_out(par);
 }
 
