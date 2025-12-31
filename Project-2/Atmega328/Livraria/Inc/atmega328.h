@@ -63,10 +63,10 @@ typedef struct {
 	Atmega328TwoWireSerialInterface_TypeDef* const twi;
 	Atmega328Usart0_TypeDef* const usart0;
 	Atmega328WatchdogTimer_TypeDef* const wdt;
-} DEV_ATMEGA328;
+} dev_atmega328;
 
 /*** Global Header ***/
-DEV_ATMEGA328* dev(void);
+dev_atmega328* dev(void);
 
 /*****************************/
 /**** MAIN HARDWARE LAYER ****/

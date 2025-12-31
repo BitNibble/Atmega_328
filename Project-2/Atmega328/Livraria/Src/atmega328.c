@@ -18,7 +18,7 @@ unsigned int ftCounter[FTDELAY_SIZE] = {0};
 /*******************************/
 /**** SECOND HARDWARE LAYER ****/
 /*******************************/
-static DEV_ATMEGA328 atmega328_setup = {
+static dev_atmega328 atmega328_setup = {
 		.gpwr = (Atmega328GPWR_TypeDef*) 0x0000,
 		.ac = (Atmega328AnalogComparator_TypeDef*) 0x0050,
 		.adc = (Atmega328AnalogToDigitalConverter_TypeDef*) 0x0078,
@@ -37,8 +37,7 @@ static DEV_ATMEGA328 atmega328_setup = {
 		.wdt = (Atmega328WatchdogTimer_TypeDef*) 0x0060
 };
 
-// DEV_ATMEGA328
-DEV_ATMEGA328* dev(void){ return (DEV_ATMEGA328*) &atmega328_setup; }
+dev_atmega328* dev(void){ return (dev_atmega328*) &atmega328_setup; }
 
 /*****************************/
 /**** MAIN HARDWARE LAYER ****/
